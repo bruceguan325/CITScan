@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-
-import com.atilika.kuromoji.ipadic.neologd.Token;
 import com.mariten.kanatools.KanaConverter;
 
 public class KuromojiUtil {
@@ -21,29 +19,7 @@ public class KuromojiUtil {
 	}
 
 	public String segAndToHiragana(String mixed) {
-		List<Token> tokens = QAUtil.nativeJpTokenizer.tokenize(mixed);
 		StringBuilder sb = new StringBuilder();
-		
-		for (Token t: tokens) {
-			String kata = t.getReading();
-			String converted = kata;
-
-    		if (StringUtils.trimToNull(kata) == null || "*".equals(kata)) {
-    			converted = t.getSurface();
-    		}
-    		else {
-    			converted = KanaConverter.convertKana(kata, conv_op_kata_and_hira_to_zen_flags);
-    		}
-			
-			System.out.println(String.format("%s at %d / converted %s ---------------", t.getSurface(), t.getPosition(), converted));
-			System.out.println(String.format("[reading]%s, [pronunciation]%s", t.getReading(), t.getPronunciation()));
-			System.out.println(String.format("[base]%s,[reading]%s,[conj]%s,[conjType]%s", t.getBaseForm(), t.getReading(), t.getConjugationForm(), t.getConjugationType()));
-			System.out.println(String.format("[1]%s,[2]%s,[3]%s,[4]%s,[5]%s,[6]%s,[7]%s,[8]%s,[9]%s", t.getAllFeaturesArray()));
-			System.out.println("---------------------------------");
-			
-			sb.append(converted);
-		}
-		
 		return sb.toString();
 	}
 	

@@ -67,8 +67,6 @@ import org.nlpcn.commons.lang.tire.domain.Value;
 import org.nlpcn.commons.lang.tire.library.Library;
 
 import com.atilika.kuromoji.TokenizerBase.Mode;
-import com.atilika.kuromoji.ipadic.neologd.Token;
-import com.atilika.kuromoji.ipadic.neologd.Tokenizer;
 import com.google.common.collect.BiMap;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
@@ -217,11 +215,8 @@ public class QAUtil {
 	static final Pattern entityBlock = Pattern.compile("\\((#[^\\)]+)\\)");
 	static final Pattern essentialBlock = Pattern.compile("\\[([^\\]]+)\\]");
 
-	static Tokenizer nativeJpTokenizer = null;
-
 	static {
 		try {
-			nativeJpTokenizer = new Tokenizer.Builder().mode(Mode.NORMAL).build();
 			docScoreDescComparator = new Comparator<SolrDocument>() {
 
 				@Override
@@ -393,7 +388,6 @@ public class QAUtil {
 	Forest ambiguityForest = null;
 	Forest userDefinedForest = null;
 	private Map<String, String> kuromojiUserDictionary = new ConcurrentHashMap<>();
-	private Tokenizer jpTokenizer = null;
 	private EnglishUtil englishUtil = null;
 
 	public QAUtil(Tenant tenant) {
@@ -2501,12 +2495,6 @@ public class QAUtil {
 		return a;
 	}
 
-	public Tokenizer getJpTokenizer() {
-		if (!initialized)
-			init();
-		return jpTokenizer;
-	}
-
 	public Forest getAmbiguityForest() {
 		return ambiguityForest;
 	}
@@ -2706,20 +2694,6 @@ public class QAUtil {
 
 			// 為了 ja_JP 各種 hack... 理想上應該每一種語言有一個專門 nlp class 這樣比較好...
 			if (tenant != null && tenant.getLocale() == HitHotLocale.ja_JP) {
-				Tokenizer tokenizer = new Tokenizer.Builder().build();
-				parse = new ArrayList<org.ansj.domain.Term>();
-				int offe = 0;
-
-				for (Token token : tokenizer.tokenize(question)) {
-					String kw = token.getBaseForm();
-					if (StringUtils.trimToNull(kw) == null || "*".equals(kw)) {
-						kw = token.getSurface();
-					}
-					System.out.println(kw + "\t" + token.getAllFeatures());
-					org.ansj.domain.Term t = new org.ansj.domain.Term(kw, offe++,
-							KuromojiUtil.kuromojiTagMapping(token.getAllFeaturesArray()), 1000);
-					parse.add(t);
-				}
 			} else {
 
 				if (analysis != null) {
@@ -3990,18 +3964,6 @@ public class QAUtil {
 		if (tenant != null && tenant.getLocale() == HitHotLocale.ja_JP) {
 			terms = new ArrayList<org.ansj.domain.Term>();
 			int offe = 0;
-			
-		    for (Token token : qautil.getJpTokenizer().tokenize(question)) {
-		    		String kw = token.getBaseForm();
-		    		if (StringUtils.trimToNull(kw) == null || "*".equals(kw)) {
-		    			kw = token.getSurface();
-		    		}
-			    	/*System.out.println(kw + "\t" + token.getAllFeatures());
-			    	System.out.println(kw + "\t ---> " + token.getReading());
-			    	System.out.println(kw + "\t ---> " + new KuromojiUtil().segAndToHiragana(token.getReading()));*/
-			    	org.ansj.domain.Term t = new org.ansj.domain.Term(kw, offe++, KuromojiUtil.kuromojiTagMapping(token.getAllFeaturesArray()), 1000);
-			    	terms.add(t);
-			}
 		}
 		else if (tenant != null && tenant.getLocale() == HitHotLocale.en_US) {
 			terms = qautil.englishUtil.tokenize(question);
@@ -4367,20 +4329,6 @@ public class QAUtil {
 			int offe = 0;
 
 			System.out.println("  ---------> " + new KuromojiUtil().segAndToHiragana(question));
-
-			for (Token token : qautil.nativeJpTokenizer.tokenize(question)) {
-				String kw = token.getBaseForm();
-				if (StringUtils.trimToNull(kw) == null || "*".equals(kw)) {
-					kw = token.getSurface();
-				}
-				/*
-				 * System.out.print(kw + "\t" + token.getAllFeatures()); System.out.println();
-				 */
-
-				org.ansj.domain.Term t = new org.ansj.domain.Term(kw, offe++,
-						KuromojiUtil.kuromojiTagMapping(token.getAllFeaturesArray()), 1000);
-				terms.add(t);
-			}
 		} else if (qautil.tenant != null && qautil.tenant.getLocale() == HitHotLocale.en_US) {
 			terms = qautil.englishUtil.tokenize(question);
 		} else {
@@ -4879,12 +4827,6 @@ public class QAUtil {
 	}
 
 	public void reloadKuromojiUserDictionary() {
-		try {
-			jpTokenizer = new Tokenizer.Builder().mode(Mode.NORMAL)
-					.userDictionary(getKuromojiUserDictionaryInputStream()).build();
-		} catch (Exception ignore) {
-			jpTokenizer = new Tokenizer.Builder().mode(Mode.NORMAL).build();
-		}
 	}
 
 	public InputStream getKuromojiUserDictionaryInputStream() {
