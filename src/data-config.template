@@ -1,0 +1,8 @@
+<dataConfig>
+ <dataSource driver="${driver}" url="${url}" user="${account}" password="${password}"/>
+  <document name="products"
+			onImportStart="com.intumit.solr.dataimport.DihEventListener"
+            onImportEnd="com.intumit.solr.dataimport.DihEventListener">
+${body}
+  </document>
+</dataConfig>

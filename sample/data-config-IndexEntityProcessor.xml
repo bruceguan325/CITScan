@@ -1,0 +1,22 @@
+<dataConfig>
+	<dataSource  type="FileDataSource" />
+	
+	<!--
+		從另外一個 solr core index 中讀取資料，重新建立索引 
+	-->
+    <document name="products">
+        <entity name="product"
+				processor="com.intumit.solr.dataimport.IndexEntityProcessor"
+        		query="*:*" 
+        		targetCore="core1" 
+				transformer="com.intumit.solr.SynnexDataTransformer"
+        		batchSize="200">
+        	<field column="id" name="id" />
+        	<field column="SecondCategoryName" name="SecondCategoryName" />
+        	<field column="TopCategoryName" name="TopCategoryName" />
+        	<field column="Keyword" name="Keyword" />
+        	<field column="KeywordValue" name="KeywordValue" />
+        	<field column="ManufacturerName" name="ManufacturerName" />
+        </entity>
+    </document>
+</dataConfig>

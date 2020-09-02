@@ -1,0 +1,258 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "DialogConfig schema.",
+  "description": "對話設定",
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Name schema.",
+      "description": "An explanation about the purpose of this instance."
+    },
+    "description": {
+      "type": "string",
+      "title": "Description schema.",
+      "description": "An explanation about the purpose of this instance."
+    },
+    "class": {
+      "type": "string",
+      "title": "Class schema.",
+      "description": "An explanation about the purpose of this instance."
+    },
+    "enterDoubleConfirm": {
+      "type": "boolean",
+      "title": "EnterDoubleConfirm schema.",
+      "description": "An explanation about the purpose of this instance."
+    },
+    "enterDoubleConfirmText": {
+      "type": "string",
+      "title": "EnterDoubleConfirmText schema.",
+      "description": "An explanation about the purpose of this instance."
+    },
+    "quitText": {
+      "type": "string",
+      "title": "QuitText schema.",
+      "description": "An explanation about the purpose of this instance."
+    },
+    "enterTrigger": {
+      "type": "array",
+      "title": "EnterTrigger schema.",
+      "description": "An explanation about the purpose of this instance.",
+      "items": {
+        "type": "object",
+        "title": "1 schema.",
+        "description": "An explanation about the purpose of this instance.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type schema.",
+            "description": "An explanation about the purpose of this instance."
+          },
+          "contents": {
+            "type": "array",
+            "title": "Contents schema.",
+            "description": "An explanation about the purpose of this instance.",
+            "items": {
+              "type": "string",
+              "title": "1 schema.",
+              "description": "An explanation about the purpose of this instance."
+            }
+          }
+        },
+        "required": [
+          "type",
+          "contents"
+        ]
+      }
+    },
+    "normalTrigger": {
+      "type": "array",
+      "title": "NormalTrigger schema.",
+      "description": "An explanation about the purpose of this instance.",
+      "items": {}
+    },
+    "quitTrigger": {
+      "type": "array",
+      "title": "QuitTrigger schema.",
+      "description": "An explanation about the purpose of this instance.",
+      "items": {
+        "type": "object",
+        "title": "1 schema.",
+        "description": "An explanation about the purpose of this instance.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "Type schema.",
+            "description": "An explanation about the purpose of this instance."
+          },
+          "contents": {
+            "type": "array",
+            "title": "Contents schema.",
+            "description": "An explanation about the purpose of this instance.",
+            "items": {
+              "type": "string",
+              "title": "4 schema.",
+              "description": "An explanation about the purpose of this instance."
+            }
+          },
+          "showCurrentStatus": {
+            "type": "boolean",
+            "title": "ShowCurrentStatus schema.",
+            "description": "An explanation about the purpose of this instance."
+          },
+          "doubleConfirm": {
+            "type": "boolean",
+            "title": "DoubleConfirm schema.",
+            "description": "An explanation about the purpose of this instance."
+          },
+          "doubleConfirmText": {
+            "type": "string",
+            "title": "DoubleConfirmText schema.",
+            "description": "An explanation about the purpose of this instance."
+          }
+        },
+        "required": [
+          "type",
+          "contents",
+          "showCurrentStatus",
+          "doubleConfirm",
+          "doubleConfirmText"
+        ]
+      }
+    },
+    "fields": {
+      "type": "array",
+      "title": "Fields schema.",
+      "description": "An explanation about the purpose of this instance.",
+      "items": {
+        "type": "object",
+        "title": "4 schema.",
+        "description": "An explanation about the purpose of this instance.",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name schema.",
+            "description": "An explanation about the purpose of this instance."
+          },
+          "showName": {
+            "type": "string",
+            "title": "ShowName schema.",
+            "description": "An explanation about the purpose of this instance."
+          },
+          "type": {
+            "type": "string",
+            "title": "Type schema.",
+            "description": "An explanation about the purpose of this instance."
+          },
+          "require": {
+            "type": "integer",
+            "title": "Require schema.",
+            "description": "An explanation about the purpose of this instance."
+          },
+          "multivalue": {
+            "type": "boolean",
+            "title": "Multivalue schema.",
+            "description": "An explanation about the purpose of this instance."
+          },
+          "defaultQuestion": {
+            "type": "string",
+            "title": "DefaultQuestion schema.",
+            "description": "An explanation about the purpose of this instance."
+          },
+          "doubleConfirm": {
+            "type": "boolean",
+            "title": "DoubleConfirm schema.",
+            "description": "An explanation about the purpose of this instance."
+          },
+          "doubleConfirmText": {
+            "type": "string",
+            "title": "DoubleConfirmText schema.",
+            "description": "An explanation about the purpose of this instance."
+          },
+          "rules": {
+            "type": "array",
+            "title": "Rules schema.",
+            "description": "An explanation about the purpose of this instance.",
+            "items": {
+              "type": "object",
+              "title": "1 schema.",
+              "description": "An explanation about the purpose of this instance.",
+              "properties": {
+                "class": {
+                  "type": "string",
+                  "title": "Class schema.",
+                  "description": "An explanation about the purpose of this instance."
+                },
+                "match": {
+                  "type": "string",
+                  "title": "Match schema.",
+                  "description": "An explanation about the purpose of this instance."
+                },
+                "rewrite": {
+                  "type": "string",
+                  "title": "Rewrite schema.",
+                  "description": "An explanation about the purpose of this instance."
+                }
+              },
+              "required": [
+                "class",
+                "match",
+                "rewrite"
+              ]
+            }
+          },
+          "validators": {
+            "type": "array",
+            "title": "Validators schema.",
+            "description": "An explanation about the purpose of this instance.",
+            "items": {
+              "type": "object",
+              "title": "1 schema.",
+              "description": "An explanation about the purpose of this instance.",
+              "properties": {
+                "expr": {
+                  "type": "string",
+                  "title": "Expr schema.",
+                  "description": "An explanation about the purpose of this instance."
+                },
+                "errorText": {
+                  "type": "string",
+                  "title": "ErrorText schema.",
+                  "description": "An explanation about the purpose of this instance."
+                }
+              },
+              "required": [
+                "expr",
+                "errorText"
+              ]
+            }
+          }
+        },
+        "required": [
+          "name",
+          "showName",
+          "type",
+          "require",
+          "multivalue",
+          "defaultQuestion",
+          "doubleConfirm",
+          "doubleConfirmText",
+          "rules",
+          "validators"
+        ]
+      }
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "class",
+    "enterDoubleConfirm",
+    "enterDoubleConfirmText",
+    "quitText",
+    "enterTrigger",
+    "normalTrigger",
+    "quitTrigger",
+    "fields"
+  ]
+}

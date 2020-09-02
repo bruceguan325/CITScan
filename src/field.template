@@ -1,0 +1,1 @@
+		    <field column="${column}" name="${index}"#if($trimflag=="true") trim="true"#end#if($htmlflag=="true") html="true"#end#if($clobflag=="true") clob="true"#end#if($timestampflag=="true") timestamp="true"#end/>

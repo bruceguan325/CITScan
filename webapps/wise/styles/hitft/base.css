@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+/*Desktop用的Layout*/
+@import url("layout.css") only screen and (min-width:755px);
+
+/*iPhone用的Layout*/
+@import url("layout-mobile.css") only screen and (max-width: 480px);
+
+/*other device test*/
+@import url("layout.css") only screen and (max-width: 754px) and  (min-width: 481px);

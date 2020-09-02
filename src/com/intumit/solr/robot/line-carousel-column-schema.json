@@ -1,0 +1,19 @@
+{
+"name": "column",
+"type": "object",
+"headerTemplate": "{{ self.title }}",
+"properties": {
+  "text": { "type": "string", "propertyOrder": 20, "description": "120 characters (no img or title), otherwise 60" },
+  "title": { "type": "string", "propertyOrder": 10, "description": "40 characters" },
+  "thumbnailImageUrl": { "type": "string", "propertyOrder": 50, "description": "HTTPS / JPG / 1:1.51 / Max width 1024px, 1M" },
+  "imageBackgroundColor": { "type": "string", "propertyOrder": 60, "description": "RGB, default is #FFFFF" },
+  "actions": {
+    "type": "array", "propertyOrder": 100,
+    "items": {
+      "headerTemplate": "按鈕{{ i1 }}",
+      "$ref": "get-jsonschema-ajax.jsp?type=line-action"
+    }
+  }
+},
+"defaultProperties": ["text", "actions"]
+}

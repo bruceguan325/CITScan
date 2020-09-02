@@ -1,0 +1,62 @@
+.class1{
+                font-family:"SimHei";
+	font-weight:bold;
+	font-size:2.0em;
+	text-align:center;
+	margin: 1em 0em 1em 0em;
+}
+.class2{
+                 font-family: "STKaiti";
+	font-size:1.8em;
+	text-align:left;
+	text-indent:0em;
+	margin: 1em 0em 1em 0em;
+}
+.class3{       
+               font-family: "STLiti";
+	font-size:1.5em;
+	text-align:left;
+	text-indent:0em;
+	margin: 0.3em 0em 0.3em 0em;
+}
+.class4{
+               font-family: "STKaiti";
+	font-size:1.4em;
+	text-align:center;
+	margin: 0em 0em 1em 0em;
+}
+.class5{
+                font-family: "Simsun";
+	font-size: 1.4em;
+	text-align: left;
+	text-indent:2.0em;
+	margin: 0em 0em 0em 0em;
+}
+.class6{
+               font-family: "STKaiti";
+                text-indent:2.0em;
+	font-size: 1.1em;
+                 text-align: left;
+	margin: 0em 0em 0em 0em;
+}
+.class7{
+                 font-family: "STKaiti";
+	font-size:1.8em;
+	text-align:center;
+	text-indent:0em;
+	margin: 1em 0em 1em 0em;
+}
+.class8{
+	
+	margin: 1em 0em 0em 0em;
+}
+.class9{
+                font-family: "STKaiti";
+	font-size: 1.2em;
+                text-align: right;
+	margin: 0em 0em 0em 1em;
+}
+.class10{
+	text-align:left;
+	margin: 0em 0em 0em 0em;
+}

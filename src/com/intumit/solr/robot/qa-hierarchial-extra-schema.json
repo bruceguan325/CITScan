@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "name": "extra-parameters",
+  "title": "Extra parameters",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "text": {
+      "type": "string"
+    },
+    "thumbnailImageUrl": {
+      "type": "string",
+      "links": [
+	    {
+	      "href": "{{self}}",
+	      "mediaType": "image/png"
+	    }
+	  ]
+    },
+    "actions": {
+	  "type": "array",
+	  "format": "table",
+	  "items": {
+	    "type": "object",
+	    "properties": {
+	      "label": { "type": "string" },
+	      "type": { "type": "string" },
+	      "uri": { 
+	      	"type": "string",
+			"links": [
+				{
+				  "rel": "Open Link",
+				  "href": "{{self}}"
+				}
+			]
+	      }
+	    }
+	  }
+    }
+  }
+}

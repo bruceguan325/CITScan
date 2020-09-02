@@ -1,0 +1,47 @@
+<dataConfig>
+    <!-- 必要 -->
+    <dataSource name="fs" type="FileDataSource" />
+    <dataSource name="binFS" type="BinFileDataSource" />
+
+    <document name="products">
+        <!-- 
+        一般常見就是改 fileName & baseDir & recursive & excludes 四個參數，其他都不用動
+        
+        fileName 必要 (請用正規表示法)
+        baseDir 必要
+        recursive 包含子目錄，預設 false
+        excludes 正規表示法表示要跳過的檔名
+        newerThan ${dataimporter.last_index_time} 為標準格式，代表上次更新的時間。
+         -->
+        <entity 
+        	dataSource="fs"
+        	name="file"
+        	processor="UltraFileListEntityProcessor"
+			transformer="com.intumit.solr.FileColumnTransformer,solr.HTMLStripTransformer"
+        	rootEntity="true"
+        	pk="id"
+        	
+        	baseDir="C:/Documents"
+        	fileName=".*"
+        	recursive="true"
+        	
+			newerThan="${dataimporter.last_index_time}"
+        	>
+        	<field column="fileAbsolutePath"	name="id" />
+        	<field column="fileDir" 			name="fileDir_s" />
+        	<field column="fileLastModified"	name="Date_dt" />
+        	<field column="file"				name="Name_t" />
+        	<field column="fileExtension"		name="Extension_s" />
+        	
+        	<!-- 如果要解析檔案內容當中的文字（例如 PDF, Office 檔案），則需包含下面這個區段
+        	     若不需要請關閉，否則解析檔案耗時，效能較低 -->
+        	<!-- 
+        	<entity name="x" dataSource="binFS" processor="TikaEntityProcessor" url="${file.fileAbsolutePath}">
+            	<field column="text"				name="Description_mt"/>
+		    	<field column="Author"	meta="true"	name="Author_s"/>
+		    	<field column="title"	meta="true"	name="Name_t"/>
+            </entity>
+        	-->
+        </entity>
+    </document>
+</dataConfig>

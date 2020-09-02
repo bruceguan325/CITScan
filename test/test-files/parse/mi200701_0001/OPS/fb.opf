@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns:opf="http://www.idpf.org/2007/opf" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.idpf.org/2007/opf" version="2.0" unique-identifier="bookid">
+  <metadata>
+    <dc:identifier id="bookid">urn:uuid:5ff19749-4241-477e-9c9a-cad40974a21e</dc:identifier>
+    <dc:title>2007年第1期（总390期）</dc:title>
+    <dc:language>简体中文</dc:language>
+    <dc:creator>读者</dc:creator>
+    <dc:publisher>读者出版集团</dc:publisher>
+    <dc:date>2010-07-24</dc:date>
+    <meta name="cover" content="cover-image" />
+  </metadata>
+  <manifest>
+    <!-- Content Documents -->
+    <item id="css" href="css/main.css" media-type="text/css" />
+    <item id="coverpage" href="coverpage.html" media-type="application/xhtml+xml" />
+    <item id="ncx" href="fb.ncx" media-type="application/x-dtbncx+xml" />
+    <item id="cover-image" href="images/cover.jpg" media-type="image/jpeg" />
+    <item id="item1" href="images/1.jpg" media-type="image/jpeg" />
+    <item id="item2" href="images/10.jpg" media-type="image/jpeg" />
+    <item id="item3" href="images/11.jpg" media-type="image/jpeg" />
+    <item id="item4" href="images/12.jpg" media-type="image/jpeg" />
+    <item id="item5" href="images/15.jpg" media-type="image/jpeg" />
+    <item id="item6" href="images/16.jpg" media-type="image/jpeg" />
+    <item id="item7" href="images/17.jpg" media-type="image/jpeg" />
+    <item id="item8" href="images/18.jpg" media-type="image/jpeg" />
+    <item id="item9" href="images/19.jpg" media-type="image/jpeg" />
+    <item id="item10" href="images/20.jpg" media-type="image/jpeg" />
+    <item id="item11" href="images/23.jpg" media-type="image/jpeg" />
+    <item id="item12" href="images/24.jpg" media-type="image/jpeg" />
+    <item id="item13" href="images/25.jpg" media-type="image/jpeg" />
+    <item id="item14" href="images/26.jpg" media-type="image/jpeg" />
+    <item id="item15" href="images/27.jpg" media-type="image/jpeg" />
+    <item id="item16" href="images/28.jpg" media-type="image/jpeg" />
+    <item id="item17" href="images/29.jpg" media-type="image/jpeg" />
+    <item id="item18" href="images/30.jpg" media-type="image/jpeg" />
+    <item id="item19" href="images/31.jpg" media-type="image/jpeg" />
+    <item id="item20" href="images/32.jpg" media-type="image/jpeg" />
+    <item id="item21" href="images/33.jpg" media-type="image/jpeg" />
+    <item id="item22" href="images/35-1.jpg" media-type="image/jpeg" />
+    <item id="item23" href="images/35-2.jpg" media-type="image/jpeg" />
+    <item id="item24" href="images/35-3.jpg" media-type="image/jpeg" />
+    <item id="item25" href="images/35-4.jpg" media-type="image/jpeg" />
+    <item id="item26" href="images/35-5.jpg" media-type="image/jpeg" />
+    <item id="item27" href="images/36.jpg" media-type="image/jpeg" />
+    <item id="item28" href="images/38.jpg" media-type="image/jpeg" />
+    <item id="item29" href="images/39.jpg" media-type="image/jpeg" />
+    <item id="item30" href="images/4.jpg" media-type="image/jpeg" />
+    <item id="item31" href="images/40.jpg" media-type="image/jpeg" />
+    <item id="item32" href="images/41.jpg" media-type="image/jpeg" />
+    <item id="item33" href="images/42.jpg" media-type="image/jpeg" />
+    <item id="item34" href="images/44.jpg" media-type="image/jpeg" />
+    <item id="item35" href="images/45.jpg" media-type="image/jpeg" />
+    <item id="item36" href="images/46.jpg" media-type="image/jpeg" />
+    <item id="item37" href="images/47.jpg" media-type="image/jpeg" />
+    <item id="item38" href="images/48.jpg" media-type="image/jpeg" />
+    <item id="item39" href="images/51.jpg" media-type="image/jpeg" />
+    <item id="item40" href="images/52.jpg" media-type="image/jpeg" />
+    <item id="item41" href="images/53.jpg" media-type="image/jpeg" />
+    <item id="item42" href="images/54.jpg" media-type="image/jpeg" />
+    <item id="item43" href="images/56.jpg" media-type="image/jpeg" />
+    <item id="item44" href="images/57.jpg" media-type="image/jpeg" />
+    <item id="item45" href="images/58.jpg" media-type="image/jpeg" />
+    <item id="item46" href="images/6.jpg" media-type="image/jpeg" />
+    <item id="item47" href="images/60.jpg" media-type="image/jpeg" />
+    <item id="item48" href="images/61-1.jpg" media-type="image/jpeg" />
+    <item id="item49" href="images/61-2.jpg" media-type="image/jpeg" />
+    <item id="item50" href="images/62.jpg" media-type="image/jpeg" />
+    <item id="item51" href="images/7.jpg" media-type="image/jpeg" />
+    <item id="item52" href="images/8.jpg" media-type="image/jpeg" />
+    <item id="item53" href="images/34.jpg" media-type="image/jpeg" />
+    <item id="chapter1" href="chapter1.html" media-type="application/xhtml+xml" />
+    <item id="chapter2" href="chapter2.html" media-type="application/xhtml+xml" />
+    <item id="chapter3" href="chapter3.html" media-type="application/xhtml+xml" />
+    <item id="chapter4" href="chapter4.html" media-type="application/xhtml+xml" />
+    <item id="chapter5" href="chapter5.html" media-type="application/xhtml+xml" />
+    <item id="chapter6" href="chapter6.html" media-type="application/xhtml+xml" />
+    <item id="chapter7" href="chapter7.html" media-type="application/xhtml+xml" />
+    <item id="chapter8" href="chapter8.html" media-type="application/xhtml+xml" />
+    <item id="chapter9" href="chapter9.html" media-type="application/xhtml+xml" />
+    <item id="chapter10" href="chapter10.html" media-type="application/xhtml+xml" />
+    <item id="chapter11" href="chapter11.html" media-type="application/xhtml+xml" />
+    <item id="chapter12" href="chapter12.html" media-type="application/xhtml+xml" />
+    <item id="chapter13" href="chapter13.html" media-type="application/xhtml+xml" />
+    <item id="chapter14" href="chapter14.html" media-type="application/xhtml+xml" />
+    <item id="chapter15" href="chapter15.html" media-type="application/xhtml+xml" />
+    <item id="chapter16" href="chapter16.html" media-type="application/xhtml+xml" />
+    <item id="chapter17" href="chapter17.html" media-type="application/xhtml+xml" />
+    <item id="chapter18" href="chapter18.html" media-type="application/xhtml+xml" />
+    <item id="chapter19" href="chapter19.html" media-type="application/xhtml+xml" />
+    <item id="chapter20" href="chapter20.html" media-type="application/xhtml+xml" />
+    <item id="chapter21" href="chapter21.html" media-type="application/xhtml+xml" />
+    <item id="chapter22" href="chapter22.html" media-type="application/xhtml+xml" />
+    <item id="chapter23" href="chapter23.html" media-type="application/xhtml+xml" />
+    <item id="chapter24" href="chapter24.html" media-type="application/xhtml+xml" />
+    <item id="chapter25" href="chapter25.html" media-type="application/xhtml+xml" />
+    <item id="chapter26" href="chapter26.html" media-type="application/xhtml+xml" />
+    <item id="chapter27" href="chapter27.html" media-type="application/xhtml+xml" />
+    <item id="chapter28" href="chapter28.html" media-type="application/xhtml+xml" />
+    <item id="chapter29" href="chapter29.html" media-type="application/xhtml+xml" />
+    <item id="chapter30" href="chapter30.html" media-type="application/xhtml+xml" />
+    <item id="chapter31" href="chapter31.html" media-type="application/xhtml+xml" />
+    <item id="chapter32" href="chapter32.html" media-type="application/xhtml+xml" />
+    <item id="chapter33" href="chapter33.html" media-type="application/xhtml+xml" />
+    <item id="chapter34" href="chapter34.html" media-type="application/xhtml+xml" />
+    <item id="chapter35" href="chapter35.html" media-type="application/xhtml+xml" />
+    <item id="chapter36" href="chapter36.html" media-type="application/xhtml+xml" />
+    <item id="chapter37" href="chapter37.html" media-type="application/xhtml+xml" />
+    <item id="chapter38" href="chapter38.html" media-type="application/xhtml+xml" />
+    <item id="chapter39" href="chapter39.html" media-type="application/xhtml+xml" />
+    <item id="chapter40" href="chapter40.html" media-type="application/xhtml+xml" />
+    <item id="chapter41" href="chapter41.html" media-type="application/xhtml+xml" />
+    <item id="chapter42" href="chapter42.html" media-type="application/xhtml+xml" />
+    <item id="chapter43" href="chapter43.html" media-type="application/xhtml+xml" />
+    <item id="chapter44" href="chapter44.html" media-type="application/xhtml+xml" />
+    <item id="chapter45" href="chapter45.html" media-type="application/xhtml+xml" />
+    <item id="chapter46" href="chapter46.html" media-type="application/xhtml+xml" />
+    <item id="chapter47" href="chapter47.html" media-type="application/xhtml+xml" />
+    <item id="chapter48" href="chapter48.html" media-type="application/xhtml+xml" />
+    <item id="chapter49" href="chapter49.html" media-type="application/xhtml+xml" />
+    <item id="chapter50" href="chapter50.html" media-type="application/xhtml+xml" />
+    <item id="chapter51" href="chapter51.html" media-type="application/xhtml+xml" />
+    <item id="chapter52" href="chapter52.html" media-type="application/xhtml+xml" />
+  </manifest>
+  <spine toc="ncx">
+    <itemref idref="coverpage" linear="yes" />
+    <itemref idref="chapter1" linear="yes" />
+    <itemref idref="chapter2" linear="yes" />
+    <itemref idref="chapter3" linear="yes" />
+    <itemref idref="chapter4" linear="yes" />
+    <itemref idref="chapter5" linear="yes" />
+    <itemref idref="chapter6" linear="yes" />
+    <itemref idref="chapter7" linear="yes" />
+    <itemref idref="chapter8" linear="yes" />
+    <itemref idref="chapter9" linear="yes" />
+    <itemref idref="chapter10" linear="yes" />
+    <itemref idref="chapter11" linear="yes" />
+    <itemref idref="chapter12" linear="yes" />
+    <itemref idref="chapter13" linear="yes" />
+    <itemref idref="chapter14" linear="yes" />
+    <itemref idref="chapter15" linear="yes" />
+    <itemref idref="chapter16" linear="yes" />
+    <itemref idref="chapter17" linear="yes" />
+    <itemref idref="chapter18" linear="yes" />
+    <itemref idref="chapter19" linear="yes" />
+    <itemref idref="chapter20" linear="yes" />
+    <itemref idref="chapter21" linear="yes" />
+    <itemref idref="chapter22" linear="yes" />
+    <itemref idref="chapter23" linear="yes" />
+    <itemref idref="chapter24" linear="yes" />
+    <itemref idref="chapter25" linear="yes" />
+    <itemref idref="chapter26" linear="yes" />
+    <itemref idref="chapter27" linear="yes" />
+    <itemref idref="chapter28" linear="yes" />
+    <itemref idref="chapter29" linear="yes" />
+    <itemref idref="chapter30" linear="yes" />
+    <itemref idref="chapter31" linear="yes" />
+    <itemref idref="chapter32" linear="yes" />
+    <itemref idref="chapter33" linear="yes" />
+    <itemref idref="chapter34" linear="yes" />
+    <itemref idref="chapter35" linear="yes" />
+    <itemref idref="chapter36" linear="yes" />
+    <itemref idref="chapter37" linear="yes" />
+    <itemref idref="chapter38" linear="yes" />
+    <itemref idref="chapter39" linear="yes" />
+    <itemref idref="chapter40" linear="yes" />
+    <itemref idref="chapter41" linear="yes" />
+    <itemref idref="chapter42" linear="yes" />
+    <itemref idref="chapter43" linear="yes" />
+    <itemref idref="chapter44" linear="yes" />
+    <itemref idref="chapter45" linear="yes" />
+    <itemref idref="chapter46" linear="yes" />
+    <itemref idref="chapter47" linear="yes" />
+    <itemref idref="chapter48" linear="yes" />
+    <itemref idref="chapter49" linear="yes" />
+    <itemref idref="chapter50" linear="yes" />
+    <itemref idref="chapter51" linear="yes" />
+    <itemref idref="chapter52" linear="yes" />
+  </spine>
+</package>

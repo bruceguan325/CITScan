@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
+	"http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+
+<struts-config>
+	
+	<action-mappings>
+		<!-- 
+		<action path="/Home" type="com.intumit.uwin.action.Home">
+			<forward name="success" path="/Home.jsp" />
+		</action>
+		
+		<action path="/LoginPage" type="com.intumit.uwin.action.LoginPage">
+			<forward name="success" path="/user/Login.jsp" />
+		</action>
+		
+		<action path="/Login" type="com.intumit.uwin.action.Login">
+			<forward name="success" path="/" redirect="true" />
+			<forward name="redirect" path="/Redirect.action" />
+			<forward name="input" path="/user/Login.jsp" />
+		</action>
+		
+		<action path="/Logout" type="com.intumit.uwin.action.Logout">
+			<forward name="success" path="/login" redirect="true" />
+		</action>
+		 -->
+	</action-mappings>
+	
+	<message-resources null="false" parameter="default/messages" />
+	
+</struts-config>

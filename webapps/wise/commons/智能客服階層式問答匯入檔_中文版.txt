@@ -1,0 +1,24 @@
+id	選項編號	選後行為	QAID	問題	答案	例句	腳本	extraParams	期限	下層顯示模式	下層輸入模式	h_qa_1	h_qa_2	h_qa_3	h_qa_4
+2	1501307633952	直接回答			AAA							你好			
+	1501309075533	INPUT_TEXT											321		
+	1501309113810	DIRECT_ANSWER			ASDW									123	
+	1501307680204	送出文字											BBB		
+	1501309075534	INPUT_TEXT											ddd		
+	1501309113811	DIRECT_ANSWER			ASDW									ASDW	
+	1501307709226		COMMON_SENSE-5	測試								測試			
+	111	直接回答			CC							CCC			
+	222	送出文字											C		
+4	1501307633953	直接回答			AAA							AAA			
+	1501309075534	INPUT_TEXT											321		
+	1501309113811	DIRECT_ANSWER			ASDW									123	
+	1501307680205	INPUT_TEXT											BBB		
+	1501309075535	送出文字											ddd		
+3	1501307633951	DIRECT_ANSWER			AAA							AAA			
+	1501307680203	INPUT_TEXT											BBB		
+5	1234	DIRECT_ANSWER			AAA							AAA			
+		INPUT_TEXT											321		
+		直接回答			ASDW									123	
+		INPUT_TEXT											BBB		
+		送出文字											ddd		
+		DIRECT_ANSWER			ASDW									ASDW	
+			COMMON_SENSE-5	TEST								TEST			

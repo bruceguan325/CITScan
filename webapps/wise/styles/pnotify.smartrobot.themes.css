@@ -1,0 +1,16 @@
+.ui-pnotify.quick-test-panel .ui-pnotify-container {
+	background-image: none !important;
+	border: none !important;
+}
+.ui-pnotify.quick-test-panel .ui-pnotify-title, .ui-pnotify.quick-test-panel .ui-pnotify-text {
+	font-family: Arial, Helvetica, sans-serif !important;
+	text-rendering: geometricPrecision !important;
+}
+.ui-pnotify.quick-test-panel .row {
+	margin-top:10px;
+}
+.ui-pnotify.quick-test-panel .ui-pnotify-title {
+}
+.ui-pnotify.quick-test-panel .ui-pnotify-icon {
+	float: left;
+}

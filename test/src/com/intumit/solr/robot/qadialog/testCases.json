@@ -1,0 +1,656 @@
+{
+"testGroups": [
+	{
+	"desc": "測試AVM",
+	"tags": ["AVM", "AVM1"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "Y", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市松山區寶清街22號", "answer": "請確認地址是否為台北市松山區寶清街22號"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "assertType": "startsWith", "answer": "請問您所在的樓層?"},
+			{"question": "5", "answer": "請確認您房屋所在樓層為5樓?"},
+			{"question": "否", "assertType": "startsWith", "answer": "請問您所在的樓層?"},
+			{"question": "5", "answer": "請確認您房屋所在樓層為5樓?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "您清楚您買的房屋屋齡或是知道哪一年蓋好的嗎？"},
+			{"question": "43", "answer": "請問您輸入的是? 1.民國43年; 2.屋齡43年;"},
+			{"question": "2", "assertType": "startsWith", "answer": "請問房屋的權狀坪數是多少坪呢?"},
+			{"question": "-5坪", "answer": "坪數不可為零或者負數，請重新輸入。"},
+			{"question": "33.5坪", "answer": "感謝您耐心的等候，您在台北市松山區寶清街22號的房屋估價大約是2196萬，可貸款成數為8成\n（您可以輸入「房貸」進行放款估價情境，或者直接輸入本次POC相關問題進行測試）"}
+		]
+	},
+	{
+	"desc": "測試AVM地下N樓及中間中斷",
+	"tags": ["AVM", "AVM2"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "Y", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市松山區寶清街22號", "answer": "請確認地址是否為台北市松山區寶清街22號"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "assertType": "startsWith", "answer": "請問您所在的樓層?"},
+			{"question": "地下3樓", "answer": "目前公司不承作地下室物件的放款"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市松山區寶清街22號，類型:華廈(10層含以下有電梯)"}
+		]
+	},
+	{
+	"desc": "測試AVM從地址中判定樓層",
+	"tags": ["AVM", "AVM3"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "Y", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市松山區寶清街22號3F", "answer": "請確認地址是否為台北市松山區寶清街22號3F"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "assertType": "startsWith", "answer": "請確認您房屋所在樓層為3樓?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "您清楚您買的房屋屋齡或是知道哪一年蓋好的嗎？"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市松山區寶清街22號3F，類型:華廈(10層含以下有電梯)"}
+		]
+	},
+	{
+	"desc": "測試AVM非整數樓層",
+	"tags": ["AVM", "AVM4"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "Y", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市松山區寶清街22號", "answer": "請確認地址是否為台北市松山區寶清街22號"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "assertType": "startsWith", "answer": "請問您所在的樓層? (ex. 10樓)"},
+			{"question": "5.5", "assertType": "startsWith", "answer": "樓層需為整數，請重新輸入"},
+			{"question": "5", "answer": "請確認您房屋所在樓層為5樓?"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市松山區寶清街22號，類型:華廈(10層含以下有電梯)"}
+		]
+	},
+	{
+	"desc": "測試AVM中文的屋齡",
+	"tags": ["AVM", "AVM5"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "Y", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市松山區寶清街22號3F", "answer": "請確認地址是否為台北市松山區寶清街22號3F"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "assertType": "startsWith", "answer": "請確認您房屋所在樓層為3樓?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "您清楚您買的房屋屋齡或是知道哪一年蓋好的嗎？"},
+			{"question": "十年前", "answer": "請確認屋齡是否為10年?"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市松山區寶清街22號3F，類型:華廈(10層含以下有電梯)"}
+		]
+	},
+	{
+	"desc": "測試AVM無法回答坪數或者屋齡",
+	"tags": ["AVM", "AVM6"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "Y", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市松山區寶清街22號3F", "answer": "請確認地址是否為台北市松山區寶清街22號3F"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "assertType": "startsWith", "answer": "請確認您房屋所在樓層為3樓?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "您清楚您買的房屋屋齡或是知道哪一年蓋好的嗎？"},
+			{"question": "不知道", "answer": "若不清楚屋齡，請來電由客服人員為您協助"},
+			{"question": "10年前", "answer": "請確認屋齡是否為10年?"},
+			{"question": "對的", "assertType": "startsWith", "answer": "請問房屋的權狀坪數是多少坪呢?"},
+			{"question": "不知道", "answer": "若不清楚坪數，請來電由客服人員為您協助"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市松山區寶清街22號3F，類型:華廈(10層含以下有電梯)"}
+		]
+	},
+	{
+	"desc": "測試AVM地址判定1",
+	"tags": ["AVM"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "Y", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市松山區八德路四段72巷14弄3之2號", "answer": "請確認地址是否為台北市松山區八德路四段72巷14弄3-2號"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址"}
+		]
+	},
+	{
+	"desc": "測試AVM地址判定2",
+	"tags": ["AVM"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "Y", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "彰化縣員林市山腳路三段2巷6號", "answer": "彰化縣目前不提供自動估價試算，請重新輸入房屋地址。"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址"}
+		]
+	},
+	{
+	"desc": "測試AVM地址判定3",
+	"tags": ["AVM", "ADDR4"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "Y", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市松山區八德路3段108號B4F", "answer": "請確認地址是否為台北市松山區八德路三段108號B4F"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址"}
+		]
+	},
+	{
+	"desc": "測試AVM進入關鍵字",
+	"tags": ["AVM"],
+	"tests": [
+			{"question": "房貸該如何申請", "assertType": "startsWith", "answer": "準備申請文件->房屋估價->審核對保->設定->撥款->撥款後貸款契約生效，借款人開始每月還款。"}
+		]
+	},
+	{
+	"desc": "測試AVM進入問句1",
+	"tags": ["AVM"],
+	"tests": [
+			{"question": "我要房屋估價", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "沒有耶", "answer": "地址:尚未填入，類型:尚未填入，樓層:尚未填入，屋齡:尚未填入，坪數:尚未填入 已經取消房貸AVM估價"}
+		]
+	},
+	{
+	"desc": "測試AVM進入問句2",
+	"tags": ["AVM"],
+	"tests": [
+			{"question": "我想問你們的房貸有沒有優惠", "assertType": "startsWith", "answer": "國壽保戶且年繳保費20萬元以上"},
+			{"question": "1", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "沒有耶", "answer": "地址:尚未填入，類型:尚未填入，樓層:尚未填入，屋齡:尚未填入，坪數:尚未填入 已經取消房貸AVM估價"}
+		]
+	},
+	{
+	"desc": "測試AVM進入問句3",
+	"tags": ["AVM"],
+	"tests": [
+			{"question": "我想要詢問房貸相關問題", "assertType": "startsWith", "answer": "想詢問房貸相關問題，請參考下列選項"},
+			{"question": "1", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "沒有耶", "answer": "地址:尚未填入，類型:尚未填入，樓層:尚未填入，屋齡:尚未填入，坪數:尚未填入 已經取消房貸AVM估價"}
+		]
+	},
+	{
+	"desc": "測試AVM各種同意",
+	"tags": ["AVM", "CONFIRM"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址"},
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "對對對", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址"},
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "好!!!", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址"}
+		]
+	},
+	{
+	"desc": "測試AVM拒絕進入",
+	"tags": ["AVM"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "沒有耶", "answer": "地址:尚未填入，類型:尚未填入，樓層:尚未填入，屋齡:尚未填入，坪數:尚未填入 已經取消房貸AVM估價"},
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "不是喔", "answer": "地址:尚未填入，類型:尚未填入，樓層:尚未填入，屋齡:尚未填入，坪數:尚未填入 已經取消房貸AVM估價"},
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "沒", "answer": "地址:尚未填入，類型:尚未填入，樓層:尚未填入，屋齡:尚未填入，坪數:尚未填入 已經取消房貸AVM估價"},
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "否", "answer": "地址:尚未填入，類型:尚未填入，樓層:尚未填入，屋齡:尚未填入，坪數:尚未填入 已經取消房貸AVM估價"},
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "沒有", "answer": "地址:尚未填入，類型:尚未填入，樓層:尚未填入，屋齡:尚未填入，坪數:尚未填入 已經取消房貸AVM估價"}
+		]
+	},
+	{
+	"desc": "AVM測試地址不全1",
+	"tags": ["AVM", "ADDR5"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市松山區", "answer": "請問是台北市松山區的哪裡呢？（需要完整的地址及門牌號碼）"},
+			{"question": "寶清街22號3樓", "answer": "請確認地址是否為台北市松山區寶清街22號3樓"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "answer": "請確認您房屋所在樓層為3樓?"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址"}
+		]
+	},
+	{
+	"desc": "AVM測試地址不全2",
+	"tags": ["AVM", "ADDR6"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市", "answer": "請問是台北市的什麼區域？(ex. 大安區、中正區)"},
+			{"question": "台北市松山區寶清街22號3樓", "answer": "請確認地址是否為台北市松山區寶清街22號3樓"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "answer": "請確認您房屋所在樓層為3樓?"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市松山區寶清街22號3樓，類型:華廈(10層含以下有電梯)"}
+		]
+	},
+	{
+	"desc": "AVM測試地址不全3",
+	"tags": ["AVM", "ADDR7"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "松山區", "answer": "請問是台北市松山區的哪裡呢？（需要完整的地址及門牌號碼）"},
+			{"question": "寶清街22號3樓", "answer": "請確認地址是否為台北市松山區寶清街22號3樓"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "answer": "請確認您房屋所在樓層為3樓?"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市松山區寶清街22號3樓，類型:華廈(10層含以下有電梯)"}
+		]
+	},
+	{
+	"desc": "AVM測試地址不全4",
+	"tags": ["AVM", "ADDR8"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市松山區寶清街22號3樓", "answer": "請確認地址是否為台北市松山區寶清街22號3樓"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "都不是", "answer": "需要請您直接來電由客服人員進行協助"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市松山區寶清街22號3樓"}
+		]
+	},
+	{
+	"desc": "AVM測試地址不全5",
+	"tags": ["AVM", "ADDR9"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "松山", "answer": "請問是台北市松山區的哪裡呢？（需要完整的地址及門牌號碼）"},
+			{"question": "寶清街22號3樓", "answer": "請確認地址是否為台北市松山區寶清街22號3樓"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "answer": "請確認您房屋所在樓層為3樓?"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市松山區寶清街22號3樓，類型:華廈(10層含以下有電梯)"}
+		]
+	},
+	{
+	"desc": "AVM測試地址不全6",
+	"tags": ["AVM", "ADDR10"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "松山寶清街22號3樓", "answer": "請確認地址是否為台北市松山區寶清街22號3樓"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "answer": "請確認您房屋所在樓層為3樓?"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市松山區寶清街22號3樓，類型:華廈(10層含以下有電梯)"}
+		]
+	},
+	{
+	"desc": "AVM測試地址不全7",
+	"tags": ["AVM", "ADDR11"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "新北新店", "answer": "新北市目前不提供自動估價試算，請重新輸入房屋地址。"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:尚未填入，類型:尚未填入"}
+		]
+	},
+	{
+	"desc": "AVM測試地址不全8",
+	"tags": ["AVM", "ADDR12"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "松山寶清街", "answer": "請問是台北市松山區寶清街的哪裡呢？（需要完整的地址及門牌號碼）"},
+			{"question": "22號3樓", "answer": "請確認地址是否為台北市松山區寶清街22號3樓"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "answer": "請確認您房屋所在樓層為3樓?"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市松山區寶清街22號3樓，類型:華廈(10層含以下有電梯)"}
+		]
+	},
+	{
+	"desc": "AVM測試地址不全9",
+	"tags": ["AVM", "ADDR13"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市仁愛路四段296號", "answer": "請問是台北市仁愛路四段296號的什麼區域？(ex. 大安區、中正區)"},
+			{"question": "大安區", "answer": "請確認地址是否為台北市大安區仁愛路四段296號"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "answer": "請問您所在的樓層? (ex. 10樓)"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市大安區仁愛路"}
+		]
+	},
+	{
+	"desc": "AVM測試地址不全10",
+	"tags": ["AVM", "ADDR14"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "仁愛路四段296號", "answer": "請問是哪個縣市的仁愛路四段296號？"},
+			{"question": "台北市大安區", "answer": "請確認地址是否為台北市大安區仁愛路四段296號"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "answer": "請問您所在的樓層? (ex. 10樓)"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市大安區仁愛路"}
+		]
+	},
+	{
+	"desc": "AVM測試地址不全11",
+	"tags": ["AVM", "ADDR15"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市松山路南京東西五段120號", "answer": "請問是台北市松山路南京東西五段120號的什麼區域？(ex. 大安區、中正區)"},
+			{"question": "台北市大安區", "answer": "請確認地址是否為台北市大安區松山路南京東西五段120號"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "answer": "請問您所在的樓層? (ex. 10樓)"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市大安區"}
+		]
+	},
+	{
+	"desc": "AVM測試地址不全12",
+	"tags": ["AVM", "ADDR16"],
+	"tests": [
+			{"question": "AVM", "answer": "請問是否要進行房貸自動估價服務?"},
+			{"question": "是", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市南京東路五段120號", "answer": "請問是台北市南京東路五段120號的什麼區域？(ex. 大安區、中正區)"},
+			{"question": "大安", "answer": "請確認地址是否為台北市大安區南京東路五段120號"},
+			{"question": "Y", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯)"},
+			{"question": "4", "answer": "請問您所在的樓層? (ex. 10樓)"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址:台北市大安區"}
+		]
+	},
+	
+	
+	
+	
+	{
+	"desc": "保單繳費查詢1",
+	"tags": ["InsuranceFee", "InsuranceFee1"],
+	"tests": [
+			{"question": "查詢保單繳費狀況", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "Y18664628C", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "您所有保單的下次繳費時間資訊如下： (1). 9023157990"},
+			{"question": "有哪些是月繳的", "assertType": "startsWith", "answer": "您 2張月繳保單的繳別資訊如下: (請用前方的數字選擇您欲查詢的保單，或輸入「全部保單」取得全部保單資訊) (1). 9023157990"},
+			{"question": "總共要繳多少錢", "assertType": "startsWith", "answer": "您有 2張月繳的保單: (請用前方的數字選擇您欲查詢的保單，或輸入「全部保單」取得全部保單資訊) (1). 9023157990"},
+			{"question": "全部保單", "assertType": "startsWith", "answer": "您好，您一共有 2張保單： (1). 9023157990"},
+			{"question": "9023157990", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）,契約效力為"},
+			{"question": "全部保單", "assertType": "startsWith", "answer": "您好，您一共有 2張保單： (1). 9023157990"},
+			{"question": "9022594459", "assertType": "startsWith", "answer": "9022594459（金好康養老保險）,契約效力為"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	{
+	"desc": "保單繳費查詢2",
+	"tags": ["InsuranceFee", "InsuranceFee2"],
+	"tests": [
+			{"question": "保單停效了怎麼辦", "assertType": "startsWith", "answer": "台端可於本契約停效期間內"},
+			{"question": "1", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "M28705791F", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "保單號碼：7500001458 被保人：古○珠"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	{
+	"desc": "保單繳費查詢3",
+	"tags": ["InsuranceFee", "InsuranceFee3"],
+	"tests": [
+			{"question": "查詢保單繳費狀況", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "B28633231C", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "保單號碼：7500019713 被保人：陳○基"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	{
+	"desc": "保單繳費查詢4",
+	"tags": ["InsuranceFee", "InsuranceFee4"],
+	"tests": [
+			{"question": "便利超商繳費", "assertType": "startsWith", "answer": "單張保單之繳款金額(含保費及保單借款利息)未逾新臺幣5萬元者"},
+			{"question": "1", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "K26748785E", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "保單號碼：7500400867 被保人：吳○瑤"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	{
+	"desc": "保單繳費查詢5",
+	"tags": ["InsuranceFee", "InsuranceFee5"],
+	"tests": [
+			{"question": "我要查保單", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "J18792871J", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "保單號碼：7500453758 被保人：黃○有"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	{
+	"desc": "保單繳費查詢6",
+	"tags": ["InsuranceFee", "InsuranceFee6"],
+	"tests": [
+			{"question": "便利超商繳費", "assertType": "startsWith", "answer": "單張保單之繳款金額(含保費及保單借款利息)未逾新臺幣5萬元者"},
+			{"question": "1", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "Y18664628C", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "您好，您一共有 2張保單： (1). 9023157990"},
+			{"question": "月繳的有哪幾張", "assertType": "startsWith", "answer": "提供給您月繳的保單資料: (請用前方的數字選擇您欲查詢的保單，或輸入「全部保單」取得全部保單資訊) (1). 9023157990"},
+			{"question": "1", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）的繳費頻率為月繳"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	{
+	"desc": "保單繳費查詢7",
+	"tags": ["InsuranceFee", "InsuranceFee7"],
+	"tests": [
+			{"question": "便利超商繳費", "assertType": "startsWith", "answer": "單張保單之繳款金額(含保費及保單借款利息)未逾新臺幣5萬元者"},
+			{"question": "1", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "不記得了", "answer": "確定要結束保單查詢（Y/N）?"},
+			{"question": "是", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	{
+	"desc": "保單明細查詢1",
+	"tags": ["InsuranceFeeDetail"],
+	"tests": [
+	
+			{"question": "9023157990", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "Y18664628C", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "保單號碼：9023157990 被保人：王○涵"},
+			{"question": "保單號碼?", "answer": "9023157990"},
+			{"question": "保單名稱", "answer": "9023157990（金好康養老保險）保單名稱為金好康養老保險"},
+			{"question": "請問除了轉帳還有什麼方式可以繳保費", "assertType": "startsWith", "answer": "繳費管道包括： 超商自繳"},
+			{"question": "投保的時間", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）投保日期為"},
+			{"question": "何時開始投保的", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）投保日期為"},
+		    {"question": "什麼時候開始投保的", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）投保日期為"},
+			{"question": "繳到什麼時候期滿", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）繳費年期為6"},
+		    {"question": "繳到什麼時候到期", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）繳費年期為6"},
+			{"question": "繳多久期滿", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）繳費年期為6"},
+			{"question": "保險年期多久", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）保險年期為6"},
+			{"question": "多久要繳一次", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）無下次繳費時間"},
+			{"question": "保費是每個月繳嗎", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）繳費頻率為"},
+			{"question": "主約保額多少金額", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）主約保額為 15.0000"},
+			{"question": "繳費保額多少金額", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）主約保額為 15.0000，繳費保額為 15.0000"},
+			{"question": "墊繳下次應繳日", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）查無墊繳下次應繳日"},
+			{"question": "下次什麼時候要繳錢", "answer": "9023157990（金好康養老保險）無下次繳費時間"},
+			{"question": "何時繳費?", "answer": "9023157990（金好康養老保險）無下次繳費時間"},
+			{"question": "上次何時繳費?", "answer": "9023157990（金好康養老保險）最近繳費日期為 2015-01-29，無下次繳費時間"},
+			{"question": "共繳了幾次?", "answer": "9023157990（金好康養老保險）共繳了72次"},
+			{"question": "多少次支票沒有兌現", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）票據未兌現次數為 0"},
+			{"question": "我的保單有紅利嗎", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）紅利類別為 無紅利"},
+			{"question": "保單最近有什麼異動", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）,最近的異動種類為 ABB001,異動時間 2015-02-11"},
+			{"question": "保單異動日期是什麼時候", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）,最近的異動種類為 ABB001,異動時間 2015-02-11"},
+			{"question": "保單體檢類別是什麼", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）體檢類別為 無體檢"},
+			{"question": "是有效的保單嗎", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）契約效力為 非終身險滿期"},
+			{"question": "契約效力?", "answer": "9023157990（金好康養老保險）契約效力為 非終身險滿期"},
+			{"question": "是否是無效保單?", "answer": "9023157990（金好康養老保險）契約效力為 非終身險滿期"},
+			{"question": "目前保單狀況如何", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）,契約效力為 非終身險滿期,處理狀況為 無作業辦理中"},
+			{"question": "保單補發幾次了", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）補發的次數為 0"},
+			{"question": "最近一次的保單補發時間是什麼時候", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）,補發的次數為 0,查無保單補發日期"},
+			{"question": "保單什麼時候停效", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）停效(終止)日期為 9999-12-31"},
+			{"question": "保單的停效日期是什麼時候", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）停效(終止)日期為 9999-12-31"},
+			{"question": "保單有墊繳嗎", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）墊繳狀況為 墊繳"},
+			{"question": "收費代碼幾號", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）收費代碼為 FF70301"},
+			{"question": "保單合併碼", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）保單合併碼為 0"},
+			{"question": "被保人身份證號", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）被保人身份證號為 F28340392F"},
+			{"question": "保單當初投保的年齡是幾歲", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）被保人 王○涵 投保年齡為18"},
+			{"question": "保單延長期間", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）目前尚無法提供延長期間的查詢"},
+			{"question": "保單提前給付嗎", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）目前尚無法提供提前給付表示的查詢"},
+			{"question": "生命表回饋方式", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）目前尚無法提供生命表回饋方式的查詢"},
+			{"question": "被保人患病幾年", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）目前尚無法提供患病年度的查詢"},
+			{"question": "保單被保人的性別是", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）被保人性別為 女"},
+			{"question": "保單成立日期是什麼時候", "assertType": "startsWith", "answer": "您欲查詢的資料目前無法提供，請輸入可以查詢的欄位再試試看!"},
+			{"question": "保單年金保證期間／約定給付期間", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）目前尚無法提供年金保證期間／約定給付期間的查詢"},
+			{"question": "保單年金的開始給付日", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）目前尚無法提供年金開始給付日的查詢"},
+			{"question": "保單年金的年金給付方式", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）目前尚無法提供年金給付方式的查詢"},
+			{"question": "保單新契約受理編號", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）新契約受理編號為 B014646128"},
+			{"question": "保單的幣別", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）幣別為 NTD"},
+			{"question": "保單的主約表定保費", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）主約表定保費為 1947.0000"},
+			{"question": "保單的主約保費", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）主約保費為 0"},
+			{"question": "保單的下次應繳保費", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）,主約表定保費為 1947.0000,查無下次應繳保費"},
+			{"question": "要保人", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）要保人姓名為"},
+			{"question": "被保人", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）被保人姓名為"},
+			{"question": "怎麼繳費", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）繳費方式為"},
+			{"question": "保單投資標的是什麼幣別", "assertType": "startsWith", "answer": "9023157990（金好康養老保險）幣別為"},
+			{"question": "扣款銀行", "answer": "9023157990（金好康養老保險）目前尚無法提供扣款銀行的查詢"},
+			{"question": "業務的電話", "answer": "9023157990（金好康養老保險）目前尚無法提供服務人員電話的查詢"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎?"}
+
+		]
+	},
+	
+	
+	{
+	"desc": "情境切換 - AVM跟保單繳費查詢互相切換",
+	"tags": ["InsuranceFee2AVM"],
+	"tests": [
+			{"question": "便利超商繳費", "assertType": "startsWith", "answer": "單張保單之繳款金額(含保費及保單借款利息)未逾新臺幣5萬元者"},
+			{"question": "1", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "Y18664628C", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "您好，您一共有 2張保單： (1). 9023157990"},
+			{"question": "avm", "answer": "您正在保單保費查詢情境當中，確定要進入房貸自動估價情境？"},
+			{"question": "Y", "answer": "請問您的房屋地址是那裡? (目前僅提供台北市估價)"},
+			{"question": "台北市松山區寶清街22號", "answer": "請確認地址是否為台北市松山區寶清街22號"},
+			{"question": "我想查我的保單狀況", "answer": "確定要回到保單保費查詢情境？"},
+			{"question": "是", "assertType": "startsWith", "answer": "您欲查詢的資料目前無法提供，您可以直接輸入保單前方的數字進入保單明細。 提供給您全部的保單資料:"},
+			{"question": "結束", "answer": "確定要結束保單查詢（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "請問還有其他需要為您服務的地方嗎? 已回到房貸自動估價情境。"},
+			{"question": "9023157990", "assertType": "startsWith", "answer": "您正在房貸自動估價情境當中，確定要進入保單保費查詢情境？"},
+			{"question": "Y", "assertType": "startsWith", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "Y18664628C", "assertType": "startsWith", "answer": "保單號碼：9023157990 被保人：王○涵"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎? 已回到房貸自動估價情境。"},
+			{"question": "結束", "answer": "您尚未完成估價，確定要結束（Y/N）?"},
+			{"question": "是的", "assertType": "startsWith", "answer": "地址"}
+		]
+	},
+	
+	{
+	"desc": "保費驗身失敗",
+	"tags": ["InsuranceFee", "InsuranceFee8"],
+	"tests": [
+			{"question": "請問我想查我的保費狀況要怎麼查", "assertType": "startsWith", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "A3232139234", "assertType": "startsWith", "answer": "您輸入的會員帳號不正確，請提供您完整的會員帳號（英文字母請輸入大寫）"},
+			{"question": "K26748785E", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "保單號碼：7500400867 被保人：吳○瑤 商品名稱：創世紀丙型 契約效力"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	{
+	"desc": "保單查詢被保人資料－引導",
+	"tags": ["InsuranceFee", "InsuranceFee9"],
+	"tests": [
+			{"question": "我買的保單被保人有那些", "assertType": "startsWith", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "K26748785E", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "被保人姓名為 吳○瑤"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	{
+	"desc": "保單查詢被保人資料－引導2",
+	"tags": ["InsuranceFee", "InsuranceFee9-1"],
+	"tests": [
+			{"question": "我買的保單被保人有那些", "assertType": "startsWith", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "G18687956E", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "被保人姓名為 吳○瑤"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	{
+	"desc": "保費上下文問答",
+	"tags": ["InsuranceFee", "InsuranceFee10"],
+	"tests": [
+			{"question": "保費轉帳失敗怎麼辦", "assertType": "startsWith", "answer": "同一繳次扣款失敗一次，將自動執行第二次扣款，若連續兩次扣款不成則需自行繳費。"},
+			{"question": "為什麼會失敗", "assertType": "startsWith", "answer": "常見的扣款失敗原因如下： 1.存款不足"},
+			{"question": "我的保單什麼時候會再扣款", "assertType": "startsWith", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "Y18664628C", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "提供給您轉帳扣款的保單資料: (請用前方的數字選擇您欲查詢的保單，或輸入「全部保單」取得全部保單資訊) 抱歉查無相關資訊"},
+			{"question": "結束", "answer": "確定要結束保單查詢（Y/N）?"},
+			{"question": "對", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	{
+	"desc": "保單查詢問題聽不懂－引導",
+	"tags": ["InsuranceFee", "InsuranceFee11"],
+	"tests": [
+			{"question": "查詢保單繳費狀況", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "Y18664628C", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "您好，您一共有 2張保單： (1). 9023157990"},
+			{"question": "有哪些是隨便繳的", "assertType": "startsWith", "answer": "您欲查詢的資料目前無法提供，您可以直接輸入保單前方的數字進入保單明細"},
+			{"question": "我的保單有紅利嗎", "assertType": "startsWith", "answer": "提供給您紅利選擇的資料： (請用"},
+			{"question": "我的保單狀況", "assertType": "startsWith", "answer": "提供給您契約效力的資料： (請用"},
+			{"question": "保單名稱", "assertType": "startsWith", "answer": "提供給您保險名稱的資料： (請用"},
+			{"question": "全部保單", "assertType": "startsWith", "answer": "您好，您一共有 2張保單： (1). 9023157990"},
+			{"question": "9023157990", "assertType": "startsWith", "answer": "保單號碼：9023157990 被保人：王○涵"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	{
+	"desc": "保單查詢問題臺灣國語",
+	"tags": ["InsuranceFee", "InsuranceFee12"],
+	"tests": [
+			{"question": "查詢保單繳會狀況", "answer": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？"},
+			{"question": "Y18664628C", "assertType": "startsWith", "answer": "請問您您的會員密碼是？"},
+			{"question": "123456", "assertType": "startsWith", "answer": "您好，您一共有 2張保單： (1). 9023157990"},
+			{"question": "我的保單有紅利嗎", "assertType": "startsWith", "answer": "您好，您一共有 2張保單： (1). 9023157990（金好康養老保險）紅利類別"},
+			{"question": "下次角會是和時", "assertType": "startsWith", "answer": "提供給您下次繳費時間的資料："},
+			{"question": "保單名稱", "assertType": "startsWith", "answer": "提供給您保險名稱的資料： (請用"},
+			{"question": "全部保單", "assertType": "startsWith", "answer": "您好，您一共有 2張保單： (1). 9023157990"},
+			{"question": "9023157990", "assertType": "startsWith", "answer": "保單號碼：9023157990 被保人：王○涵"},
+			{"question": "結束", "answer": "請問還有其他需要為您服務的地方嗎?"}
+		]
+	},
+	
+	
+	
+	{
+	"desc": "展示情境",
+	"tags": ["DEMO"],
+	"tests": [
+				{"question": "我最近想買房子,想請問你們房貸有優惠嗎", "assertType": "startsWith", "answer": "主要考量借款人的還款能力作為審核貸款利率"},
+				{"question": "1", "assertType": "startsWith", "answer": "請問是否要進行房貸自動估價服務?"},
+				{"question": "好", "assertType": "startsWith", "answer": "請問您的房屋地址是那裡? (目前僅提供台"},
+				{"question": "松山寶清街", "assertType": "startsWith", "answer": "請問是台北市松山區寶清街的哪裡呢？（需要"},
+				{"question": "22號3樓", "assertType": "startsWith", "answer": "請確認地址是否為台北市松山區寶清街22號"},
+				{"question": "對", "assertType": "startsWith", "answer": "請問房屋的類型是? 1.公寓(5樓含以下"},
+				{"question": "4", "assertType": "startsWith", "answer": "請確認您房屋所在樓層為3樓?"},
+				{"question": "市滴", "assertType": "startsWith", "answer": "您清楚您買的房屋屋齡或是知道哪一年蓋好的"},
+				{"question": "應該是十二年以前", "assertType": "startsWith", "answer": "請確認屋齡是否為12年?"},
+				{"question": "應該是", "assertType": "startsWith", "answer": "請問房屋的權狀坪數是多少坪呢? (ex."},
+				{"question": "不知吔", "assertType": "startsWith", "answer": "若不清楚坪數，請來電由客服人員為您協助"},
+				{"question": "大概28.5平", "assertType": "startsWith", "answer": "感謝您耐心的等候，目前無法從估價系統取得"},
+				{"question": "房貸送件需要準備哪些文件？", "assertType": "startsWith", "answer": "通常都會要求檢附財力證明（存款證明、薪資"},
+				{"question": "我是你們的保戶跟你們申請房貸有優惠嗎", "assertType": "startsWith", "answer": "國壽保戶且年繳保費20萬元以上，可享有 "},
+				{"question": "2", "assertType": "startsWith", "answer": "請提供您完整的身份證字號？（英文字母請輸"},
+				{"question": "Y18664628C", "assertType": "startsWith", "answer": "提供給您全部的保單資料: (請用前方的數"},
+				{"question": "保額是多少", "assertType": "startsWith", "answer": "提供給您主約保額的資料： (請用前方的數"},
+				{"question": "1", "assertType": "startsWith", "answer": "保單號碼：9023157990 被保人："},
+				{"question": "上次什麼時候繳錢的", "assertType": "startsWith", "answer": "最近繳費日期為 2015-01-29，無"},
+				{"question": "保單的下次應繳保費", "assertType": "startsWith", "answer": "主約表定保費為 1947.0000，查無"},
+				{"question": "下次角會是和時", "assertType": "startsWith", "answer": "無下次繳費時間"},
+				{"question": "什麼時候保的", "assertType": "startsWith", "answer": "投保日期為 2009-02-11"},
+				{"question": "什麼時候其滿", "assertType": "startsWith", "answer": "繳費年期為6"},
+				{"question": "請問除了轉帳還有什麼方式可以繳保費", "assertType": "startsWith", "answer": "繳費管道包括： 超商自繳、官網線上刷卡、"},
+				{"question": "為什麼會扣款失敗", "assertType": "startsWith", "answer": "常見的扣款失敗原因如下： 1.存款不足 "},
+				{"question": "保費可以跨行匯款嗎", "assertType": "startsWith", "answer": "可以透過其他銀行匯撥繳費，不過須自行支付"},
+				{"question": "可以告訴匯款帳號嗎", "assertType": "startsWith", "answer": "銀行匯撥收款人戶名為「國泰人壽保險股份有"},
+				{"question": "幫我查一下業務的電話", "assertType": "startsWith", "answer": "目前尚無法提供服務人員電話的查詢"},
+				{"question": "我想問我可以貸款的成數是多少", "assertType": "startsWith", "answer": "貸款成數一般在7成左右，但要注意像是套房"},
+				{"question": "1", "assertType": "startsWith", "answer": "本公司提供親切的到府服務，免鑑價費，利率"}
+		]
+	}
+]
+}

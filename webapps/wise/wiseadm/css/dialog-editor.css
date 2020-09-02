@@ -1,0 +1,126 @@
+
+.box-shadow--2dp {
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12)
+}
+.box-shadow--3dp {
+    box-shadow: 0 3px 4px 0 rgba(0, 0, 0, .14), 0 3px 3px -2px rgba(0, 0, 0, .2), 0 1px 8px 0 rgba(0, 0, 0, .12)
+}
+.box-shadow--4dp {
+    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2)
+}
+.hl-box-shadow--10dp {
+    box-shadow: 0 4px 5px 0 rgba(255, 0, 0, .9), 0 1px 24px 0 rgba(255, 0, 0, .9), 0 5px 5px -1px rgba(255, 0, 0, .9)
+}
+
+.node-row {
+	display: table;
+}
+
+.node-box {
+	width: 250px;
+	min-height: 70px;
+	padding-left: 15px;
+	float: left;
+    position:relative;
+}
+
+.node-level-container {
+    position:relative;
+}
+
+.node-box-connect {
+    width: 36px;
+    height: 47px;
+    border-top: 2px solid black;
+    position: absolute;
+    top: 20px;
+    left: 7px;
+    z-index: -999;
+}
+
+.node-box-connect-first {
+    width: 66px;
+    height: 47px;
+    border-top: 2px solid black;
+    position: absolute;
+    top: 20px;
+    left: 0px;
+    z-index: -999;
+}
+
+.node-level-container-vertical-line {
+    width: 36px;
+    height: 100%;
+    border-left: 2px solid black;
+    position: absolute;
+    top: 20px;
+    left: 7px;
+    z-index: -999;
+}
+
+/*.node-level-container:after {
+  content: '';
+  width: 0;
+  height: 90%;
+  position: absolute;
+  border: 1px solid rgba(200,200,200,0.6);
+  top: 40px;
+  left: -8px;
+}*/
+
+.node-box-collapse-btn {
+    width: 160px;
+    height: 30px;
+    position: absolute;
+    top: 0px;
+    left: 18px;
+    color: white;
+}
+
+.node-box-expand-btn {
+    width: 160px;
+    height: 30px;
+    position: absolute;
+    top: 0px;
+    left: 18px;
+    color: white;
+}
+
+
+.testScore span {
+    margin: 0 5px;
+}
+
+.answer-text {
+  display: block;
+  max-width: 400px;
+  height: 67px; /* Fallback for non-webkit */
+  margin: 0 auto;
+  font-size: 14px;
+  line-height: 1.4;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav-tabs {
+    padding-left: 20px;
+    margin-bottom: 0px;
+}
+
+.popover-content { 
+	<%-- 讓各種問法的編輯彈出視窗更美觀 --%>
+	margin: 0 10px;
+}
+
+.tabBorder{
+	border:1px solid #ddd;
+	border-radius: 4px;
+	padding: 15px;
+	padding-left: 25px;
+	padding-right: 25px;
+	margin-bottom: 20px;
+}
+
+.ui-dialog { z-index: 1000 !important ;}

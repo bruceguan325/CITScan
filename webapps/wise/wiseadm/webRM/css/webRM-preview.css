@@ -1,0 +1,201 @@
+.msg-content {
+	font-size: 1.2em;
+}
+
+.message-row {
+    position: relative;
+    margin-bottom: 30px;
+    overflow: hidden;
+    clear: both;
+}
+
+.message-row a {
+    color: #2296F3;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+.message-row a:hover {
+    color: #71B1F7;
+    text-decoration: none;
+}
+
+.message-row.by-robot {
+    min-height: 32px;
+}
+
+.message-row.by-robot .msg {
+    margin-right: 80px;
+}
+
+.message-row.by-robot.swiper {
+    margin-right: -316px;
+}
+
+.swiper .buttons-message-container {
+    /* padding-right: 84px; */
+    padding-right: 316px;
+}
+
+.buttons-message-container {
+    margin-left: 0px;
+    float: left;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: visible;
+}
+
+.buttons-message-block {
+    width: 232px;
+    min-width: 232px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    background-color: #F0F0F0;
+    color: #4C4C4C;
+    font-size: 16px;
+    display: inline-block;
+    margin-right: 14px;
+}
+
+.buttons-message-block:last-of-type {
+    margin-right: 0;
+}
+
+.buttons-message-block .img-wrapper {
+    margin: -10px -20px;
+    margin-bottom: 0;
+    height: 128px;
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+}
+
+.buttons-message-block .img-wrapper img {
+    width: 100%;
+}
+
+.buttons-message-block .description {
+    background-color: white;
+    color: #7F7F7F;
+    font-size: 14px;
+    margin: 0 -20px;
+    padding: 10px 20px;
+    border: 1px solid #CCCCCC;
+    border-bottom: transparent;
+    white-space: normal;
+}
+
+.buttons-message-block .description h4 {
+    color: #4C4C4C;
+    font-size: 16px;
+    line-height: 22px;
+    margin: 0;
+}
+
+.buttons-message-block ul {
+    list-style: none;
+    padding: 0;
+    background-color: white;
+    margin: 0 -20px -10px -20px;
+    border: 1px solid #CCCCCC;
+    border-top: transparent;
+    border-radius: 0 0 12px 12px;
+}
+
+.buttons-message-block ul li {
+    border-top: 1px solid #CCCCCC;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+}
+
+.quickreplies-message-block {
+    width: 1500px;
+}
+
+.quickreplies-message-block ul {
+	padding-top: 5px; padding-left: 0px;
+}
+
+.form-control-round {
+	margin-left: 5px;
+	border: 1px solid #2d9ee0;
+	border-radius: 15px !important;
+	color: #2d9ee0;
+	display: inline-block;
+    width: auto;
+}
+.btns-area {
+	width: 100%;
+	margin: 3px;
+	padding: 5px;
+	border-radius: 5px;
+	border: 2px solid #FFFFFF;
+	background-color: #FFFFFF;
+	font-size: 12pt;
+	line-height: 1.5em;
+	word-break: break-word;
+	word-wrap: break-word;
+	display: inline-block;
+}
+.more-area {
+	width: 10%;
+}
+.btns-area-btn {
+	border-style: solid;
+	background-color: #FFFFFF;
+	border: 1px solid #99FFFF;
+	border-radius: 5px;
+	text-align: center;
+	color: #2d9ee0; 
+}
+.slideshow-container {
+	position: relative;
+	margin: auto;
+}
+.msg-content .next {
+	right: 0;
+	border-radius: 1px 0 0 1px;
+}
+.msg-content .prev:hover,.msg-content .next:hover {
+	color:white;
+	background-color: #009d95;
+}
+.link-btn-img{
+	width:100%;
+	border-radius: 10px;
+}
+.link-btn-txt{
+	padding:0.5em;
+	font-family: "微軟正黑體",sans-serif;
+	color:#fff;
+	text-align:left;
+	white-space: pre-line;
+}
+.link-btn-img img {
+	width:100%;
+	height:100%;
+}
+.link-btn-block::-webkit-scrollbar { width: 0 !important; height: 0 !important } 
+.link-btn-block { -ms-overflow-style: none; } 
+.link-btn-block { overflow: -moz-scrollbars-none; }
+	
+.link-btn-block{ background:none; width:auto; height:auto; white-space:nowrap; position:relative; overflow-y:hidden; overflow-x:auto; display:-webkit-box;}
+.link-btn{ width:290px; margin:3px; padding:5px; border-radius: 5px; border:2px solid #9BD2B7; background-color: #FFFFFF; font-size: 12pt; line-height: 1.5em; word-break: break-word; word-wrap: break-word;}
+.msg-content .prev, .msg-content .next { display:block; cursor: pointer; position: absolute; top: 50%; width: auto; font-weight: bold; font-size: 18px; transition: 0.6s ease; border-radius: 0 1px 1px 0;}
+
+.swiper-scroll-container {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    -webkit-scroll-snap-type: mandatory;
+    -ms-overflow-style: none;
+    -ms-scroll-snap-type: mandatory;
+    scroll-snap-type: mandatory;
+    scroll-padding-left: 86px;
+    position: relative;
+}
+
+.swiper-scroll-container::-webkit-scrollbar {
+    display: none;
+}

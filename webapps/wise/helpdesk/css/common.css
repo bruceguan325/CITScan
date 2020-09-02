@@ -1,0 +1,422 @@
+@charset "UTF-8";
+/* **********************************************************************************
+
+	イニシャライズ
+
+********************************************************************************** */
+header, footer {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  font-style: normal;
+  vertical-align: baseline;
+  background-color: transparent; }
+
+body {
+  line-height: 1; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after, q:before, q:after {
+  content: '';
+  content: none; }
+
+header a, footer a {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+input, select {
+  vertical-align: top; }
+
+article, aside, footer, header, main, nav, section {
+  display: block; }
+
+html {
+  font-size: 62.5%;
+  overflow-y: scroll; }
+
+body {
+  background-color: #fff;
+  color: #333333;
+  font-family: Meiryo,"メイリオ","Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3",Helvetica,sans-serif; }
+
+a:link {
+  color: #2451c6;
+  text-decoration: none; }
+
+a:active {
+  color: #2451c6;
+  text-decoration: underline; }
+
+a:visited {
+  color: #7c169e;
+  text-decoration: none; }
+
+a:hover {
+  color: #2451c6;
+  text-decoration: underline; }
+
+input {
+  font-family: Meiryo,"メイリオ","Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3",Helvetica,sans-serif; }
+
+button {
+  font-family: Meiryo,"メイリオ","Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3",Helvetica,sans-serif; }
+
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0; }
+
+/* clearfix */
+.clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
+  height: 0px;
+  visibility: hidden; }
+
+.clearfix {
+  min-height: 1px; }
+
+/* **********************************************************************************
+
+	グローバルエリア定義
+
+********************************************************************************** */
+/* ----------------------------
+	コンテナ
+----------------------------- */
+#wrap {
+  min-width: 996px;
+  text-align: left;
+  -webkit-text-size-adjust: 100%;
+  overflow: hidden; }
+
+/* ----------------------------
+	ヘッダ－
+----------------------------- */
+#header {
+  display: block;
+  width: 960px;
+  margin: 0 auto;
+  color: #333333;
+  /* ロゴ */
+  /* オレンジ区画 */ }
+  #header ul,
+  #header ul li,
+  #header p,
+  #header p img {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    font-style: normal;
+    vertical-align: baseline;
+    background-color: transparent; }
+  #header #header-logo {
+    float: left;
+    width: 185px;
+    padding: 13px 5px 0 10px; }
+  #header #header-utility #header-menu {
+    float: right;
+    padding: 11px 0 0; }
+    #header #header-utility #header-menu ul {
+      text-align: right; }
+      #header #header-utility #header-menu ul li {
+        display: inline;
+        list-style: none outside none;
+        font-size: 11px;
+        font-size: 1.1rem;
+        line-height: 1.5;
+        font-size: 11px;
+        line-height: 1.5; }
+        #header #header-utility #header-menu ul li a {
+          display: inline-block;
+          margin: 0 0 0 18px;
+          padding-left: 15px;
+          background: url(/contents/common-chatbot-ots/img/icon-blank-gray.png) no-repeat 0 0.35em;
+          color: #333;
+          text-decoration: none; }
+          #header #header-utility #header-menu ul li a:hover {
+            text-decoration: underline; }
+  #header #header-title {
+    clear: both;
+    display: table;
+    width: 958px;
+    margin: 10px 0 0 0;
+    border-left: 1px solid #c04915;
+    border-top: 1px solid #d1690c;
+    border-right: 1px solid #d27b33;
+    border-radius: 6px;
+    background: #d9470a;
+    background: url(/contents/common-chatbot-ots/img/head-navi-bg.png), -webkit-linear-gradient(left, #dd4b12 0%, #e88544 100%);
+    background: url(/contents/common-chatbot-ots/img/head-navi-bg.png), linear-gradient(to right, #dd4b12 0%, #e88544 100%);
+    background-position: right top;
+    background-repeat: no-repeat;
+    background-clip: padding-box;
+    box-shadow: 1px 0 1px #eee,-1px 0 1px #eee; }
+    #header #header-title p {
+      padding: 7px 10px 6px;
+      color: #f9f9f9;
+      text-shadow: 0 -1px 2px #555;
+      font-size: 15px;
+      font-size: 1.5rem;
+      line-height: 1.2em;
+      font-weight: bold;
+      letter-spacing: 1px;
+      word-break: break-all; }
+
+/* ----------------------------
+	メイン
+----------------------------- */
+#main-container {
+  width: 960px;
+  margin: 0 auto; }
+
+/* ----------------------------
+	フッター
+----------------------------- */
+#footer {
+  display: block;
+  font-family: Meiryo,"メイリオ","Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3",Helvetica,sans-serif;
+  /* ユーティリティ */
+  /* コピーライト */ }
+  #footer ul,
+  #footer ul li,
+  #footer p {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    font-style: normal;
+    vertical-align: baseline;
+    background-color: transparent; }
+  #footer #footer-notes p {
+    width: 960px;
+    margin: 0 auto;
+    padding: 10px 0 20px;
+    text-align: left;
+    font-size: 12px;
+    line-height: 1.5em; }
+  #footer #footer-utility-outer {
+    background-color: #572626; }
+    #footer #footer-utility-outer #footer-utility {
+      position: relative;
+      width: 960px;
+      margin: 0 auto;
+      padding: 10px 0;
+      background-color: #572626;
+      border-bottom: 1px solid #8b6d68; }
+      #footer #footer-utility-outer #footer-utility ul li {
+        list-style: none;
+        float: left;
+        padding: 0 11px 0 0;
+        font-size: 12px;
+        line-height: 1.5em; }
+        #footer #footer-utility-outer #footer-utility ul li a {
+          display: inline-block;
+          padding-left: 15px;
+          background: url(/contents/common-chatbot-ots/img/icon-blank-white.png) no-repeat 0 0.35em;
+          color: #fff;
+          text-decoration: none; }
+          #footer #footer-utility-outer #footer-utility ul li a:hover {
+            text-decoration: underline; }
+      #footer #footer-utility-outer #footer-utility p {
+        position: absolute;
+        bottom: -27px;
+        right: 0;
+        font-size: 12px;
+        line-height: 1.5em; }
+        #footer #footer-utility-outer #footer-utility p a {
+          display: inline-block;
+          padding-left: 15px;
+          background: url(/contents/common-chatbot-ots/img/icon-blank-white.png) no-repeat 0 0.35em;
+          color: #fff; }
+  #footer #footer-copyright {
+    background-color: #572626; }
+    #footer #footer-copyright p {
+      width: 960px;
+      margin: 0 auto;
+      padding: 10px 0 20px 0;
+      background-color: #572626;
+      text-align: left;
+      color: #fff;
+      font-size: 12px;
+      line-height: 1.3em; }
+
+/* *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+	コンテンツエリア
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
+#main .chatbot-area .chatbot-title {
+  position: relative;
+  margin: 0;
+  padding: 6px 0 8px 20px;
+  border-bottom: 2px solid #ccc;
+  font-size: 22px;
+  font-size: 2.2rem;
+  line-height: 1.4em;
+  overflow: hidden; }
+  #main .chatbot-area .chatbot-title:before {
+    content: "";
+    display: block;
+    height: 86%;
+    width: 8px;
+    position: absolute;
+    left: 0;
+    bottom: 5px;
+    background: #ff9e20;
+    border-radius: 4px; }
+
+/* 閉じるボタン */
+#main .chatbot-area .window-close-button {
+  position: relative;
+  margin: calc(((2.2rem * 1.4) + 6px + 8px + 2px) * -1) 0 10px;
+  font-size: 14px;
+  font-size: 1.4rem;
+  line-height: 1em;
+  text-align: right; }
+  #main .chatbot-area .window-close-button button {
+    padding: 9px 28px;
+    border: 1px solid #ccc;
+    border-radius: 2em;
+    background: -webkit-linear-gradient(top, #fff 0%, #f1f1f1 100%);
+    background: linear-gradient(to bottom, #fff 0%, #f1f1f1 100%);
+    font-size: 14px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    line-height: 1em;
+    cursor: pointer; }
+    #main .chatbot-area .window-close-button button:hover {
+      background: #f0f0f0;
+      box-shadow: inset 0 0 0 2px #fff; }
+
+/* **********************************************************************************
+
+	スマートフォン対応 チャットボット
+
+********************************************************************************** */
+@media screen and (max-device-width: 599px) and (orientation: portrait), screen and (max-device-width: 736px) and (orientation: landscape), screen and (device-width: 854px) and (device-height: 534px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2.25) {
+  /* **********************************************************************************
+
+	グローバルエリア定義
+
+********************************************************************************** */
+  /* ----------------------------
+	コンテナ
+----------------------------- */
+  #wrap {
+    min-width: 1px; }
+  /* ----------------------------
+	ヘッダ－
+----------------------------- */
+  #header {
+    display: block;
+    min-height: 51px;
+    width: auto;
+    margin: 0;
+    padding: 0 10px;
+    color: #333;
+    border-bottom: 2px solid #e25112;
+    box-shadow: 0 3px 3px #dbdbdb;
+    background: url(/contents/common-chatbot-ots/img/sp-header-bg.png) no-repeat right 0;
+    background-size: 100% 51px;
+    /* ロゴ */
+    /* SP用　閉じるボタン */ }
+    #header img {
+      display: block;
+      max-width: 100%; }
+    #header ul,
+    #header ul li,
+    #header p,
+    #header p img {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      font-size: 100%;
+      font-style: normal;
+      vertical-align: baseline;
+      background-color: transparent; }
+    #header #header-logo {
+      float: left;
+      width: 147px;
+      margin-top: 17px;
+      padding: 0; }
+    #header .window-close-button {
+      float: right;
+      margin: 10px 0 0; }
+      #header .window-close-button button {
+        padding: 4px 15px 5px;
+        border: 1px solid #666;
+        border-radius: 5px;
+        background: -webkit-linear-gradient(top, #878787 0%, #757575 50%, #666 51%, #4c4c4c 100%);
+        background: linear-gradient(to bottom, #878787 0%, #757575 50%, #666 51%, #4c4c4c 100%);
+        font-size: 12px;
+        color: #fff; }
+        #header .window-close-button button::-moz-focus-inner {
+          padding: 0;
+          border: none; }
+  /* ----------------------------
+	メイン
+----------------------------- */
+  #main-container {
+    width: 100%; }
+  /* ----------------------------
+	フッター
+----------------------------- */
+  #footer {
+    display: block;
+    font-family: Meiryo,"メイリオ","Hiragino Kaku Gothic Pro","ヒラギノ角ゴ Pro W3",Helvetica,sans-serif;
+    background-color: #582727;
+    /* コピーライト */ }
+    #footer ul,
+    #footer ul li,
+    #footer p {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      outline: 0;
+      font-size: 100%;
+      font-style: normal;
+      vertical-align: baseline;
+      background-color: transparent; }
+    #footer #footer-copyright {
+      padding: 2px 0;
+      background-color: transparent;
+      text-align: center;
+      color: #fff; }
+      #footer #footer-copyright p {
+        width: auto;
+        margin: 0 auto;
+        padding: 0;
+        background-color: transparent;
+        text-align: center;
+        color: #fff; }
+      #footer #footer-copyright small {
+        font-size: 11px; }
+      #footer #footer-copyright span {
+        font-size: 14px;
+        line-height: 1.3em;
+        font-family: Helvetica;
+        vertical-align: -1px; }
+  /* *-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
+
+	コンテンツエリア
+
+*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-* */
+  /* PC用　閉じるボタン　非表示 */
+  #main .chatbot-area .window-close-button {
+    display: none; } }

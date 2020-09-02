@@ -1,0 +1,36 @@
+{
+	"name": "messages",
+    "type": "object",
+    "properties": {
+      "type": {
+	     "type": "enum", "propertyOrder": 10,
+		 "enumSource": [{
+		      "source": [
+		        { "value": "confirm", "title": "CONFIRM (up to 2 buttons)" },
+		        { "value": "buttons", "title": "BUTTONS (up to 4 buttons)" },
+		        { "value": "carousel", "title": "CAROUSEL (up to 5 cols, each has up to 3 buttons)" },
+		        { "value": "image_carousel", "title": "IMAGE CAROUSEL (up to 10 cols)" }
+		      ],
+		      "title": "{{item.title}}",
+		      "value": "{{item.value}}"
+		 }]
+      },
+      "columns": {
+        "title": "橫向選單的清單",
+	    "type": "array", "propertyOrder": 100,
+	    "items": {
+          "headerTemplate": "橫向選單{{ i1 }}",
+          "$ref": "get-jsonschema-ajax.jsp?type=line-carousel-column"
+        }
+      },
+      "actions": {
+        "title": "按鈕清單",
+	    "type": "array", "propertyOrder": 100,
+        "headerTemplate": "按鈕{{ i1 }}",
+	    "items": {
+          "$ref": "get-jsonschema-ajax.jsp?type=line-action"
+        }
+      }
+    },
+    "defaultProperties": ["type"]
+}

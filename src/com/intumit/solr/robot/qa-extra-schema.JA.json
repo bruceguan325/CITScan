@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "name": "extra-parameters",
+  "title": "パラメーターを追加",
+  "properties": {
+    "intent": {
+      "type": "string"
+    },
+    "entity": {
+      "type": "string"
+    },
+    "extInfo": {
+      "type": "string"
+    },
+    "line": {
+      "type": "object",
+      "title": "LINE Messages (Up to 5)",
+      "properties": {
+        "messages": {
+           "$ref": "get-jsonschema-ajax.jsp?type=line-messages"
+        }
+      }
+    },
+    "messages": {
+      "$ref": "get-jsonschema-ajax.jsp?type=line-messages"
+    }
+  }
+}

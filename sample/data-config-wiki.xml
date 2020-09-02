@@ -1,0 +1,23 @@
+<dataConfig>
+        <dataSource type="FileDataSource" encoding="UTF-8" />
+        <document>
+        <entity name="page"
+                processor="XPathEntityProcessor"
+                url="${dataimporter.request.filename}"
+                stream="true"
+                forEach="/mediawiki/page/"
+                transformer="RegexTransformer,DateFormatTransformer,TemplateTransformer"
+                >
+            <field column="page_id_s"        xpath="/mediawiki/page/id" />
+            <field column="title_t"     xpath="/mediawiki/page/title" />
+            <field column="revision_s"  xpath="/mediawiki/page/revision/id" />
+            <!--field column="user_t"      xpath="/mediawiki/page/revision/contributor/username" /-->
+            <!--field column="userId_s"    xpath="/mediawiki/page/revision/contributor/id" /-->
+            <field column="text_t"      xpath="/mediawiki/page/revision/text" />
+            <field column="lang_s"      template="${dataimporter.request.lang}" />
+            <field column="timestamp_dt" xpath="/mediawiki/page/revision/timestamp" dateTimeFormat="yyyy-MM-dd'T'hh:mm:ss'Z'" />
+            <field column="$skipDoc"  regex="^#REDIRECT .*" replaceWith="true" sourceColName="text_t"/>
+            <field column="id"        template="${dataimporter.request.lang}-${page.page_id_s}" />
+       </entity>
+        </document>
+</dataConfig>

@@ -1,0 +1,794 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+    xmlns="http://java.sun.com/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    version="3.0">
+	
+	<session-config>
+		<cookie-config>
+		  <http-only>true</http-only>
+		  <secure>false</secure>
+		</cookie-config>
+	</session-config>
+	
+    <filter>
+        <filter-name>hazelcast-filter</filter-name>
+        <filter-class>com.hazelcast.web.WebFilter</filter-class>
+		<async-supported>true</async-supported>
+        <!--
+            Name of the distributed map storing
+            your web session objects
+        -->
+        <init-param>
+            <param-name>map-name</param-name>
+            <param-value>smartrobot</param-value>
+        </init-param>
+        <!--
+            How is your load-balancer configured?
+            stick-session means all requests of a session
+            is routed to the node where the session is first created.
+            This is excellent for performance.
+            If sticky-session is set to false, when a session is updated
+            on a node, entry for this session on all other nodes is invalidated.
+            You have to know how your load-balancer is configured before
+            setting this parameter. Default is true.
+            
+            簡言之，若 F5 (or any reverse proxy else) 開啟 sticky-session，
+            這裡"可以"設定為 true（但非必要）。可是若不是 sticky 就一定要用 false（不然會有 session 不同步的問題）
+            因此其實是 default 設定為 false 比較保險
+        -->
+        <init-param>
+            <param-name>sticky-session</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        
+		<init-param>
+			<param-name>deferred-write</param-name>
+			<param-value>false</param-value>
+		</init-param>
+        <!--
+            Are you debugging? Default is false.
+        -->
+        <init-param>
+            <param-name>debug</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        
+        <init-param>
+            <param-name>cookie-secure</param-name>
+            <param-value>false</param-value>
+        </init-param>
+        <init-param>
+            <param-name>cookie-http-only</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>hazelcast-filter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    
+    <listener>
+        <listener-class>com.hazelcast.web.SessionListener</listener-class>
+    </listener>
+        
+	<filter>
+      <filter-name>check-initial</filter-name>
+      <filter-class>com.intumit.license.CheckInitialFilter</filter-class>
+      <async-supported>true</async-supported>
+    </filter>
+    <filter-mapping>
+      <filter-name>check-initial</filter-name>
+	  <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+	<!-- Any path (name) registered in solrconfig.xml will be sent to that filter -->
+	<filter>
+		<filter-name>SolrRequestFilter</filter-name>
+		<filter-class>com.intumit.solr.servlet.SolrDispatchFilter</filter-class>
+		<async-supported>true</async-supported>
+	    <!-- If you are wiring Solr into a larger web application which controls
+	         the web context root, you will probably want to mount Solr under
+	         a path prefix (app.war with /app/solr mounted into it, for example).
+	         You will need to put this prefix in front of the SolrDispatchFilter
+	         url-pattern mapping too (/solr/*), and also on any paths for
+	         legacy Solr servlet mappings you may be using.
+	         For the Admin UI to work properly in a path-prefixed configuration,
+	         the admin folder containing the resources needs to be under the app context root
+	         named to match the path-prefix.  For example:
+	
+	            .war
+	               xxx
+	                 js
+	                   main.js
+    	<filter-class>org.apache.solr.servlet.SolrDispatchFilter</filter-class>
+	    -->
+	    <init-param>
+	      <param-name>path-prefix</param-name>
+	      <param-value>/wiseadm</param-value>
+	    </init-param>
+	</filter>
+	<filter-mapping>
+	    <!--
+	      NOTE: When using multicore, /admin JSP URLs with a core specified
+	      such as /solr/coreName/admin/stats.jsp get forwarded by a
+	      RequestDispatcher to /solr/admin/stats.jsp with the specified core
+	      put into request scope keyed as "org.apache.solr.SolrCore".
+	
+	      It is unnecessary, and potentially problematic, to have the SolrDispatchFilter
+	      configured to also filter on forwards.  Do not configure
+	      this dispatcher as <dispatcher>FORWARD</dispatcher>.
+	    -->
+		<filter-name>SolrRequestFilter</filter-name>
+		<url-pattern>/wiseadm/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+        <dispatcher>ASYNC</dispatcher>
+	</filter-mapping>
+
+    <filter>
+		<filter-name>RobotAPLogFilter</filter-name>
+		<filter-class>com.intumit.solr.servlet.RobotAPLogFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter-mapping>
+		<filter-name>RobotAPLogFilter</filter-name>
+		<url-pattern>/wiseadm/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+        <filter-name>SetCharacterEncoding</filter-name>
+        <filter-class>com.intumit.solr.EncodingFilter</filter-class>
+        <async-supported>true</async-supported>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>SetCharacterEncoding</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+    <filter>
+        <filter-name>JsonpFilter</filter-name>
+        <filter-class>com.intumit.solr.servlet.JsonpFilter</filter-class>
+        <async-supported>true</async-supported>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>JsonpFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    
+	<filter>
+		<filter-name>FrontEndUserLoginFilter</filter-name>
+		<filter-class>com.intumit.solr.servlet.FrontEndUserLoginFilter</filter-class>
+		<async-supported>true</async-supported>
+	</filter>
+	<filter-mapping>
+		<filter-name>FrontEndUserLoginFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 
+	<filter>
+      <filter-name>dump-everything</filter-name>
+      <filter-class>com.intumit.solr.DumpEverythingFilter</filter-class>
+      <async-supported>true</async-supported>
+    </filter>
+    <filter-mapping>
+      <filter-name>dump-everything</filter-name>
+	  <url-pattern>/wiseadm/*</url-pattern>
+    </filter-mapping>
+    -->
+    
+	<!-- define search keyword log mode (db or index), default will be db if 
+		not setup in web.xml -->
+	<context-param>
+		<param-name>SearchKeywordLog.Mode</param-name>
+		<param-value>index</param-value>
+	</context-param>
+	
+	<context-param>
+		<param-name>config-file</param-name>
+		<param-value>quartz.properties</param-value>
+	</context-param>
+	<context-param>
+		<param-name>shutdown-on-unload</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+		<param-name>start-scheduler-on-load</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	
+	<!-- H2 -->
+	<context-param>
+	    <param-name>db.url</param-name>
+	    <param-value>jdbc:h2:../kernel/db/robot/quartz</param-value>
+	</context-param>
+	<context-param>
+	    <param-name>db.user</param-name>
+	    <param-value>root</param-value>
+	</context-param>
+	<context-param>
+	    <param-name>db.password</param-name>
+	    <param-value>root</param-value>
+	</context-param>
+	<context-param>
+	    <param-name>db.tcpServer</param-name>
+	    <param-value>-tcpAllowOthers</param-value>
+	</context-param>
+	
+	<listener>
+	    <listener-class>org.h2.server.web.DbStarter</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>com.intumit.solr.servlet.InitHibernate</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>com.intumit.solr.servlet.InitHitHot</listener-class>
+	</listener>
+
+	<listener>
+		<listener-class>com.intumit.quartz.QuartzInitializerListener</listener-class>
+	</listener>
+	
+   <!-- Standard Action Servlet Configuration --> 
+    <servlet> 
+        <servlet-name>action</servlet-name> 
+        <servlet-class>
+            org.apache.struts.action.ActionServlet
+        </servlet-class> 
+        <init-param> 
+            <param-name>config</param-name> 
+            <param-value>
+                /WEB-INF/cfg/struts-config.xml
+            </param-value> 
+        </init-param> 
+        <load-on-startup>2</load-on-startup> 
+    </servlet> 
+
+    <!-- Standard Action Servlet Mapping --> 
+    <servlet-mapping> 
+        <servlet-name>action</servlet-name> 
+        <url-pattern>*.action</url-pattern> 
+    </servlet-mapping>
+	
+	<!--  webconsole -->
+	<servlet>
+		<servlet-name>groovyWebConsole</servlet-name>
+		<servlet-class>com.intumit.solr.util.ConsoleAction</servlet-class>
+		<init-param>
+		        <param-name>admAuth</param-name>
+		        <param-value>1</param-value><!-- ID -->
+    	</init-param>
+    	<!-- 
+		<init-param>
+		        <param-name>ipAuth</param-name>
+		        <param-value>127.0.0.1</param-value>
+    	</init-param>
+    	<init-param>
+		        <param-name>envAuth</param-name>
+		        <param-value>xxx=xxx</param-value>
+    	</init-param>
+    	 -->
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>groovyWebConsole</servlet-name>
+		<url-pattern>/wiseadm/gwc/*</url-pattern>
+	</servlet-mapping>
+	
+	
+	<servlet>
+	    <servlet-name>H2Console</servlet-name>
+	    <servlet-class>org.h2.server.web.WebServlet</servlet-class>
+	    <!--
+	    <init-param>
+	        <param-name>webAllowOthers</param-name>
+	        <param-value></param-value>
+	    </init-param>
+	    <init-param>
+	        <param-name>trace</param-name>
+	        <param-value></param-value>
+	    </init-param>
+	    -->
+	    <load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>H2Console</servlet-name>
+	    <url-pattern>/wiseadm/h2/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Zookeeper</servlet-name>
+		<servlet-class>org.apache.solr.servlet.ZookeeperInfoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Zookeeper</servlet-name>
+		<url-pattern>/wiseadm/zookeeper</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>MyLoadAdminUI</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.LoadAdminUiServlet</servlet-class>
+		<init-param>
+			<param-name>admin-path-prefix</param-name>
+			<param-value>/wiseadm</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MyLoadAdminUI</servlet-name>
+		<url-pattern>/wiseadm/wise-admin.html</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>LoadAdminUI</servlet-name>
+		<servlet-class>org.apache.solr.servlet.LoadAdminUiServlet</servlet-class>
+		<init-param>
+			<param-name>admin-path-prefix</param-name>
+			<param-value>/wiseadm</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LoadAdminUI</servlet-name>
+		<url-pattern>/wiseadm/solr-admin.html</url-pattern>
+	</servlet-mapping>
+
+
+	<servlet>
+		<servlet-name>tts</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.TextToSpeechServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>tts</servlet-name>
+		<url-pattern>/tts</url-pattern>
+	</servlet-mapping>
+	
+    <servlet>
+    	<servlet-name>FileUpload</servlet-name>            
+    	<servlet-class>com.intumit.solr.util.fileupload.FileUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    	<servlet-name>FileUpload</servlet-name>
+    	<url-pattern>/wiseadm/fileUpload</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+    	<servlet-name>TenantDumpFileUpload</servlet-name>            
+    	<servlet-class>com.intumit.solr.util.fileupload.QAFileUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    	<servlet-name>TenantDumpFileUpload</servlet-name>
+    	<url-pattern>/wiseadm/tenantDumpUpload</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+    	<servlet-name>ProcessQAData</servlet-name>            
+    	<servlet-class>com.intumit.solr.robot.ProcessQADataServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+    	<servlet-name>ProcessQAData</servlet-name>
+    	<url-pattern>/wiseadm/processData</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>APIRequestHandler</servlet-name>
+        <servlet-class>com.intumit.solr.servlet.APIRequestHandler</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>APIRequestHandler</servlet-name>
+        <url-pattern>/1/*</url-pattern>
+    </servlet-mapping>
+
+	<!-- Remove in Solr 5.0 -->
+	<!-- This sends SC_MOVED_PERMANENTLY (301) for resources that changed in 4.0 -->
+	<servlet>
+		<servlet-name>RedirectOldAdminUI</servlet-name>
+		<servlet-class>org.apache.solr.servlet.RedirectServlet</servlet-class>
+		<init-param>
+			<param-name>destination</param-name>
+			<param-value>${context}/wiseadm/#/</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RedirectOldAdminUI</servlet-name>
+		<url-pattern>/wiseadm/admin/</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RedirectOldAdminUI</servlet-name>
+		<url-pattern>/wiseadm/admin</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>RedirectOldZookeeper</servlet-name>
+		<servlet-class>org.apache.solr.servlet.RedirectServlet</servlet-class>
+		<init-param>
+			<param-name>destination</param-name>
+			<param-value>${context}/wiseadm/zookeeper</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RedirectOldZookeeper</servlet-name>
+		<url-pattern>/wiseadm/zookeeper.jsp</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>RedirectLogging</servlet-name>
+		<servlet-class>org.apache.solr.servlet.RedirectServlet</servlet-class>
+		<init-param>
+			<param-name>destination</param-name>
+			<param-value>${context}/wiseadm/#/~logging</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RedirectLogging</servlet-name>
+		<url-pattern>/wiseadm/logging</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SolrRestApi</servlet-name>
+		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
+		<init-param>
+			<param-name>org.restlet.application</param-name>
+			<param-value>org.apache.solr.rest.SolrRestApi</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SolrRestApi</servlet-name>
+		<url-pattern>/wiseadm/schema/*</url-pattern>
+	</servlet-mapping>
+  
+
+	<!-- 
+	<servlet>
+		<servlet-name>GetHotKeyword</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.GetHotKeywordServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetHotKeyword</servlet-name>
+		<url-pattern>/getHotKeyword</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>GetSuggestKeyword</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.GetSuggestKeywordServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetSuggestKeyword</servlet-name>
+		<url-pattern>/getSuggestKeyword</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>GetRecommendDoc</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.GetRecommendDocServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GetRecommendDoc</servlet-name>
+		<url-pattern>/getRecommendDoc</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Query</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.QueryServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Query</servlet-name>
+		<url-pattern>/query</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>GroupQuery</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.GroupQueryServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GroupQuery</servlet-name>
+		<url-pattern>/grpquery</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>AdvancedQuery</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.AdvancedQueryServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdvancedQuery</servlet-name>
+		<url-pattern>/advquery</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>QuerySynonym</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.QuerySynonymServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>QuerySynonym</servlet-name>
+		<url-pattern>/querySynonym/*</url-pattern>
+	</servlet-mapping>
+	-->
+
+	<servlet>
+		<servlet-name>Captcha</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.CaptchaServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Captcha</servlet-name>
+		<url-pattern>/captcha/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Schedule</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.ScheduleServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Schedule</servlet-name>
+		<url-pattern>/wiseadm/schedule/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SearchManagerServlet</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.SearchManagerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SearchManagerServlet</servlet-name>
+		<url-pattern>/wiseadm/sms/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Ambiguity</servlet-name>
+		<servlet-class>com.intumit.solr.robot.ambiguity.AmbiguityDatabaseServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Ambiguity</servlet-name>
+		<url-pattern>/wiseadm/ambiguity/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Dictionary</servlet-name>
+		<servlet-class>com.intumit.solr.robot.dictionary.DictionaryDatabaseServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Dictionary</servlet-name>
+		<url-pattern>/wiseadm/dict/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>EmbeddedFuzzy</servlet-name>
+		<servlet-class>com.intumit.solr.robot.dictionary.EmbeddedFuzzyDatabaseServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EmbeddedFuzzy</servlet-name>
+		<url-pattern>/wiseadm/embedded/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Intent</servlet-name>
+		<servlet-class>com.intumit.solr.robot.intent.QAIntentServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Intent</servlet-name>
+		<url-pattern>/wiseadm/intent/*</url-pattern>
+	</servlet-mapping>
+
+ 	<servlet>
+		<servlet-name>IntentUploadFile</servlet-name>
+		<servlet-class>com.intumit.solr.robot.intent.QAIntentUploadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>IntentUploadFile</servlet-name>
+		<url-pattern>/wiseadm/qaIntentUploadFile</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Entity</servlet-name>
+		<servlet-class>com.intumit.solr.robot.entity.QAEntityServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Entity</servlet-name>
+		<url-pattern>/wiseadm/entity/*</url-pattern>
+	</servlet-mapping>
+
+ 	<servlet>
+		<servlet-name>EntityUploadFile</servlet-name>
+		<servlet-class>com.intumit.solr.robot.entity.QAEntityUploadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EntityUploadFile</servlet-name>
+		<url-pattern>/wiseadm/qaEntityUploadFile</url-pattern>
+	</servlet-mapping>
+	
+     <servlet>
+        <servlet-name>QAAltTemplateUploadFile</servlet-name>
+        <servlet-class>com.intumit.solr.robot.QAAltTemplateFileUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>QAAltTemplateUploadFile</servlet-name>
+        <url-pattern>/wiseadm/qaAltTemplateFileUpload</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>WiVoEntry</servlet-name>
+		<servlet-class>com.intumit.solr.robot.wivo.WiVoEntryServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WiVoEntry</servlet-name>
+		<url-pattern>/wiseadm/wivoEntry/*</url-pattern>
+	</servlet-mapping>
+
+ 	<servlet>
+		<servlet-name>WiVoEntryUploadFile</servlet-name>
+		<servlet-class>com.intumit.solr.robot.wivo.WiVoEntryUploadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WiVoEntryUploadFile</servlet-name>
+		<url-pattern>/wiseadm/wivoEntryUploadFile</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>EventType</servlet-name>
+		<servlet-class>com.intumit.solr.robot.EventTypeServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EventType</servlet-name>
+		<url-pattern>/wiseadm/eventType/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>QAEvaluationLogServlet</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.QAEvaluationLogServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>QAEvaluationLogServlet</servlet-name>
+		<url-pattern>/wiseadm/eatExport/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Syn</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.SynServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Syn</servlet-name>
+		<url-pattern>/wiseadm/syn/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>White</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.WhiteServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>White</servlet-name>
+		<url-pattern>/wiseadm/white/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Black</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.BlackServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Black</servlet-name>
+		<url-pattern>/wiseadm/black/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>Recommend</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.RecommendServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Recommend</servlet-name>
+		<url-pattern>/wiseadm/recommend/*</url-pattern>
+	</servlet-mapping>
+
+ 	<servlet>
+		<servlet-name>SynUploadFile</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.SynUploadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SynUploadFile</servlet-name>
+		<url-pattern>/wiseadm/synUploadFile</url-pattern>
+	</servlet-mapping>
+
+ 	<servlet>
+		<servlet-name>CapitalNewsExcelUploadFile</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.CapitalNewsExcelUploadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CapitalNewsExcelUploadFile</servlet-name>
+		<url-pattern>/capitalNewsUploadFile</url-pattern>
+	</servlet-mapping>
+
+<!-- <servlet>
+		<servlet-name>WhiteUploadFile</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.WhiteUploadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>WhiteUploadFile</servlet-name>
+		<url-pattern>/WhiteUploadFile/*</url-pattern>
+	</servlet-mapping> -->
+
+	<servlet>
+		<servlet-name>UpdateSystemConfigServlet</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.UpdateSystemConfigServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UpdateSystemConfigServlet</servlet-name>
+		<url-pattern>/wiseadm/UpdateSystemConfigServlet/*</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>UpdateReplicationConfigServlet</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.UpdateReplicationConfigServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UpdateReplicationConfigServlet</servlet-name>
+		<url-pattern>/wiseadm/UpdateReplicationConfigServlet/*</url-pattern>
+	</servlet-mapping>
+  
+    <servlet>
+		<servlet-name>DicUploadFile</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.DicUploadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DicUploadFile</servlet-name>
+		<url-pattern>/wiseadm/dicUploadFile</url-pattern>
+	</servlet-mapping>
+  
+  	<servlet>
+		<servlet-name>EmbeddedDicUploadFile</servlet-name>
+		<servlet-class>com.intumit.solr.servlet.EmbeddedDicUploadFileServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EmbeddedDicUploadFile</servlet-name>
+		<url-pattern>/wiseadm/embeddedUploadFile</url-pattern>
+	</servlet-mapping>
+  
+  
+  
+  <mime-mapping>
+    <extension>.xsl</extension>
+    <!-- per http://www.w3.org/TR/2006/PR-xslt20-20061121/ -->
+    <mime-type>application/xslt+xml</mime-type>
+  </mime-mapping>
+	
+	<welcome-file-list>
+            <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+    <!-- Production 環境要導出所有錯誤頁面 -->
+    <error-page>
+        <error-code>404</error-code>
+        <location>/ErrorPage404.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/ErrorPage.jsp</location>
+    </error-page>
+    <error-page>
+        <error-code>503</error-code>
+        <location>/ErrorPage.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>javax.servlet.ServletException</exception-type>
+        <location>/ErrorPage.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>org.apache.solr.client.solrj.SolrServerException</exception-type>
+        <location>/ErrorPage.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.RuntimeException</exception-type>
+        <location>/ErrorPage.jsp</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/ErrorPage.jsp</location>
+    </error-page>
+  	
+</web-app>

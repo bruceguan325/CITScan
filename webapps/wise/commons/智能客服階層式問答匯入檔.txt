@@ -1,0 +1,22 @@
+id	hqaid	optionAction	pipe	question	answer	matchSentences	script	extraParams	expiry	menuView	inputType	h_qa_1	h_qa_2	h_qa_3	h_qa_4
+2	1501307633952	DIRECT_ANSWER			AAA							你好			
+	1501309075533	INPUT_TEXT											321		
+	1501309113810	DIRECT_ANSWER			ASDW									123	
+	1501307680204	INPUT_TEXT											BBB		
+	1501309075534	INPUT_TEXT											ddd		
+	1501309113811	DIRECT_ANSWER			ASDW									ASDW	
+	1501307709226		COMMON_SENSE-5	測試								測試			
+4	1501307633953	DIRECT_ANSWER			AAA							AAA			
+	1501309075534	INPUT_TEXT											321		
+	1501309113811	DIRECT_ANSWER			ASDW									123	
+	1501307680205	INPUT_TEXT											BBB		
+	1501309075535	INPUT_TEXT											ddd		
+3	1501307633951	DIRECT_ANSWER			AAA							AAA			
+	1501307680203	INPUT_TEXT											BBB		
+5	1234	DIRECT_ANSWER			AAA							AAA			
+		INPUT_TEXT											321		
+		DIRECT_ANSWER			ASDW									123	
+		INPUT_TEXT											BBB		
+		INPUT_TEXT											ddd		
+		DIRECT_ANSWER			ASDW									ASDW	
+			COMMON_SENSE-5	TEST								TEST			

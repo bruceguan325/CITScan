@@ -1,0 +1,99 @@
+﻿#main{
+				
+	border:1px #F2F2F2 solid;
+	padding:10px;
+	margin:5px;
+	min-width:1020px;
+	text-align:center;
+	
+}
+
+#input-div{
+	width:500px;
+	display:inline-block;
+	vertical-align:top;
+		padding:5px;
+		border:1px #F2F2F2 solid;
+
+}
+
+#ref-div{
+	width:500px;
+	display:inline-block;
+
+	vertical-align:top;
+	padding:5px;
+}
+
+#user_twitter{
+				
+ text-align:center;
+}
+
+
+.dlg-debug-panel-bg {
+	background: #e1f5ff;
+}
+
+.chat-text{
+    width:100%; overflow-x: hidden; overflow-y: hidden;
+}
+.chat-text > p:first-of-type{
+    width:100%;margin-top:0;margin-bottom:auto;line-height: 17px;font-size: 16px;
+}
+.chat-text > p:last-of-type{
+    width:100%;text-align:right;color:silver;margin-bottom:-7px;margin-top:auto;
+}
+.chat-text-l{
+    float:left;padding-right:10px;
+}        
+.chat-text-r{
+    float:right;padding-left:10px;
+}
+.macro{
+    margin-top:5px;width:82%;border-radius:5px;padding:5px;display:flex;
+}
+.msj-rta{
+    float:right;background:#a9d0f5;
+    margin: 5px 25px 15px 0;
+}
+.msj{
+    float:left;background:#ffffff;margin-left: 25px;
+}
+.msj:before{
+    width: 0;
+    height: 0;
+    content:"";
+    top:-5px;
+    left:-14px;
+    position:relative;
+    border-style: solid;
+    border-width: 0 13px 13px 0;
+    border-color: #a9d0f5 #ffffff transparent transparent;
+}
+.msj-rta:after{
+    width: 0;
+    height: 0;
+    content:"";
+    top:-5px;
+    left:14px;
+    position:relative;
+    border-style: solid;
+    border-width: 13px 13px 0 0;
+    border-color: #a9d0f5 transparent transparent transparent;           
+}
+.hierarchical-list li {
+    display: block;
+}
+
+.hierarchical-list li:before
+{
+    /*Using a Bootstrap glyphicon as the bullet point*/
+    content: "\e072";
+    font-family: 'Glyphicons Halflings';
+    font-size: 9px;
+    float: left;
+    margin-top: 4px;
+    margin-left: -20px;
+    color: #BB3333;
+}

@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "format": "grid",
+  "title": "情境問句學習設定介面",
+  "properties": {
+    "DIALOG": {
+      "type": "string",
+      "title": "情境名稱",
+      "description": "名稱需要為英數字，且需為唯一",
+      "propertyOrder": 10
+    },
+    "originalQuestion": {
+      "type": "string",
+      "title": "使用者問句",
+      "description": "使用者輸入的原始問句",
+      "propertyOrder": 11
+    },
+    "output": {
+      "type": "string",
+      "title": "系統回覆答案",
+      "description": "這次紀錄中機器回答給客戶的答案",
+      "propertyOrder": 15
+    },
+    "questionType": { "type": "string", "options": { "hidden": true } },
+    "answerType": { "type": "string", "options": { "hidden": true } },
+    "datetime": {
+      "type": "string",
+      "format": "datetime",
+      "title": "紀錄時間",
+      "description": "客戶發問的時間",
+      "propertyOrder": 20
+    },
+    "intents": {
+      "type": "array",
+      "format": "tabs",
+      "title": "意圖",
+      "description": "已判斷到的意圖",
+      "items": {
+        "type": "object",
+        "format": "grid",
+        "title": "意圖",
+        "description": "意圖",
+        "properties": {
+          "class": {
+            "type": "string",
+            "title": "意圖JAVA類",
+            "enum": ["com.intumit.robot.intent.IntentDatabase"]
+          },
+          "category": {
+            "type": "string",
+            "title": "意圖分類",
+            "description": "意圖分類"
+          },
+          "tag": {
+            "type": "string",
+            "title": "意圖標籤",
+            "description": "意圖標籤（此意圖的Unique辨識代號）"
+          },
+          "subTags": {
+            "type": "string",
+            "title": "子意圖標籤",
+            "description": "與此意圖相關的子意圖標籤（用逗號分隔）"
+          },
+          "keywords": {
+            "type": "string",
+            "title": "意圖值",
+            "description": "意圖可能的欄位值（多個用逗號分隔）"
+          },
+          "enabled": {
+            "type": "boolean",
+            "format": "checkbox",
+            "title": "是否已啟用"
+          }
+        },
+        "required": [
+          "class", "category", "tag", "subTags", "keywords", "enabled"
+        ]
+      }
+    },
+    "entities": {
+      "type": "array",
+      "format": "tabs",
+      "title": "實體",
+      "description": "已判斷到的實體",
+      "items": {
+        "type": "object",
+        "format": "grid",
+        "title": "實體",
+        "description": "實體",
+        "properties": {
+          "class": {
+            "type": "string",
+            "title": "實體JAVA類",
+            "enum": ["com.intumit.robot.entity.EntityDatabase"]
+          },
+          "category": {
+            "type": "string",
+            "title": "實體分類",
+            "description": "實體分類"
+          },
+          "tag": {
+            "type": "string",
+            "title": "實體標籤",
+            "description": "實體標籤（此實體的Unique辨識代號）"
+          },
+          "subTags": {
+            "type": "string",
+            "title": "子實體標籤",
+            "description": "與此實體相關的子實體標籤（用逗號分隔）"
+          },
+          "keywords": {
+            "type": "string",
+            "title": "實體值",
+            "description": "實體可能的欄位值（多個用逗號分隔）"
+          },
+          "enabled": {
+            "type": "boolean",
+            "format": "checkbox",
+            "title": "是否已啟用"
+          }
+        },
+        "required": [
+          "class", "category", "tag", "subTags", "keywords", "enabled"
+        ]
+      }
+    }
+  },
+  "required": [
+    "DIALOG",
+    "output",
+    "datetime",
+    "originalQuestion"
+  ]
+}

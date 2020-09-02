@@ -1,0 +1,10 @@
+        <entity name="${name}"
+         pk="id"
+         transformer="${transformer}"
+         query="${sql}" 
+         deltaQuery="${deltaSql}"
+         deletedPkQuery="${deleteSql}"
+         deltaImportQuery="${deltaImportSql}"
+         batchSize="10000">
+${body}
+        </entity>

@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "array",
+  "format": "tabs",
+  "name": "qa-perceptions",
+  "title": "感知條件設定區",
+  "description": "這裡的感知條件可以有多個，將會依序判定，因此順序是有差別的。<p class='text-danger'>注意：一旦有任何一個感知條件成立時，就不會繼續檢測其他的感知條件了。</p>",
+  "items": {
+    "type": "object",
+    "headerTemplate": "{{ i1 }} - {{ self.label }}",
+    "properties": {
+      "label": { "title": "名稱 (建議不超過 10 個字)", "type": "string" },
+      "type": {
+      	  "title": "感知類型",
+		  "type": "enum",
+		  "enumSource": [{
+		      "source": [
+		        { "value": "regex", "title": "正規表示法" },
+		        { "value": "confirm", "title": "確認是或否" },
+		        { "value": "number_range", "title": "數字及數字範圍" },
+		        { "value": "string", "title": "字串比對" },
+		        { "value": "date_time", "title": "日期及時間比對" },
+		        { "value": "address", "title": "地址比對" },
+		        { "value": "intent_entity", "title": "記憶、意圖與實體" },
+		        { "value": "unconditional", "title": "無條件進入" },
+		        { "value": "identity_number", "title": "身份證字號" },
+		        { "value": "intent_entity_exit", "title": "記憶、意圖與實體比對" },
+		        { "value": "direct_answer", "title": "一般問答句型比對" },
+		        { "value": "inline_function", "title": "內建函數呼叫" }
+		      ],
+		      "title": "{{item.title}}",
+		      "value": "{{item.value}}"
+		  }]
+		},
+	  "checkval": {
+	  	  "title": "變數替換",
+	  	  "description": "若感知條件需使用的變數替換的內容(變數替換以;分開，感知條件直接定義VALREPLACE0、VALREPLACE1)",
+	  	  "type": "string",
+	  	  "format": "textarea"
+	  },
+	  "criteria": {
+	  	  "title": "感知條件",
+	  	  "description": "無條件進入：無論使用者輸入什麼都可通過（可設定最多觸發次數）<br>數字、數字範圍：放入可接受的數字範圍(用'-'來表示，例如：10000-50000)<br>字串、模糊字串：放入欲比對的字串(目前只有比對完整字串)<br>確認是或否：填入Y或N即可<br>身份證字號：填入正常的身分證字號即可<br>地址：用數字當作條件範圍(1:只需行政區:縣或市, 2:承1並包含地區(市區鄉鎮), 3:承1.2並包含XX路或XX街, 4:承1.2.3並包含號<br>正規表示法：直接放入正規表示語法 ex. <i>.*?[0-9]+.*?</i><br>記憶、意圖與實體：語法為 @intent_tag +#entity_code -@intent_tag +%_CTX_foo -%_REQ_bar +%_DLG_boo，前頭加號為 AND 的意思，減號則為 NOT，若為 OR 則放入空白<br>日期及時間比對：以dateformat來比對，但格式要完全一致(例如：條件為yyyy/MM/dd，若使用者輸入2017/06/16條件達成，若輸入20170616則失敗；條件為dd，使用者輸入1~31條件達成，若輸入小於1或是大於31的則失敗，因為日期最大為31號)<br>記憶、意圖與實體比對：結合<ul><li>a.記憶、意圖與實體(@|#|%)</li><li>b.FunctionUtil.collectExecAndReplace，感知使用者輸入是否存在</li></ul><br>",
+	  	  "type": "string",
+	  	  "format": "textarea"
+	  },
+      "enable": {
+      	  "title": "是否啟用",
+		  "type": "boolean",
+		  "format": "checkbox"
+		}
+    }
+  }
+}

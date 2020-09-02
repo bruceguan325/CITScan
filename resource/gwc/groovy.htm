@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html ng-app="groovyConsole">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" href="./gwc?file=codemirror.css"></link>
+<link rel="stylesheet" href="./gwc?file=docs.css"></link>
+<script src="./gwc?file=codemirror.js"></script>
+<script src="./gwc?file=angular.js"></script>
+<script src="./gwc?file=groovy.js"></script>
+
+<title>groovy shell</title>
+</head>
+
+<body ng-controller="bodyCtrl">
+ <textarea id="intext" c-editor="" ng-model="code"></textarea>
+ <button ng-click="sub()">submit</button>
+ <textarea id="outtext" c-editor="" ng-model="result"></textarea>
+ 
+
+<script type="text/javascript">
+ var editor = CodeMirror.fromTextArea(document.getElementById("intext"), {
+   lineNumbers: true,
+   matchBrackets: true,
+   mode: "text/x-groovy",
+ });
+ 
+ 
+ var editor2 = CodeMirror.fromTextArea(document.getElementById("outtext"), {
+      lineNumbers: false,
+      matchBrackets: false,
+      mode: "text/x-groovy",
+		readOnly:true
+}); 
+	  
+ var groovyConsole = angular.module('groovyConsole', []);
+
+ groovyConsole.controller('bodyCtrl', ['$scope','$http',function ($scope,$http) {
+ 	$scope.sub=function(){ 	
+ 		url="./gwc?code="+encodeURIComponent(editor.getValue());
+ 		$http.defaults.transformResponse = [];
+ 		editor2.setValue("");
+ 		$http.get(url).success(function(data){
+ 			//alert(data);
+ 			editor2.setValue(data);
+ 		});
+ 	};
+ }]);
+ 
+ 
+ </script>
+ 
+ </body>
+
+</html>

@@ -1,0 +1,4 @@
+以下提供給您$branchName的相關訊息：
+#foreach( $fn in $fields ) #if( $colMapper.getMappingName($fn) ) $colMapper.getMappingName($fn)： #if ( $fn.indexOf("_ADDR_") != -1 ) $firstDoc.getFirstValue($fn) #else $firstDoc.getFirstValue($fn)  #end 
+<br>#end #end
+進一步查詢更多分行資訊，請至 https://www.cathaybk.com.tw/cathaybk/about_query01.asp 進行查詢

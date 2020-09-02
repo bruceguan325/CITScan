@@ -1,0 +1,23 @@
+{
+ "type": "object",
+ "description": "選哪一種 type 就要新增對應的 property， uri（可為 http / https / tel）/ message -> text / postback -> data (SmartRobot 吃 \"action=_message&message=XXXX\" 這樣的格式)",
+ "name": "action",
+ "properties": {
+   "type": {
+     "type": "enum", "propertyOrder": 10,
+	 "enumSource": [{
+	      "source": [
+	        { "value": "uri", "title": "URI 網址" },
+	        { "value": "message", "title": "MESSAGE 訊息" },
+	        { "value": "postback", "title": "POSTBACK" } ],
+	      "title": "{{item.title}}",
+	      "value": "{{item.value}}"
+	 }]
+   },
+   "label": { "type": "string", "propertyOrder": 20 },
+   "message": { "type": "string" },
+   "postback": { "type": "string" },
+   "uri": { "type": "string" }
+ },
+ "defaultProperties": ["type", "label"]
+}

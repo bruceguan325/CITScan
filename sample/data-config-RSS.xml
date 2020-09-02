@@ -1,0 +1,23 @@
+<dataConfig>
+        <dataSource type="URLDataSource" />
+        <document>
+                <entity name="rss"
+                        pk="id"
+                        url="http://rss.cnn.com/rss/edition.rss"
+                        processor="XPathEntityProcessor"
+                        forEach="/rss/channel/item"
+                        transformer="DateFormatTransformer">
+
+                        <field column="id"         xpath="/rss/channel/item/link" />
+                        <field column="source_s"       xpath="/rss/channel/title"   commonField="true" />
+                        <field column="source_link_s"  xpath="/rss/channel/link"    commonField="true" />
+                        <field column="source_description_t"      xpath="/rss/channel/description" commonField="true" />
+
+                        <field column="Name_t"        xpath="/rss/channel/item/title" />
+                        <field column="Link_s"         xpath="/rss/channel/item/link" />
+                        <field column="Description_mt"  xpath="/rss/channel/item/description" />
+
+                        <field column="Date_dt" xpath="/rss/channel/item/pubDate" dateTimeFormat="yyyy-MM-dd'T'hh:mm:ss" />
+                </entity>
+        </document>
+</dataConfig>

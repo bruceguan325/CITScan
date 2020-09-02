@@ -1,0 +1,592 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "title": "情境設定編輯",
+  "properties": {
+    "mkey": {
+      "type": "string",
+      "title": "MKEY",
+      "description": "名稱需要為英數字，且需為唯一",
+      "propertyOrder": 5
+    },
+    "dialogName": {
+      "type": "string",
+      "title": "情境名稱",
+      "description": "名稱需要為英數字，且需為唯一",
+      "propertyOrder": 10
+    },
+    "dialogDesc": {
+      "type": "string",
+      "title": "情境說明",
+      "description": "情境的中文名稱",
+      "propertyOrder": 15
+    },
+    "class": {
+      "type": "string",
+      "title": "JAVA類",
+      "description": "情境的JAVA類別",
+      "propertyOrder": 20
+    },
+    "enterDoubleConfirm": {
+      "type": "boolean",
+      "title": "進入確認",
+      "description": "進入情境時是否需要確認？",
+      "propertyOrder": 30
+    },
+    "enterDoubleConfirmText": {
+      "type": "string",
+      "title": "進入情境確認文案",
+      "description": "若進入情境需再確認，那麼這裡就是確認用的文案",
+      "propertyOrder": 31
+    },
+    "quitText": {
+      "type": "string",
+      "title": "情境結束文案",
+      "description": "當情境結束時會顯示此文案",
+      "propertyOrder": 40
+    },
+    "showSearchResultScript": {
+      "type": "string",
+      "format": "groovy",
+      "title": "結果顯示Script",
+      "description": "用 Script 來處理查詢結果的輸出",
+      "propertyOrder": 50
+    },
+    "customScripts": {
+      "type": "object",
+      "title": "自訂Script",
+      "description": "自訂常用 Script",
+      "propertyOrder": 55,
+      "patternProperties": {
+      	".+": {
+      		"type": "object",
+		    "title": "自訂Script",
+		    "description": "自訂常用 Script",
+    		"headerTemplate": "Script - {{ self.name }} ({{ self.desc }})",
+		    "properties": {
+		      	"name": {
+		      		"type": "string",
+				    "title": "Name"
+		      	},
+		      	"desc": {
+		      		"type": "string",
+				    "title": "Description"
+		      	},
+		      	"scriptText": {
+		      		"type": "string",
+				    "title": "Groovy script",
+      				"format": "groovy"
+		      	}
+		    },
+		    "defaultProperties": ["name", "desc", "scriptText"]
+      	}
+      }
+    },
+    "enterTrigger": {
+      "type": "array",
+      "format": "tabs",
+      "title": "情境觸發條件",
+      "description": "設定情境可能的觸發條件",
+      "items": {
+        "type": "object",
+        "format": "grid",
+        "title": "觸發設定",
+        "description": "設定觸發條件",
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "觸發類型",
+            "description": "觸發條件的類型",
+            "enum": ["sentence", "reqAttr", "lastReqAttr", "expression", "chooseOption", "rule"]
+          },
+          "contents": {
+            "type": "array",
+            "title": "觸發條件參數陣列",
+            "description": "依據不同的觸發條件類型，這裡會需要不同的值，請參閱觸發條件說明文件",
+            "items": {
+              "type": "string",
+              "title": "條件值",
+              "description": "條件值"
+            }
+          },
+          "rules": {
+            "type": "array",
+            "format": "grid",
+            "title": "觸發條件參數陣列",
+            "description": "依據不同的觸發條件類型，這裡會需要不同的值，請參閱觸發條件說明文件",
+            "items": {
+              "type": "object",
+              "title": "條件值",
+              "description": "條件值",
+              "properties": {
+              	"class": {
+              		"type": "string",
+              		"title": "Rule Java Class"
+              	},
+              	"match": {
+              		"type": "array",
+              		"title": "符合條件"
+              	},
+		        "partial": {
+		            "type": "boolean",
+		            "format": "checkbox",
+		            "title": "部分比對",
+		            "description": "部分比對即觸發"
+		        }
+              },
+              "defaultProperties": ["class", "match"]
+            }
+          },
+          "partial": {
+            "type": "boolean",
+            "format": "checkbox",
+            "title": "部分比對",
+            "description": "部分比對即觸發"
+          }
+        },
+        "required": [
+          "type",
+          "partial",
+          "contents"
+        ]
+      }
+    },
+    "normalTrigger": {
+      "type": "array",
+      "format": "tabs",
+      "title": "一般觸發條件",
+      "description": "設定此情境運行中可能的觸發條件",
+      "items": {
+        "type": "object",
+        "format": "grid",
+        "title": "觸發設定",
+        "description": "設定觸發條件",
+        "properties": {
+          "endpoint": {
+            "type": "array",
+            "format": "table",
+            "title": "所有觸發檢查點",
+            "description": "設定情境流程中哪些檢查點需要檢測一次此觸發設定",
+            "items": {
+              "enum": ["beforeRuleProcess", "beforeAggregateData", "beforeShowingResult", "postDialogCheck", "replaceShowCurrentStatusWhenSearchingText"],
+              "type": "string",
+              "title": "觸發檢查點"
+            }
+          },
+          "type": {
+            "type": "string",
+            "title": "觸發類型",
+            "description": "觸發條件的類型"
+          },
+          "partial": {
+            "type": "boolean",
+            "format": "checkbox",
+            "title": "部分比對",
+            "description": "部分比對即觸發"
+          },
+          "contents": {
+            "type": "array",
+            "title": "觸發條件參數陣列",
+            "description": "依據不同的觸發條件類型，這裡會需要不同的值，請參閱觸發條件說明文件",
+            "items": {
+              "type": "string",
+              "title": "條件值",
+              "description": "條件值"
+            }
+          },
+          "action": {
+          	"type": "object",
+          	"title": "執行動作",
+          	"properties": {
+          	  "type": {
+	            "type": "string",
+	            "enum": ["runScript", "open"],
+	            "title": "動作類型"
+	          },
+	          "scriptText": {
+		      		"type": "string",
+				    "title": "Groovy script",
+      				"format": "groovy"
+		      }
+          	}
+          }
+        },
+        "required": [
+          "type",
+          "contents",
+          "action"
+        ]
+      }
+    },
+    "quitTrigger": {
+      "type": "array",
+      "format": "tabs",
+      "title": "情境結束條件",
+      "description": "設定情境可能的結束觸發條件",
+      "items": {
+        "type": "object",
+        "format": "grid",
+        "title": "觸發設定",
+        "description": "設定觸發條件",
+        "properties": {
+          "type": {
+            "type": "string",
+            "title": "觸發類型",
+            "description": "觸發條件的類型"
+          },
+          "contents": {
+            "type": "array",
+            "title": "觸發條件參數陣列",
+            "description": "依據不同的觸發條件類型，這裡會需要不同的值，請參閱觸發條件說明文件",
+            "items": {
+              "type": "string",
+              "title": "條件值",
+              "description": "條件值"
+            }
+          },
+          "showCurrentStatus": {
+            "type": "boolean",
+            "title": "顯示目前情境狀態",
+            "description": "條件觸發時顯示情境狀態"
+          },
+          "doubleConfirm": {
+            "type": "boolean",
+            "title": "是否再確認",
+            "description": "是否經過再確認才觸發條件"
+          },
+          "doubleConfirmText": {
+            "type": "string",
+            "title": "再確認文案"
+          }
+        },
+        "required": [
+          "type",
+          "contents"
+        ]
+      }
+    },
+    "filters": {
+      "type": "array",
+      "format": "tabs",
+      "title": "情境的過濾設定",
+      "description": "跟此情境有關的過濾，亦即欄位的「值」有關的資訊",
+      "items": {
+        "type": "object",
+        "format": "grid",
+        "title": "過濾設定",
+        "description": "過濾設定",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "過濾代號",
+            "description": "過濾代號，過濾代號需為唯一"
+          },
+          "showName": {
+            "type": "string",
+            "title": "顯示名稱",
+            "description": "用來顯示用的名稱"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["string", "integer", "double", "password", "stringMask"],
+            "enum_titles": ["字串", "整數", "浮點數", "密碼", "需遮罩字串"],
+            "title": "資料型態",
+            "description": "過濾的資料型態"
+          },
+          "require": {
+            "type": "integer",
+            "title": "是否必要",
+            "description": "若為0則此過濾為非必要"
+          },
+          "multivalue": {
+            "type": "boolean",
+            "title": "允許多個過濾值"
+          },
+          "defaultQuestion": {
+            "type": "string",
+            "title": "反問文案",
+            "description": "當需要此過濾時，利用此文案來問使用者"
+          },
+          "doubleConfirm": {
+            "type": "boolean",
+            "title": "是否再確認",
+            "description": "是否經過再確認才接受此過濾值"
+          },
+          "doubleConfirmText": {
+            "type": "string",
+            "title": "再確認文案"
+          },
+          "rules": {
+            "type": "array",
+      		"format": "tabs",
+            "title": "過濾比對規則",
+            "description": "用來比對句子中是否有出現此過濾",
+            "items": {
+              "type": "object",
+        	  "format": "grid",
+              "title": "規則設定",
+              "properties": {
+                "class": {
+                  "type": "string",
+                  "title": "規則JAVA類",
+                  "enum": ["com.intumit.solr.robot.qadialog.RegexRule", 
+                  		   "com.intumit.solr.robot.qadialog.SearchableRegexRule", 
+                  		   "com.intumit.solr.robot.qadialog.OptionsRule", 
+                  		   "com.intumit.solr.robot.qadialog.SearchableOptionsRule", 
+                  		   "com.intumit.solr.robot.qadialog.ChainRule", 
+                  		   "com.intumit.solr.robot.qadialog.DateRangeRule", 
+                  		   "com.intumit.solr.robot.qadialog.SortRule", 
+                  		   "com.intumit.solr.robot.qadialog.PipeRule", 
+                  		   "com.intumit.solr.robot.qadialog.SearchableCustomDataRule", 
+                  		   "com.intumit.solr.robot.qadialog.LUISRule", 
+                  		   "com.intumit.solr.robot.qadialog.HouseAgeRule", 
+                  		   "com.intumit.solr.robot.qadialog.AddressRule"],
+                  "description": "規則JAVA類"
+                },
+                "match": {
+                  "title": "比對規則",
+                  "description": "比對規則，常用正規表示法"
+                },
+                "rewrite": {
+                  "type": "string",
+                  "title": "取值規則",
+                  "description": "當符合上述比對規則後，取出過濾值的規則"
+                },
+                "options": {
+		            "type": "array",
+		      		"format": "table",
+		            "title": "選項",
+		            "description": "提供可能的選項",
+		            "items": {
+		              "type": "string",
+		              "title": "選項名稱"
+		            }
+		        },
+                "testCases": {
+		            "type": "array",
+		      		"format": "table",
+		            "title": "測試案例",
+		            "description": "提供可能的測試案例",
+		            "items": {
+		              "type": "object",
+		              "title": "測試案例"
+		            }
+		        }
+              },
+              "required": [
+                "class"
+              ]
+            }
+          },
+          "validators": {
+            "type": "array",
+      		"format": "table",
+            "title": "資料檢核",
+            "description": "用來檢核比對到的過濾值",
+            "items": {
+              "type": "object",
+        	  "format": "grid",
+              "title": "檢核規則",
+              "description": "An explanation about the purpose of this instance.",
+              "properties": {
+                "expr": {
+                  "type": "string",
+                  "title": "檢核條件式",
+                  "description": "請參閱文件瞭解可用的條件式語法"
+                },
+                "errorText": {
+                  "type": "string",
+                  "title": "檢核錯誤文案",
+                  "description": "當發現過濾值不符合檢核條件時，顯示給客戶的文案"
+                }
+              },
+              "required": [
+                "expr",
+                "errorText"
+              ]
+            }
+          }
+        },
+        "required": [
+          "name",
+          "showName",
+          "type",
+          "require",
+          "multivalue",
+          "defaultQuestion",
+          "doubleConfirm",
+          "doubleConfirmText",
+          "rules"
+        ]
+      }
+    },
+    "fields": {
+      "type": "array",
+      "format": "tabs",
+      "title": "情境的實體設定",
+      "description": "跟此情境有關的實體，所謂實體是可被查詢、計算、限縮、排序、顯示的標的物",
+      "items": {
+        "type": "object",
+        "format": "grid",
+        "title": "實體設定",
+        "description": "實體設定",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "實體代號",
+            "description": "實體代號，此情境中需為唯一"
+          },
+          "showName": {
+            "type": "string",
+            "title": "顯示名稱",
+            "description": "用來顯示用的名稱"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["string", "integer", "double", "password", "stringMask"],
+            "enum_titles": ["字串", "整數", "浮點數", "密碼", "需遮罩字串"],
+            "title": "資料型態",
+            "description": "實體的資料型態"
+          },
+          "require": {
+            "type": "integer",
+            "title": "是否必要",
+            "description": "若為0則此實體為非必要"
+          },
+          "multivalue": {
+            "type": "boolean",
+            "title": "允許多個實體值"
+          },
+          "defaultQuestion": {
+            "type": "string",
+            "title": "反問文案",
+            "description": "當需要此實體時，利用此文案來問使用者"
+          },
+          "doubleConfirm": {
+            "type": "boolean",
+            "title": "是否再確認",
+            "description": "是否經過再確認才接受此實體值"
+          },
+          "doubleConfirmText": {
+            "type": "string",
+            "title": "再確認文案"
+          },
+          "rules": {
+            "type": "array",
+      		"format": "tabs",
+            "title": "實體比對規則",
+            "description": "用來比對句子中是否有出現此實體",
+            "items": {
+              "type": "object",
+        	  "format": "grid",
+              "title": "規則設定",
+              "properties": {
+                "class": {
+                  "type": "string",
+                  "title": "規則JAVA類",
+                  "enum": ["com.intumit.solr.robot.qadialog.RegexRule", 
+                  		   "com.intumit.solr.robot.qadialog.SearchableRegexRule", 
+                  		   "com.intumit.solr.robot.qadialog.OptionsRule", 
+                  		   "com.intumit.solr.robot.qadialog.SearchableOptionsRule", 
+                  		   "com.intumit.solr.robot.qadialog.ChainRule", 
+                  		   "com.intumit.solr.robot.qadialog.DateRangeRule", 
+                  		   "com.intumit.solr.robot.qadialog.SortRule", 
+                  		   "com.intumit.solr.robot.qadialog.PipeRule", 
+                  		   "com.intumit.solr.robot.qadialog.SearchableCustomDataRule", 
+                  		   "com.intumit.solr.robot.qadialog.LUISRule", 
+                  		   "com.intumit.solr.robot.qadialog.HouseAgeRule", 
+                  		   "com.intumit.solr.robot.qadialog.AddressRule"],
+                  "description": "規則JAVA類"
+                },
+                "match": {
+                  "title": "比對規則",
+                  "description": "比對規則，常用正規表示法"
+                },
+                "rewrite": {
+                  "type": "string",
+                  "title": "取值規則",
+                  "description": "當符合上述比對規則後，取出實體值的規則"
+                },
+                "options": {
+		            "type": "array",
+		      		"format": "table",
+		            "title": "選項",
+		            "description": "提供可能的選項",
+		            "items": {
+		              "type": "string",
+		              "title": "選項名稱"
+		            }
+		        },
+                "testCases": {
+		            "type": "array",
+		      		"format": "table",
+		            "title": "測試案例",
+		            "description": "提供可能的測試案例",
+		            "items": {
+		              "type": "object",
+		              "title": "測試案例"
+		            }
+		        }
+              },
+              "required": [
+                "class"
+              ]
+            }
+          },
+          "validators": {
+            "type": "array",
+      		"format": "table",
+            "title": "資料檢核",
+            "description": "用來檢核比對到的實體值",
+            "items": {
+              "type": "object",
+        	  "format": "grid",
+              "title": "檢核規則",
+              "description": "An explanation about the purpose of this instance.",
+              "properties": {
+                "expr": {
+                  "type": "string",
+                  "title": "檢核條件式",
+                  "description": "請參閱文件瞭解可用的條件式語法"
+                },
+                "errorText": {
+                  "type": "string",
+                  "title": "檢核錯誤文案",
+                  "description": "當發現實體值不符合檢核條件時，顯示給客戶的文案"
+                }
+              },
+              "required": [
+                "expr",
+                "errorText"
+              ]
+            }
+          }
+        },
+        "required": [
+          "name",
+          "showName",
+          "type",
+          "require",
+          "multivalue",
+          "defaultQuestion",
+          "doubleConfirm",
+          "doubleConfirmText",
+          "rules",
+          "validators"
+        ]
+      }
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "class",
+    "enterDoubleConfirm",
+    "enterDoubleConfirmText",
+    "quitText",
+    "enterTrigger",
+    "normalTrigger",
+    "quitTrigger",
+    "fields"
+  ]
+}

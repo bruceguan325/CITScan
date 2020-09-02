@@ -1,0 +1,76 @@
+<dataConfig>
+<!-- <dataSource driver="net.sourceforge.jtds.jdbc.Driver" url="jdbc:jtds:sqlserver://localhost/wise_book" user="root" password="root"/> -->
+<!-- <dataSource driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/wise_book" user="root" password="root"/> -->
+<!-- 
+<dataSource driver="com.inet.tds.TdsDriver" url="jdbc:inetdae7:localhost:1433?database=wise_book" user="root" password="root"/>
+ -->
+<dataSource driver="net.sourceforge.jtds.jdbc.Driver" url="jdbc:jtds:sqlserver://localhost/wise_book" user="root" password="root"/>
+<!-- 
+ <dataSource driver="com.inet.ora.OraDriver" url="jdbc:inetora:localhost:1521:ORCL" user="root" password="root"/>
+ -->
+    <document name="products">
+        <entity name="product" transformer="com.intumit.solr.TrimTransformer" 
+        		query="SELECT P_Product.ProductID AS pid, 
+        					P_Product.EsliteSN AS id, 
+        					P_Product.Name, 
+        					P_Product.SubTitle, 
+        					P_Product.ShortDescription, 
+        					P_SearchTable.ProductPhotoPath as SmallPhotoPath, 
+        					P_SearchTable.TopCategoryName, 
+        					P_SearchTable.SecondCategoryName, 
+        					P_SearchTable.LastCategoryName, 
+        					P_SearchTable.CharacterName as CharacterName_t, 
+        					P_SearchTable.ManufacturerName as ManufacturerName_t, 
+        					P_SearchTable.CharacterName as CharacterName_s, 
+        					P_SearchTable.ManufacturerName as ManufacturerName_s, 
+        					P_Product.ManufacturerDate, 
+        					P_Product.EAN, 
+        					P_Product.ISBN10, 
+        					P_Product.OrignalName, 
+        					P_Product.OrignalSubTitle, 
+        					P_Product.FinalPrice 
+        				FROM P_Product WITH (NOLOCK) 
+        					LEFT JOIN P_SearchTable ON P_Product.ProductID = P_SearchTable.ProductID" 
+        		batchSize="10000">
+        	<field column="id" name="id" />
+        	<field column="Name" name="Name_t" />
+        	<field column="TopCategoryName" name="TopCategoryName_s" trim="true" />
+        	<field column="SecondCategoryName" name="SecondCategoryName_s" trim="true"  />
+        	<field column="LastCategoryName" name="LastCategoryName_s" trim="true"  />
+        	<field column="CharacterName_s" name="CharacterName_s" trim="true"  />
+        	<field column="CharacterName_t" name="CharacterName_t" trim="true"  />
+        	<field column="ManufacturerName_s" name="ManufacturerName_s" trim="true"  />
+        	<field column="ManufacturerName_t" name="ManufacturerName_t" trim="true"  />
+        	<field column="ISBN10" name="ISBN10_s" trim="true" />
+        	<field column="FinalPrice" name="FinalPrice_i" />
+            <field column="SmallPhotoPath" name="SmallPhotoPath_s" trim="true" />
+        	<field column="ManufacturerDate" name="Date_dt" />
+        	
+          <entity name="desc" transformer="com.intumit.solr.ClobTransformer, com.intumit.solr.HTMLEscapeTransformer" 
+          			query="SELECT P_Product.ProductID AS pid, 
+          						P_ProductDescription.Description 
+          					FROM P_Product WITH (NOLOCK) 
+          						LEFT JOIN P_ProductDescription ON P_Product.ProductID = P_ProductDescription.ProductID 
+          					WHERE P_Product.ProductID=${product.pid}">
+              <field column="Description" name="Description_mt" clob="true" html="true" />
+          </entity>
+        	
+          <!-- 
+          <entity name="photo" 
+          			query="SELECT P_Product.ProductID AS pid, 
+          						P_ProductPhoto.SmallPhotoPath  
+          					FROM P_Product WITH (NOLOCK) 
+          						LEFT JOIN P_ProductPhoto ON P_Product.ProductID = P_ProductPhoto.ProductID 
+          					WHERE P_Product.ProductID=${product.pid}">
+              <field name="SmallPhotoPath" column="SmallPhotoPath" trim="true" />
+          </entity>
+           -->
+          
+          <!-- 
+          <entity name="desc" transformer="com.intumit.solr.HTMLEscapeTransformer" query="SELECT P_Product.ProductID AS pid, P_ProductDescription.Description FROM P_Product WITH (NOLOCK) LEFT JOIN P_ProductDescription ON P_Product.ProductID = P_ProductDescription.ProductID WHERE P_Product.ProductID=${product.pid}">
+              <field name="Description" column="Description" html="true" />
+          </entity>
+ 			-->
+        </entity>
+    </document>
+</dataConfig>

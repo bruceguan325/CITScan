@@ -1,0 +1,1708 @@
+{
+"dialogConfig":[
+  {
+    "name": "InsuranceFee",
+    "description": "保單保費查詢",
+    "class": "com.intumit.solr.robot.qadialog.InsuranceFeeListSearchAPIDialog",
+    "allowContinueSearch": true,
+    "runPostMatchChain": false,
+    "continueQAruleWhenNothingToDo": false,
+    "introductionText": "您可以輸入想要查詢的保單編號，或者想要查詢的欄位，我會試著幫你取得相關資訊喔。",
+    "noMatchScript": "return '您欲查詢的資料目前無法提供，請您來電客服取得更詳細的資訊，感謝'",
+    "reconstructQuestion": true,
+    "quitText": "請問還有其他需要為您服務的地方嗎?",
+    "showCurrentStatusWhenQuitting": false,
+    "showCurrentStatusWhenSearching": false,
+    "showCurrentStatusWhenSearchingText": "提供給您${fields#,#全部}的保單資料: (請用前方的數字選擇您要查詢的保單明細，或輸入「全部保單」取得全部保單資訊)",
+    "showSearchResultScript": "
+    	import org.apache.commons.lang.StringUtils;
+    	
+    	doSummarize = false;
+    	maxShownDocs = 3;
+    	divId = new Date().getTime();
+    	
+    	// 開頭語判定，單張保單不會執行這個
+    	def printHeader(filters, hasSpecifiedField, fields) {
+    		def out = '';
+    		
+    		if (filters.size() == 0) {
+				if (docs.size() > maxShownDocs) {
+	    			if (hasSpecifiedField && fields.size() == 1) 
+		    			return '您好，您一共有 ' + docs.size() + '張保單，是否有特別想要查詢哪張保單的' + fields.get(0).showName + '？（您可以提供保單後三碼或者保單名稱，或者點選<button class=\"btn btn-primary btn-xs btnToggle\" data-target-div=' + divId + '>展開</button>所有保單）';
+		    		else
+		    			return '您好，您一共有 ' + docs.size() + '張保單，是否有特別想要查詢哪一張保單？（您可以提供保單後三碼或者保單名稱，或者點選<button class=\"btn btn-primary btn-xs btnToggle\" data-target-div=' + divId + '>展開</button>所有保單）';
+				}
+				else {	
+	    			if (hasSpecifiedField && fields.size() == 1) 
+		    			return '您所有保單的' + fields.get(0).showName + '資訊如下：';
+		    		else 
+		    			return '您好，您一共有 ' + docs.size() + '張保單：';
+	    		}
+    		}
+    		
+    		filters.each { f ->
+    			if (out != '') out += '及';
+    			out += f.currentValueForShow;
+    		}
+    		
+    		if (hasSpecifiedField && fields.size() == 1) {
+	    		return '您 ' + docs.size() + '張' + out + '保單的' + fields.get(0).showName + '資訊如下：(請用前方的數字選擇您欲查詢的保單，或輸入「全部保單」取得全部保單資訊)';
+    		}
+    		else {
+	    		return '您有 ' + docs.size() + '張' + out + '的保單：(請用前方的數字選擇您欲查詢的保單，或輸入「全部保單」取得全部保單資訊)';
+    		}
+    	}
+    	
+    	// 列印 Html table 的每個 row
+    	def printSingleDocInHtml(idx, doc, targetShowingFields) {
+    		def out = idx != -1 ? '<td>' + idx + '</td>' : '';
+    		ino = doc.getFirstValue('InsuranceNo_s');
+	    	out += '<td>' + ino.take(3) + 'XXXX' + ino.reverse().take(3).reverse() + '<br>（' + doc.getFirstValue('ProductName_s') + '）' + '</td>';
+    		
+	    	targetShowingFields.each { f ->
+				def bundle = [currentDoc: doc, field: f, fieldValue: doc.get(f.targetIndexFieldName)];
+				fieldOut = dlg.getFieldSimpleOutputString(ctx, f, bundle);
+	    		out += '<td>' + fieldOut + '</td>';
+			}
+    		return '<tr>' + out + '</tr>';
+    	}
+    	
+    	// 列印 Html 各欄位的 Header
+    	def printHtmlDocHeader(targetShowingFields) {
+    		def out = '<th>No.</th><th>保單</th>';
+    		
+    		targetShowingFields.each { f ->
+	    		out += '<th>' + f.showName + '</th>';
+    		}
+    		return '<tr>' + out + '</tr>';
+    	}
+    	
+    	// 當張保單的時候會用這個來印出內容（如果不要表格的話也是用這個）
+    	def printSingleDocInText(idx, doc, targetShowingFields) {
+    		def out = idx != -1 ? '(' + idx + '). ' : '';
+    		ino = doc.getFirstValue('InsuranceNo_s');
+    		out += ino.take(3) + 'XXXX' + ino.reverse().take(3).reverse() + '（' + doc.getFirstValue('ProductName_s') + '）';
+    		
+    		if (targetShowingFields.size() == 1) {
+    			def f = targetShowingFields.get(0);
+    			def bundle = [currentDoc: doc, field: f, fieldValue: doc.get(f.targetIndexFieldName)];
+				fieldOut = dlg.getFieldOutputString(ctx, f, bundle);
+    			out += '' + fieldOut;
+    		}
+    		else {
+	    		targetShowingFields.each { f ->
+					def bundle = [currentDoc: doc, field: f, fieldValue: doc.get(f.targetIndexFieldName)];
+					fieldOut = dlg.getFieldOutputString(ctx, f, bundle);
+	    			out += ',' + fieldOut;
+	    		}
+    		}
+    		
+    		return out;
+    	}
+    	
+    	hasSpecifiedField = currentFields.size() > 0;
+    	if (currentFields.size() == 0) {
+    		// 若沒有任何指定顯示欄位，則預設顯示下列三欄（契約效力、下次應繳日期、下次應繳金額）
+    		currentFields.add( dlg.getField('EFT_CODE') );
+    		currentFields.add( dlg.getField('nextPayDate') );
+    		currentFields.add( dlg.getField('PREM_RCPT') );
+    	}
+    	
+    	result = '';
+    	
+    	if (ctx.getRequestAttribute('doSummarize')) {
+    		result += '';
+    		doSummarize = true;
+    	}
+    	
+    	if (docs.size() == 1) {
+    		// 若過濾後的保單數量只剩下1個，就指定秀這筆
+    		dlg.currentDocOffset = 0;
+    	}
+    	
+    	if (dlg.currentDocOffset != -1) {
+    		// 有指定顯示特定保單，就只有印出該保單
+    		result += printSingleDocInText(-1, docs.get(dlg.currentDocOffset), currentFields);
+    	}
+    	else {
+    		// 印出全部
+	    	result += printHeader(currentFilters, hasSpecifiedField, currentFields) + NL;
+	    	
+    		if (docs.size() > maxShownDocs) {
+    			result += '<div id=' + divId + ' style=\"display: none;\">';
+	    	}
+	    	
+	    	result += '<table class=\"table table-striped table-bordered table-custom-theme1\" style=\"margin: 5px;\">';
+	    	result += printHtmlDocHeader(currentFields);
+	    	
+	    	for (i=1; i <= docs.size(); i++) {
+	    		result += printSingleDocInHtml(i, docs.get(i-1), currentFields);
+	    	}
+	    	
+	    	result += '</table>';
+	    	
+    		if (docs.size() > maxShownDocs) {
+    			result += '</div>';
+	    	}
+    	}
+    	
+    	if (docs.size() == 0) {
+    		if (currentFilters.size() == 1) {
+    			result = '很抱歉我查不到' + currentFilters.get(0).currentValue + '的保單資料，可否直接提供保單名稱或者號碼，我直接替您查詢呢？';
+    		}
+    		else {
+    			result = '很抱歉我查不到相關的保單資料，可否直接提供保單名稱或者號碼，我直接替您查詢呢？';
+    		}
+    		
+        	dlg.currentDocOffset = -1;
+        	dlg.currentFilters.clear();
+            	
+            dlg.filters.each { filter -> 
+           		if (!filter.getLocked()) {
+	           		filter.currentResult = null;
+	           		filter.currentValue = null;
+           		}
+            } 
+            
+            dlg.currentFields.clear();
+    	}
+    	
+    	return result;
+    ",
+    "customScripts": {
+    	"sumTotalRcpt": {
+    		"desc": "計算應繳總金額",
+    		"scriptText": "
+            	import com.intumit.solr.robot.qadialog.InsuranceFeeListSearchAPIDialog;
+            	import com.intumit.solr.robot.qarule.PostRuleCheckResult;
+            	
+            	out = '';
+            	need = 0;
+            	
+	            def tf(docs) {
+	            	def t=0;
+	            	docs.each { doc ->
+	            	    if (doc.PREM_RCPT != null) {
+		            		t = t + new Double(doc.PREM_RCPT);
+	            	    	
+	            	    	if (doc.NextPaymentDate_dt != null && doc.NextPaymentDate_dt > System.currentTimeMillis()) {
+		            	    	if (out.length() > 0) out += ', ';
+		            	    	out += doc.ProductName_s;
+		            	    	
+		            	    	need += new Double(doc.PREM_RCPT);
+	            	    	}
+	            		}
+	            	}
+	            	return t;
+	            }
+	            
+            	dlg.currentDocOffset = -1;
+            	dlg.currentFilters.clear();
+            	
+	            dlg.filters.each { filter -> 
+	           		if (!filter.getLocked()) {
+		           		filter.currentResult = null;
+		           		filter.currentValue = null;
+	           		}
+	            } 
+	            
+	            dlg.searchAndApplyFilters(ctx);
+	            total = tf(dlg.currentDocs);
+				ctx.setAnswerText('今年繳款總金額為' + total + '元，尚須需繳費金額為' + need + '元，需繳保單為：' + out);
+				ctx.setHasDirectAnswer(true, com.intumit.solr.robot.QAContext.ANSWER_TYPE.DIALOG);
+				ctx.setResponseAttribute('DIALOG', dlg.getName());
+				return PostRuleCheckResult.DEFAULT_RETURN_RESULT;
+            "
+    	},
+    	"getAllData": {
+    		"desc": "清除條件，重新取得所有保單",
+            "scriptText": "
+            	dlg.currentDocOffset = -1;
+            	dlg.currentFilters.clear();
+            	
+	            dlg.filters.each { filter -> 
+	           		if (!filter.getLocked()) {
+		           		filter.currentResult = null;
+		           		filter.currentValue = null;
+	           		}
+	            } 
+	            
+            	dlg.currentFields.clear();
+            	
+	            dlg.fields.each { field -> 
+	           		if (!field.getLocked()) {
+		           		field.currentResult = null;
+		           		field.currentValue = null;
+	           		}
+	            } 
+	           
+	            dlg.doSearchAndListResult = true;
+	            dlg.hasNewMatch = true;
+	            return null;
+            "
+    	}
+    	
+    },
+    "qaPatternMkey": "M001",
+    "intents": [
+	  { "category": "GENERAL", "tag": "AFTER", "keywords": "之後,下1次,下次,接下來,再來,後1次,下期,下1期", "class": "com.intumit.solr.robot.intent.IntentDatabase", "enabled": true },
+	  { "category": "GENERAL", "tag": "BEFORE", "keywords": "上次,上1次,前次,前1次,之前,前期,前1期", "class": "com.intumit.solr.robot.intent.IntentDatabase", "enabled": true },
+	  { "category": "GENERAL", "tag": "EXIT", "keywords": "離開,結束,關閉,不想查", "class": "com.intumit.solr.robot.intent.IntentDatabase", "enabled": true },
+	  { "category": "GENERAL", "tag": "WHAT", "keywords": "查詢,查一下,哪些,哪幾", "class": "com.intumit.solr.robot.intent.IntentDatabase", "enabled": true },
+	  { "category": "GENERAL", "tag": "WHEN", "keywords": "什麼時候,何時,幾時,啥時,哪時,的時間,的日期", "class": "com.intumit.solr.robot.intent.IntentDatabase", "enabled": true },
+	  { "category": "GENERAL", "tag": "WHERE", "keywords": "那裡,哪裡,哪邊,那邊", "class": "com.intumit.solr.robot.intent.IntentDatabase", "enabled": true },
+	  { "category": "GENERAL", "tag": "WHO", "keywords": "誰", "class": "com.intumit.solr.robot.intent.IntentDatabase", "enabled": true },
+	  { "category": "GENERAL", "tag": "WHY", "keywords": "為何,為什麼,怎麼會", "class": "com.intumit.solr.robot.intent.IntentDatabase", "enabled": true },
+	  { "category": "GENERAL", "tag": "FIND_INSURANCE_FEE", "keywords": "", "class": "com.intumit.solr.robot.intent.IntentDatabase", "enabled": true }
+    ],
+    "entities": [
+      { "category": "InsuranceFee", "tag": "ALL_INSURANCE", "subTags": "", "keywords": "", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+      { "category": "InsuranceFee", "tag": "InsuranceFee", "subTags": "", "keywords": "保單", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "AGE", "subTags": "", "keywords": "年齡,保險年齡", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "LST_CHG_KIND", "subTags": "", "keywords": "保單最近有什麼異動", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "MAIN_PREM", "subTags": "bdMAIN_PREM", "keywords": "保費,主約表定保費", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "MLY_PAY_DATE", "subTags": "", "keywords": "墊繳下期應繳日期", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "MNXT_PAY_DATE", "subTags": "", "keywords": "下期繳費日期,下期何時要繳費,何時要繳費,何時繳費", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PAY_PRD", "subTags": "", "keywords": "繳費年期,繳費期限,繳費期間,期滿,何時到期,要繳多久", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "POL_PRD", "subTags": "", "keywords": "保險年期,保障期間,保障年限", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PRCS_IND", "subTags": "", "keywords": "保單狀況怎麼", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PREM_TRN_CODE", "subTags": "", "keywords": "怎麼繳費,什麼方式繳費, 繳費方式", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "ANTY_PAY_DATE", "subTags": "", "keywords": "保單年金開始給付日期", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "ANTY_PAY_KIND", "subTags": "", "keywords": "保單年金年金給付方式", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "ANTY_PRD", "subTags": "", "keywords": "保單年金保證,期間約定給付期間", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "AUTO_PREM_CODE", "subTags": "", "keywords": "有墊繳保單,保單有墊繳", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "AUTO_PREM_CODE_VAL", "subTags": "", "keywords": "無墊繳,有墊繳,墊繳", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "BANK", "subTags": "", "keywords": "扣繳銀行,轉帳銀行", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "bdMAIN_PREM", "subTags": "", "keywords": "主約保費", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "BRDY", "subTags": "", "keywords": "生日", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "CURR", "subTags": "", "keywords": "幣別,幣", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "DVD_KIND", "subTags": "", "keywords": "保單有紅利 ,紅利處理方式", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "DVD_KIND_VAL", "subTags": "", "keywords": "無紅利,儲存生息,調整保費,現金,領現", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "EFT_CODE", "subTags": "", "keywords": "契約效力,保單狀況", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "EFT_CODE_VAL", "subTags": "", "keywords": "有效保單,無效保單,失效的保單,正常保單,終身險滿期保單,解約保單,終止保單", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "EXT_YYMM", "subTags": "", "keywords": "保單延長期間", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "FACE_AMT", "subTags": "CURR", "keywords": "主約保額,保單金額,保額", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "FACE_AMT_PAY", "subTags": "", "keywords": "繳費保額", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "FUND_CURR", "subTags": "", "keywords": "投資標的幣別,標的幣別", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "ID", "subTags": "", "keywords": "身分證", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "INSD_NM", "subTags": "SEX,ID,AGE,BRDY,AGE,SICK_Y", "keywords": "被保人", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "ISSUE_DATE", "subTags": "", "keywords": "投保日期,開始投保時間,投保的時間,什麼時候開始保", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "LPS_DATE", "subTags": "", "keywords": "停效日期,停效時間,結束時間,什麼時候停效", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "LST_CHG_DATE", "subTags": "", "keywords": "異動日期,異動時間", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "LST_PAY_DATE", "subTags": "", "keywords": "最近繳費日,近期繳費時間,上次何時繳費,最近何時繳費", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "MED_EXAM", "subTags": "", "keywords": "體檢", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "MED_EXAM_VAL", "subTags": "", "keywords": "無體檢,不需體檢,強體,強體承保,弱體,弱體承保", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "NB_APLY_NO", "subTags": "", "keywords": "保單新契約受理編號", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PAY", "subTags": "PAY_PRD,MNXT_PAY_DATE,LST_PAY_DATE,PAY_TIMES, FACE_AMT_PAY", "keywords": "繳費,繳款,付費", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PAY_FREQ", "subTags": "", "keywords": "繳別,繳費頻率,繳費週期", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PAY_FREQ_VAL", "subTags": "", "keywords": "月繳,每月繳,季繳,三個月繳一次,半年繳,六個月繳一次,年繳,十二個月繳一次,躉,每個月繳", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PAY_TIMES", "subTags": "", "keywords": "主約繳費次數,繳費次數,已繳次數,繳了幾次", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PRCS_IND_VAL", "subTags": "", "keywords": "辦理表示,處理進度", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PREM_RCPT", "subTags": "", "keywords": "保單下期應繳保費", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PREM_TRN_CODE_VAL", "subTags": "", "keywords": "扣薪,轉帳扣款,銀行扣款,信用卡轉帳,信用卡繳款,無轉帳,現金", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PRE_PAY_IND", "subTags": "", "keywords": "保單提前給付", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PROD_ID", "subTags": "", "keywords": "保單名稱,保險名稱", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "PROD_ID_VAL", "subTags": "", "keywords": "創世紀,金好康,養老保險,龍鳳育英,美滿人生,", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "RPRT_DATE", "subTags": "", "keywords": "保單補發日期,補寄日期,最近保單補發日期是何時", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "RPRT_TMS", "subTags": "", "keywords": "保單補發次數,保單補發", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "RTN_TSO", "subTags": "", "keywords": "生命回饋方式", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "SALESTEL", "subTags": "", "keywords": "業務電話", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "SEC_ISD_ID", "subTags": "", "keywords": "次被保人身份證字號,要保人身份證字號,保險人身份證字號", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "SEC_ISD_NM", "subTags": "SEX,ID,BRDY,AGE", "keywords": "要保人,次被保人,保險人", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "SEX", "subTags": "", "keywords": "性別,是男生還是女生,是男是女", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "SICK_Y", "subTags": "", "keywords": "被保人患病幾年,被保人患病何時", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, },
+	  { "category": "InsuranceFeeDetail", "tag": "UN_CASH_TMS", "subTags": "", "keywords": "多少次支票沒有兌現", "class": "com.intumit.solr.robot.entity.EntityDatabase", "enabled": true, }
+	],
+    "enterTrigger": [
+        {"type": "rule",
+         "contents": [],
+         "rules": [
+            {
+             "match": [
+	            "(?ism)(保費|保單).*?(逾期|繳費|購買明細|扣款|催繳)",
+	            "(?ism)(催繳|契約效力|繳費期限)",
+	            "(?ism)(查詢?).*?(應繳)?保(單|險|費)",
+	            "(?ism)(繳錢|繳費).*?(時候|時間)",
+	            "(?ism)有?那些.*?保(單|險|費)沒繳錢?",
+	            "(?ism)總?共.*?要繳多少(保費|費|款|錢)?",
+	            "(?ism)服務人員電話",
+	         ],
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+	         "partial": true,
+            },
+         ]
+        },
+        {"type": "sentence",
+         "partial": false,
+         "contents": [
+            "(^|\\D)\\d{10}(\\D|$)",
+          ],
+        },
+        {"type": "reqAttr",
+         "contents": [ "DLGSPCODE0001", "InsuranceFee", ],
+        },
+    ],
+    "quitTrigger": [
+        {"type": "status",
+         "contents": ["FINISHED"],
+         "showCurrentStatus": true,
+         "doubleConfirm": false,
+        },
+        {"type": "sentence",
+         "contents": ["放棄", "結束", "離開", "跳開", "再見", "掰掰", "停止", "quit"],
+         "showCurrentStatus": true,
+         "doubleConfirm": false,
+         "doubleConfirmText": "確定要結束保單查詢（Y/N）?",
+        },
+    ],
+    "normalTrigger": [
+        {"type": "expression",
+         "endpoint": ["beforeRuleProcess"], 
+         "contents": ["ctx.ctxAttr.activeDialog!=null && ctx.ctxAttr.activeDialog.getField('id').currentValue==null"],
+         "showCurrentStatus": false,
+         "doubleConfirm": false,
+         "action": {
+            "type": "open",
+            "targetType": "dialog",
+            "targetName": "AccountVerification",
+         }
+        },
+        {"type": "rule",
+         "endpoint": ["beforeRuleProcess"], 
+         "contents": [],
+         "rules": [
+            {
+             "match": [
+             	{ "op": "AND", "intents": ["FIND_INSURANCE_FEE"], "entities": ["ALL_INSURANCE"], "class": "com.intumit.solr.robot.qadialog.LUISCriteria"},
+             ],
+             "class": "com.intumit.solr.robot.qadialog.LUISRule",
+            },
+         ],
+         "action": { "type": "runScript", "scriptRef": "getAllData" }
+        },
+        {"type": "sentence",
+         "endpoint": ["beforeAggregateData"],
+         "partial": false,
+         "contents": [
+            "全部保單", "有哪些保單", "我想查全部保單", "那其他的(保單|的)呢?",
+          ],
+         "action": { "type": "runScript", "scriptRef": "getAllData" }
+        },
+        {"type": "chooseOption",
+         "endpoint": ["beforeAggregateData"],
+         "contents": ["if (ctx.ctxAttr.activeDialog!=null && choosedNumber < ctx.ctxAttr.activeDialog.currentDocs.size()) { ctx.ctxAttr.activeDialog.currentDocOffset=choosedNumber; return choosedNumber; } else { return null; }"],
+         "showCurrentStatus": false,
+         "doubleConfirm": false,
+         "action": {
+            "type": "runScript",
+            "scriptText": "
+            	import com.intumit.solr.robot.qadialog.InsuranceFeeListSearchAPIDialog;
+            	import com.intumit.solr.robot.qarule.PostRuleCheckResult;
+                targetShowFields = [];
+                
+	            dlg.fields.each { field -> 
+	           		if (!field.getNoContext() && field.currentValue != null) {
+	           			targetShowFields.push(field);
+	           		}
+	            } 
+	            
+				return null;
+            ",
+         }
+        },
+        {"type": "sentence",
+         "endpoint": ["beforeShowingResult"],
+         "partial": true,
+         "contents": [
+            "今年總?共.*?要再?繳多少(保費|費|款|錢)?",
+            "今年.*?要再?繳多少(保費|費|款|錢)?",
+            "今年還要.*?要再?繳多少(保費|費|款|錢)?",
+          ],
+         "action": { "type": "runScript", "scriptRef": "sumTotalRcpt" }
+        },
+        {"type": "sentence",
+         "endpoint": ["beforeShowingResult"],
+         "partial": true,
+         "contents": [
+            "保單(狀況|概況)",
+          ],
+         "action": { "type": "runScript", 
+         	"scriptText": "
+            	dlg.currentDocOffset = -1;
+            	dlg.currentFilters.clear();
+            	
+	            dlg.filters.each { filter -> 
+	           		if (!filter.getLocked()) {
+		           		filter.currentResult = null;
+		           		filter.currentValue = null;
+	           		}
+	            } 
+	            
+            	dlg.currentFields.clear();
+            	
+	            dlg.fields.each { field -> 
+	           		if (!field.getLocked()) {
+		           		field.currentResult = null;
+		           		field.currentValue = null;
+	           		}
+	            } 
+	           
+	            dlg.doSearchAndListResult = true;
+	            dlg.hasNewMatch = true;
+	            
+         		ctx.setRequestAttribute('doSummarize', true); // 顯示結果的 script 會讀取這個值
+         		return null;
+         	" 
+         	}
+        },
+    ],
+    "filters": [
+		{"name": "nextPayDate", "showName": "繳費時間", "type": "dateRange", "require": 0, "multivalue": false, 
+         "defaultQuestion": "請問您要查詢的繳費時間?",
+         "doubleConfirm": false,
+         "rules": [
+            {
+            "class": "com.intumit.solr.robot.qadialog.DateRangeRule",
+            "comment": "//以下為 Searchable 所需欄位",
+            "searchType": "filterQuery",
+            "queryType": "dateRange",
+            "targetField": "NextPaymentDate_dt",
+            "partial": false,
+            },
+            {
+            "class": "com.intumit.solr.robot.qadialog.SortRule",
+            "comment": "//以下為 Searchable 所需欄位",
+            "searchType": "sort",
+            "targetField": "NextPaymentDate_dt",
+            "partial": false,
+            },
+         ]
+        },
+        {"name": "insuranceName", "showName": "保險名稱", "type": "string", "require": 0, "multivalue": false, 
+         "defaultQuestion": "請問您要查詢的保險名稱?",
+         "doubleConfirm": false,
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.SearchableCustomDataRule",
+             "dataType": "insurance",
+             "restrictToField": "ProductName",
+             "testCases": [
+                { "input": "好事年年", "assertEquals": "好事年年" },
+             ],
+             "comment": "//以下為 Searchable 所需欄位",
+             "searchType": "filterQuery",
+             "queryType": "boolean",
+             "targetField": "ProductName_s",
+             "partial": true,
+            },
+         ]
+        },
+        {"name": "payMethod", "showName": "繳費管道", "type": "string", "require": 0, "multivalue": false, 
+         "defaultQuestion": "請問您要查詢的繳費管道?",
+         "doubleConfirm": false,
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.SearchableRegexRule",
+             "match": [".*?(?<payMethod>信用卡|轉帳|轉帳扣款|扣款|扣薪|無轉帳|無).*?"],
+             "rewrite": "${payMethod}",
+             "rewriteMapping": {"信用卡": "信用卡轉帳", "轉帳扣款": "(?<show>轉帳扣款)?(轉帳扣款|扣薪|信用卡轉帳)", "扣款": "(?<show>轉帳扣款)?(轉帳扣款|扣薪|信用卡轉帳)", "轉帳": "(?<show>轉帳扣款)?(轉帳扣款|扣薪|信用卡轉帳)", "扣薪": "扣薪", "無": "無轉帳"},
+             "testCases": [
+                { "input": "我用轉帳的", "assertEquals": "轉帳" },
+                { "input": "信用卡繳款", "assertEquals": "信用卡" },
+             ],
+             "comment": "//以下為 Searchable 所需欄位",
+             "searchType": "filterQuery",
+             "queryType": "boolean",
+             "targetField": "PaymentMethod_s",
+             "partial": false,
+            },
+            {
+            "class": "com.intumit.solr.robot.qadialog.SortRule",
+            "comment": "//以下為 Searchable 所需欄位",
+            "searchType": "sort",
+            "targetField": "NextPaymentDate_dt",
+            "partial": false,
+            },
+         ]
+        },
+        {"name": "payInterval", "showName": "繳別", "type": "string", "require": 0, "multivalue": false, 
+         "defaultQuestion": "請問您要查詢的繳別?",
+         "doubleConfirm": false,
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.SearchableRegexRule",
+             "match": [".*?(?<payInterval>年繳|半年繳|季繳|月繳|躉繳|彈性繳).*?"],
+             "rewrite": "${payInterval}",
+             "testCases": [
+                { "input": "年繳", "assertEquals": "年繳" },
+                { "input": "我要查年繳的", "assertEquals": "年繳" },
+                { "input": "半年繳一次", "assertEquals": "半年繳" },
+             ],
+             "comment": "//以下為 Searchable 所需欄位",
+             "searchType": "filterQuery",
+             "queryType": "boolean",
+             "targetField": "period_s",
+             "partial": false,
+            },
+         ]
+        },
+        {"name": "insuranceNo", "showName": "保單號碼", "type": "string", "require": 0, "multivalue": false, 
+         "defaultQuestion": "請問您要查詢的保單號碼?",
+         "doubleConfirm": false,
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.SearchableRegexRule",
+             "match": [".*?(?<insuranceNo>\\d{10}).*?"],
+             "rewrite": "${insuranceNo}",
+             "testCases": [
+                { "input": "保單編號7955428852", "assertEquals": "7955428852" },
+             ],
+             "comment": "//以下為 Searchable 所需欄位",
+             "searchType": "filterQuery",
+             "queryType": "boolean",
+             "targetField": "InsuranceNo_s",
+             "partial": false,
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.SearchableRegexRule",
+             "match": [
+             	"(保單|編號)?(最後3碼)?(為|是|4)?(?<insuranceNo>\\d{3})(保單)?",
+             	"(保單|編號)?(末3碼)?(為|是|4)?(?<insuranceNo>\\d{3})(保單)?"
+             ],
+             "rewrite": "${insuranceNo}",
+             "comment": "//以下為 Searchable 所需欄位",
+             "searchType": "filterQuery",
+             "queryType": "prefixWildcard",
+             "targetField": "InsuranceNo_s",
+             "partial": true,
+            },
+         ]
+        },
+        {"name": "effectiveness", "showName": "繳費狀態", "type": "string", "require": 0, "multivalue": false, 
+         "defaultQuestion": "請問您要查詢的繳費狀態?",
+         "doubleConfirm": false,
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.SearchableRegexRule",
+             "match": [".*?(?<effectiveness>正常|停效|解約|期滿|滿期|終止|註銷).*?"],
+             "rewrite": "${effectiveness}",
+             "rewriteMapping": {"正常": "正常", "停效": "停效", "期滿": "終身險滿期", "滿期": "終身險滿期", "終止": "終止", "註銷": "註銷"},
+             "testCases": [],
+             "comment": "//以下為 Searchable 所需欄位",
+             "searchType": "filterQuery",
+             "queryType": "boolean",
+             "targetField": "effectiveness_s",
+             "partial": false,
+            },
+            {
+            "class": "com.intumit.solr.robot.qadialog.SortRule",
+            "comment": "//以下為 Searchable 所需欄位",
+            "searchType": "sort",
+            "targetField": "NextPaymentDate_dt",
+            "partial": false,
+            },
+         ]
+        },
+    ],
+    "fields": [
+        {"name": "unsupportFields", "showName": "不支援的欄位", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "不支援查詢的欄位?",
+         "targetIndexFieldName": "Void_s",
+         "doubleConfirm": false,
+         "outputExpr": "'目前尚無法提供此欄位的查詢'",
+         "simpleOutputExpr": "'目前尚無法提供'",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(保單額單位|要保人身份證號|被保人身份證號|次被保人年齡|密戶|銷售通路|費率檔特有欄位一|費率檔特有欄位二|團體別|團體代碼|公司名稱|集體減費率|費用折減率|要保人豁免附約1險別|要保人豁免附約1金額|要保人豁免附約2險別|要保人豁免附約2金額|特約下期保費|調整保費|死差抵繳費保費|優待保費|契約角色號|要保人生日|被保人性別|被保人生日|職業別|墊繳本息|y增齡|短期加費|轉籍服務代號|訊息代號).*?"],
+             "rewrite": "Void_s",
+            },
+         ]
+        },
+        {"name": "insuranceNo", "showName": "保單號碼", "type": "string", "require": 0, "multivalue": false, 
+         "defaultQuestion": "保單號碼?",
+         "targetIndexFieldName": "InsuranceNo_s",
+         "entities": ["POLICY_NO"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:bundle.field.showName+'為' + bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": ["(保單號碼|保號)"],
+             "rewrite": "InsuranceNo_s",
+            },
+         ]
+        },
+        {"name": "lastPayDate", "showName": "上次繳費時間", "type": "dateRange", "require": 0, "multivalue": false, 
+         "defaultQuestion": "輸入[繳費時間]取得保單繳費時間?",
+         "targetIndexFieldName": "LastPaymentDate_dt",
+         "entities": ["LST_PAY_DATE"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'最近繳費日期為 ' + new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.LUISRule",
+             "match": [
+             	{ "op": "AND", "intents": ["WHEN", "BEFORE"], "entities": ["PAY"], "class": "com.intumit.solr.robot.qadialog.LUISCriteria"},
+             ],
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [
+             	".*?(上次).*?(?<payDate>繳費(日期?|時間)).*?",
+             	".*?(?<payDate>(何|啥|什麼|幾)時(間|候|後)?.*?繳費)的.*?"
+             ],
+             "rewrite": "LastPaymentDate_dt",
+            },
+         ]
+        },
+        {"name": "nextPayDate", "showName": "下次繳費時間", "type": "dateRange", "require": 0, "multivalue": false, 
+         "defaultQuestion": "輸入[繳費時間]取得保單繳費時間?",
+         "targetIndexFieldName": "NextPaymentDate_dt",
+         "entities": ["MNXT_PAY_DATE"],
+         "doubleConfirm": false,
+         "outputExpr": "
+         	bundle.get('fieldValue')==null
+         	?'查無'+bundle.field.showName
+         	:(new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))=='1911-01-01'?'無下次繳費時間':'下次的繳費日期為 ' + new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue')))",
+         "simpleOutputExpr": "
+         	bundle.get('fieldValue')==null
+         	?'無'
+         	:(new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))=='1911-01-01'?'無':'' + new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue')))",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.LUISRule",
+             "match": [
+             	{ "op": "AND", "intents": ["WHEN", "AFTER"], "entities": ["PAY"], "class": "com.intumit.solr.robot.qadialog.LUISCriteria"},
+             	{ "op": "AND", "intents": ["WHEN"], "entities": ["PAY"], "class": "com.intumit.solr.robot.qadialog.LUISCriteria"},
+             ],
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [
+             	".*?(下次).*?(?<payDate>繳費(日期?|時間)).*?",
+             	".*?(?<payDate>(何|啥|什麼|幾)時(間|候|後)?.*?(需要|需|得)繳費).*?"
+             ],
+             "rewrite": "NextPaymentDate_dt",
+            },
+         ]
+        },
+        {"name": "issueDate", "showName": "投保日期", "type": "dateRange", "require": 0, "multivalue": false, 
+         "defaultQuestion": "輸入[繳費時間]取得保單繳費時間?",
+         "targetIndexFieldName": "IssueDate_dt",
+         "entities": ["ISSUE_DATE"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'投保日期為 ' + new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(投保日期).*?", ".*?(?<issueDate>(何|啥|什麼|幾)時(間|候|後)?.*?(開始)?(投保|保))"],
+             "rewrite": "IssueDate_dt",
+            },
+         ]
+        },
+        {"name": "insuranceName", "showName": "保險名稱", "type": "string", "require": 0, "multivalue": false, 
+         "defaultQuestion": "保險名稱?",
+         "targetIndexFieldName": "ProductName_s",
+         "entities": ["PROD_ID"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'保單名稱為' + bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(保單名|產品名).*?"],
+             "rewrite": "ProductName_s",
+            },
+         ]
+        },
+        {"name": "payMethod", "showName": "繳費管道", "type": "string", "require": 0, "multivalue": false, 
+         "defaultQuestion": "繳費管道?",
+         "targetIndexFieldName": "PaymentMethod_s",
+         "entities": ["PREM_TRN_CODE"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'繳費方式為' + bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [
+             	".*?(怎麼繳|繳(保費|費|款|錢)?方式).*?", 
+             	".*?什麼方式繳(保費|費|款|錢)?.*?"
+             ],
+             "rewrite": "PaymentMethod_s",
+            },
+         ]
+        },
+        {"name": "payInterval", "showName": "繳別", "type": "string", "require": 0, "multivalue": false, 
+         "defaultQuestion": "繳別?",
+         "targetIndexFieldName": "period_s",
+         "entities": ["PAY_FREQ", "PAY_FREQ_VAL"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'繳費頻率為' + bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(多久繳|繳費頻率).*?"],
+             "rewrite": "period_s",
+            },
+         ]
+        },
+		{"name": "EFT_CODE", "showName": "契約效力", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "目前契約效力如何?",
+         "targetIndexFieldName": "effectiveness_s",
+         "entities": ["EFT_CODE", "EFT_CODE_VAL"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'契約效力為 ' + bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?保單狀況怎麼.*?"],
+             "rewrite": "EFT_CODE",
+            }
+         ]
+        },
+        {"name": "PAY_PRD", "showName": "繳費年期", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "繳費幾年期滿?",
+         "targetIndexFieldName": "PAY_PRD",
+         "entities": ["PAY_PRD"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'繳費年期為' + bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": [
+           {
+            "class": "com.intumit.solr.robot.qadialog.RegexRule",
+            "match": [".*?繳(幾年|幾年期的保單|多久).*?(期滿).*?"],
+            "rewrite": "PAY_PRD",
+           },
+         ]
+        },
+        {"name": "POL_PRD", "showName": "保險年期", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保障期間有多久?",
+         "targetIndexFieldName": "POL_PRD",
+         "entities": ["POL_PRD"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'保險年期為' + bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": [
+           {
+            "class": "com.intumit.solr.robot.qadialog.RegexRule",
+            "match": [".*?保險(保障期間|期間|年期).*?(多久|期滿|到期時間).*?"],
+            "rewrite": "POL_PRD",
+           },
+         ]
+        },
+        {"name": "FACE_AMT", "showName": "主約保額", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "主約保額多少金額?",
+         "targetIndexFieldName": "FACE_AMT",
+         "entities": ["FACE_AMT"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'保額為 ' + bundle.get('fieldValue') + {'1':'元', '2':'佰元', '3':'仟元', '4':'萬元'}.get(bundle.get('currentDoc').getFirstValue('FACE_AMT_UNIT'))",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(保險|保障|保額).*?(多久|金額).*?"],
+             "rewrite": "FACE_AMT",
+            },
+         ]
+        },
+        {"name": "FACE_AMT_UNIT", "showName": "保額單位", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "主約保額單位為?",
+         "targetIndexFieldName": "FACE_AMT_UNIT",
+         "entities": ["FACE_AMT_UNIT"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'保額單位為 ' +  {'1':'元', '2':'佰元', '3':'仟元', '4':'萬元'}.get(bundle.get('fieldValue'))",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':{'1':'元', '2':'佰元', '3':'仟元', '4':'萬元'}.get(bundle.get('fieldValue'))",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(保額單位).*?"],
+             "rewrite": "FACE_AMT_UNIT",
+            },
+         ]
+        },
+   		{"name": "FACE_AMT_PAY", "showName": "繳費保額", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "繳費保額多少金額?",
+         "targetIndexFieldName": "FACE_AMT_PAY",
+         "entities": ["FACE_AMT_PAY"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'繳費保額為 ' + bundle.get('fieldValue') + {'1':'元', '2':'佰元', '3':'仟元', '4':'萬元'}.get(bundle.get('currentDoc').getFirstValue('FACE_AMT_UNIT'))",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':'' + bundle.get('fieldValue') + {'1':'元', '2':'佰元', '3':'仟元', '4':'萬元'}.get(bundle.get('currentDoc').getFirstValue('FACE_AMT_UNIT'))",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?繳費(保險|保障|保額).*?(多久|金額).*?"],
+             "rewrite": "FACE_AMT_PAY",
+            },
+         ]
+        },
+   		{"name": "MLY_PAY_DATE", "showName": "墊繳下次應繳日", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "墊繳下次應繳日期是什麼時候?",
+         "targetIndexFieldName": "MLY_PAY_DATE",
+         "entities": ["MLY_PAY_DATE"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null||new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))=='1911-01-01'?'查無'+bundle.field.showName:'墊繳下次應繳日為 ' + bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null||new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))=='1911-01-01'?'無':'' + bundle.get('fieldValue')",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(墊繳)(下次).*?(繳費|應繳)(日期?|時間).*?"],
+             "rewrite": "MLY_PAY_DATE",
+            },
+         ]
+        },
+    	{"name": "UN_CASH_TMS", "showName": "票據未兌現次數", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "票據未兌現有幾次?",
+         "targetIndexFieldName": "UN_CASH_TMS",
+         "entities": ["UN_CASH_TMS"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'票據未兌現次數為 ' + bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')+'次'",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [
+              	".*?(多少次|幾次).*?(支票).*?(未|沒有)兌現.*?",
+              	".*?(未兌現|沒兌現).*?(支票).*?(幾次|多少次).*?"
+              ],
+             "rewrite": "UN_CASH_TMS",
+            },
+          {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?(未兌現|沒兌現).*?(支票).*?(幾次|多少次).*?"],
+             "rewrite": "UN_CASH_TMS",
+            },
+         ]
+        },
+		{"name": "DVD_KIND", "showName": "紅利選擇", "type": "string", "require": 0, "multivalue": false,
+          "defaultQuestion": "保單紅利的處理方式?",
+         "targetIndexFieldName": "DVD_KIND",
+         "entities": ["DVD_KIND"],
+          "doubleConfirm": false,
+          "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'紅利類別為 ' + {'0':'無紅利', '1':'儲存生息', '2':'調整保費', '3':'現金給付', '4':'增額繳清'}.get(bundle.get('fieldValue'))",
+          "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':'' + {'0':'無紅利', '1':'儲存生息', '2':'調整保費', '3':'現金給付', '4':'增額繳清'}.get(bundle.get('fieldValue'))",
+          "rules": [
+           {
+            "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?保單有?紅利嗎.*?"],
+            "rewrite": "DVD_KIND",
+           },
+         ]
+        },
+  		{"name": "LST_CHG_KIND", "showName": "最近異動種類", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單最近有什麼異動?",
+         "targetIndexFieldName": "LST_CHG_KIND",
+         "entities": ["LST_CHG_KIND"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:(bundle.get('currentDoc').getFirstValue('LST_CHG_DATE')==null?'最近無異動':'最近的異動種類為 '+ bundle.get('fieldValue') + '，異動時間 '+ sdf.format(bundle.get('currentDoc').getFirstValue('LST_CHG_DATE')))",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?保單.*?(最近).*?(異動).*?"],
+             "rewrite": "LST_CHG_KIND",
+            },
+            ]
+        },
+  		{"name": "LST_CHG_DATE", "showName": "最近異動日期", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單最近有什麼異動?",
+         "targetIndexFieldName": "LST_CHG_DATE",
+         "entities": ["LST_CHG_DATE"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:(bundle.get('currentDoc').getFirstValue('LST_CHG_DATE')==null?'最近無異動':'最近的異動種類為 '+ bundle.get('currentDoc').getFirstValue('LST_CHG_KIND') + '，異動時間 '+ sdf.format(bundle.get('fieldValue')))",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+   	     	 "match": [".*?(保單)(最近).*?(?<payDate>異動(日期?|時間)).*?"],
+             "rewrite": "LST_CHG_DATE",
+            },
+            ]
+        },
+ 		{"name": "MED_EXAM", "showName": "體檢別", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單體檢類別是什麼?",
+         "targetIndexFieldName": "MED_EXAM",
+         "entities": ["MED_EXAM"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'體檢類別為 ' + {'0':'無體檢', '1':'強體', '2':'弱體'}.get(bundle.get('fieldValue'))",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':'' + {'0':'無體檢', '1':'強體', '2':'弱體'}.get(bundle.get('fieldValue'))",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?保單需要體檢嗎.*?"],
+             "rewrite": "MED_EXAM",
+            },
+ 	 		{
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?保單.*?(體檢).*?(類別).*?"],
+             "rewrite": "MED_EXAM",
+            },
+
+         ]
+        },
+		{"name": "PRCS_IND", "showName": "辦理表示", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "目前保單狀況如何?",
+         "targetIndexFieldName": "PRCS_IND",
+         "entities": ["PRCS_IND"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'處理狀況為 ' + {'0':'無作業辦理中', '1':'主被保險人身故(壽險)辦理中', '2':'次被保險人身故(年金)辦理中', '3':'主被保險人身故(年金)辦理中', '4':'解約辦理中', '5':'解除契約辦理中'}.get(new('java.lang.Integer', bundle.get('fieldValue')).toString())",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':'' + {'0':'無作業辦理中', '1':'主被保險人身故(壽險)辦理中', '2':'次被保險人身故(年金)辦理中', '3':'主被保險人身故(年金)辦理中', '4':'解約辦理中', '5':'解除契約辦理中'}.get(new('java.lang.Integer', bundle.get('fieldValue')).toString())",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?保單狀況怎麼.*?"],
+             "rewrite": "PRCS_IND",
+            }
+         ]
+        },
+		{"name": "RPRT_TMS", "showName": "保單補發次數", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單補發幾次了?",
+         "targetIndexFieldName": "RPRT_TMS",
+         "entities": ["RPRT_TMS"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'補發的次數為 '+ bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?保單.*?(補發).*?(次數|幾次|多少次).*?"],
+             "rewrite": "RPRT_TMS",
+            }
+         ]
+        },
+		{"name": "RPRT_DATE", "showName": "保單補發日期", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "最近一次的保單補發時間是什麼時候?",
+         "targetIndexFieldName": "RPRT_DATE",
+         "entities": ["RPRT_DATE"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null||new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))=='1911-01-01'?'查無'+bundle.field.showName:'補發日期為 '+sdf.format(bundle.get('fieldValue'))",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null||new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))=='1911-01-01'?'無':new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?保單.*?(補發).*?(時間|日期).*?"],
+             "rewrite": "RPRT_DATE",
+            }
+         ]
+        },
+		{"name": "LPS_DATE", "showName": "停效(終止)日期", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單的停效日期是什麼時候?",
+         "targetIndexFieldName": "LPS_DATE",
+         "entities": ["LPS_DATE"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null||new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))=='1911-01-01'?'查無'+bundle.field.showName:'停效(終止)日期為 '+sdf.format(bundle.get('fieldValue'))",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null||new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))=='1911-01-01'?'無':new('java.text.SimpleDateFormat', 'yyyy-MM-dd').format(bundle.get('fieldValue'))",
+         "rules": []
+        },
+		{"name": "AUTO_PREM_CODE", "showName": "墊繳表示", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單有墊繳嗎?",
+         "targetIndexFieldName": "AUTO_PREM_CODE",
+         "entities": ["AUTO_PREM_CODE"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'墊繳狀況為 ' + {'0':'無墊繳', '1':'墊繳'}.get(bundle.get('fieldValue'))",  
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'查':'' + {'0':'無墊繳', '1':'墊繳'}.get(bundle.get('fieldValue'))",         
+	  	 "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?保單.*?(有|是否).*?墊繳.*?"],
+             "rewrite": "AUTO_PREM_CODE",
+            }
+         ]
+        },
+		{"name": "AGE", "showName": "投保年齡", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單當初投保的年齡是幾歲?",
+         "targetIndexFieldName": "AGE",
+         "entities": ["AGE"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'被保人 ' + bundle.get('currentDoc').getFirstValue('Cestuiquevie_s') +' 投保年齡為'+ bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':''+ bundle.get('fieldValue') +'歲'",
+	  	 "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?保單.*?(當時|當初).*?(投保|買).*?(幾歲|多大|年齡).*?"],
+             "rewrite": "AGE",
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?保單.*?(當時|當初).*?(幾歲|多大).*?買的.*?"],
+             "rewrite": "AGE",
+            },
+         ]
+        },
+		{"name": "SEC_ISD_AGE", "showName": "要保人年齡", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單當初投保的要保人年齡是幾歲?",
+         "targetIndexFieldName": "SEC_ISD_AGE",
+         "entities": ["SEC_ISD_AGE"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'要保人年齡為 '+ bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':''+ bundle.get('fieldValue') +'歲'",
+	  	 "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [
+              	".*?保單.*?(當時|當初).*?(投保|買).*?(幾歲|多大|年齡).*?",
+              	".*?保單.*?(當時|當初).*?(幾歲|多大).*?買的.*?"
+              ],
+             "rewrite": "SEC_ISD_AGE",
+            },
+         ]
+        },
+		{"name": "EXT_YYMM", "showName": "延長期間", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單延長期間?",
+         "targetIndexFieldName": "EXT_YYMM",
+         "entities": ["EXT_YYMM"],
+         "doubleConfirm": false,
+         "outputExpr": "'目前尚無法提供'+field.showName+'的查詢'",
+         "simpleOutputExpr": "'目前尚無法提供'",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?保單延長期間.*?"],
+             "rewrite": "EXT_YYMM",
+            }
+         ]
+     	},
+		{"name": "PRE_PAY_IND", "showName": "提前給付表示", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單有提前給付嗎?",
+         "targetIndexFieldName": "PRE_PAY_IND",
+         "entities": ["PRE_PAY_IND"],
+         "doubleConfirm": false,
+         "outputExpr": "'目前尚無法提供'+field.showName+'的查詢'",
+         "simpleOutputExpr": "'目前尚無法提供'",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?保單提前給付.*?"],
+             "rewrite": "PRE_PAY_IND",
+            }
+         ]
+ 		},
+		{"name": "RTN_TSO", "showName": "生命表回饋方式", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "生命表回饋方式?",
+         "targetIndexFieldName": "RTN_TSO",
+         "entities": ["RTN_TSO"],
+         "doubleConfirm": false,
+         "outputExpr": "'目前尚無法提供'+field.showName+'的查詢'",
+         "simpleOutputExpr": "'目前尚無法提供'",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?生命表回饋方式.*?"],
+             "rewrite": "RTN_TSO",
+            }
+         ]
+		},
+		{"name": "SICK_Y", "showName": "患病年度", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "被保人患病幾年?",
+         "targetIndexFieldName": "SICK_Y",
+         "entities": ["SICK_Y"],
+         "doubleConfirm": false,
+         "outputExpr": "'目前尚無法提供'+field.showName+'的查詢'",
+         "simpleOutputExpr": "'目前尚無法提供'",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?(被保人).*?(患病).*?(幾年|多久).*?"],
+             "rewrite": "SICK_Y",
+            }
+         ]
+		},
+		{"name": "SEX", "showName": "被保人性別", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單被保人的性別是?",
+         "targetIndexFieldName": "SEX",
+         "entities": ["SEX"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'被保人性別為 ' + {'1':'男', '2':'女'}.get(bundle.get('fieldValue'))",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':'' + {'1':'男', '2':'女'}.get(bundle.get('fieldValue'))",
+	     "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?保單.*?(被保人).*?(性別).*?"],
+             "rewrite": "SEX",
+            }
+         ]
+		},
+		{"name": "ANTY_PRD", "showName": "年金保證期間／約定給付期間", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單年金保證期間／約定給付期間?",
+         "targetIndexFieldName": "ANTY_PRD",
+         "entities": ["ANTY_PRD"],
+         "doubleConfirm": false,
+         "outputExpr": "'目前尚無法提供'+field.showName+'的查詢'",
+         "simpleOutputExpr": "'目前尚無法提供'",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?(保單).*?(年金保證期間|約定給付期間).*?"],
+             "rewrite": "ANTY_PRD",
+            }
+         ]
+		},
+		{"name": "ANTY_PAY_DATE", "showName": "年金開始給付日", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單年金的開始給付日?",
+         "targetIndexFieldName": "ANTY_PAY_DATE",
+         "entities": ["ANTY_PAY_DATE"],
+         "doubleConfirm": false,
+         "outputExpr": "'目前尚無法提供'+field.showName+'的查詢'",
+         "simpleOutputExpr": "'目前尚無法提供'",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?(保單).*?(年金).*?(開始給付).*?(日|時間|日期).*?"],
+             "rewrite": "ANTY_PAY_DATE",
+            }
+         ]
+		},
+		{"name": "ANTY_PAY_KIND", "showName": "年金給付方式", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單年金的年金給付方式?",
+         "targetIndexFieldName": "ANTY_PAY_KIND",
+         "entities": ["ANTY_PAY_KIND"],
+         "doubleConfirm": false,
+         "outputExpr": "'目前尚無法提供'+field.showName+'的查詢'",
+         "simpleOutputExpr": "'目前尚無法提供'",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?(保單).*?(年金).*?(給付).*?(方法).*?"],
+             "rewrite": "ANTY_PAY_KIND",
+            }
+         ]
+		},
+		{"name": "NB_APLY_NO", "showName": "新契約受理編號", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單新契約受理編號?",
+         "targetIndexFieldName": "NB_APLY_NO",
+         "entities": ["NB_APLY_NO"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'新契約受理編號為 '+ bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+	  	 "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?(保單).*?(新契約).*?(受理).*?(編號).*?"],
+             "rewrite": "NB_APLY_NO",
+            }
+         ]
+		},
+		{"name": "CURR", "showName": "幣別", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單的幣別?",
+         "targetIndexFieldName": "CURR",
+         "entities": ["CURR"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'幣別為 '+ bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+	  	 "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?(保單).*?(幣別).*?"],
+             "rewrite": "CURR",
+            }
+         ]
+		},
+		{"name": "MAIN_PREM", "showName": "主約表定保費", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單的主約表定保費?",
+         "targetIndexFieldName": "MAIN_PREM",
+         "entities": ["MAIN_PREM"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'主約表定保費為 '+ bundle.get('fieldValue')+'元'",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')+'元'",
+	  	 "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?(保單).*?(主約表定保費).*?"],
+             "rewrite": "MAIN_PREM",
+            }
+         ]
+		},
+		{"name": "bdMAIN_PREM", "showName": "主約保費", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單的主約保費?",
+         "targetIndexFieldName": "bdMAIN_PREM",
+         "entities": ["bdMAIN_PREM"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'主約保費為 '+ bundle.get('fieldValue')+'元'",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')+'元'",
+	     "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?(保單).*?(主約保費).*?"],
+             "rewrite": "bdMAIN_PREM",
+            }
+         ]
+		},
+		{"name": "PREM_RCPT", "showName": "下次應繳保費", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "保單的下次應繳保費?",
+         "targetIndexFieldName": "PREM_RCPT",
+         "entities": ["PREM_RCPT"],
+         "doubleConfirm": false,
+         "outputExpr": "bundle.get('fieldValue')==null?'查無'+bundle.field.showName:'下次應繳保費為 '+ bundle.get('fieldValue')+'元'",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')+'元'",
+	  	 "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+              "match": [".*?(保單).*?(下期|).*?繳(保費).*?"],
+             "rewrite": "PREM_RCPT",
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.LUISRule",
+             "match": [
+             	{ "op": "AND", "intents": ["WHAT"], "entities": ["PREM_RCPT"], "class": "com.intumit.solr.robot.qadialog.LUISCriteria"},
+             ],
+            },
+         ]
+        },
+        {"name": "applicant", "showName": "要保人", "type": "string", "require": 0, "multivalue": false, 
+         "defaultQuestion": "要保人?",
+         "targetIndexFieldName": "Applicant_s",
+         "entities": ["SEC_ISD_NM"],
+         "doubleConfirm": false,
+         "outputExpr": "'要保人姓名為 ' + bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": []
+        },
+        {"name": "cestuiquevie", "showName": "被保人", "type": "string", "require": 0, "multivalue": false, 
+         "defaultQuestion": "被保人?",
+         "targetIndexFieldName": "Cestuiquevie_s",
+         "entities": ["INSD_NM"],
+         "doubleConfirm": false,
+         "outputExpr": "'被保人姓名為 ' + bundle.get('fieldValue')",
+         "simpleOutputExpr": "bundle.get('fieldValue')==null?'無':bundle.get('fieldValue')",
+         "rules": []
+        },
+        {"name": "bank", "showName": "扣款銀行", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "查詢扣款帳戶?",
+         "targetIndexFieldName": "Bank_s",
+         "entities": ["BANK"],
+         "doubleConfirm": false,
+         "outputExpr": "'目前尚無法提供'+field.showName+'的查詢'",
+         "simpleOutputExpr": "'目前尚無法提供'",
+         "rules": []
+        },
+        {"name": "salesTel", "showName": "服務人員電話", "type": "string", "require": 0, "multivalue": false,
+         "defaultQuestion": "服務人員電話?",
+         "targetIndexFieldName": "SalesTel_s",
+         "entities": ["SALESTEL"],
+         "doubleConfirm": false,
+         "outputExpr": "'目前尚無法提供'+field.showName+'的查詢'",
+         "simpleOutputExpr": "'目前尚無法提供'",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(業務|服務).*?(電話|手機|聯絡方式).*?"],
+             "rewrite": "InsuranceNo_s",
+            },
+         ]
+        },
+     ]
+  },
+  {
+    "name": "AVM",
+    "description": "房貸自動估價",
+    "class": "com.intumit.solr.robot.qadialog.AVMQADialog",
+    "enterDoubleConfirm": true,
+    "enterDoubleConfirmText": "請問是否要進行房貸自動估價服務?",
+    "quitText": "已經結束房貸自動估價情境，很高興能為您服務",
+    "enterTrigger": [
+        {"type": "sentence",
+         "partial": false,
+         "contents": ["房貸", "房屋貸款", "(?i)AVM", "放款", "房屋估價", "我想申請貸款"],
+        },
+        {"type": "reqAttr",
+         "contents": [
+            "DLGSPCODE0001", "AVM",
+          ],
+        },
+    ],
+    "normalTrigger": [],
+    "quitTrigger": [
+        {"type": "status",
+         "contents": ["FINISHED"],
+         "showCurrentStatus": true,
+         "doubleConfirm": false,
+        },
+        {"type": "sentence",
+         "contents": ["放棄", "結束", "離開", "跳開", "停止"],
+         "showCurrentStatus": true,
+         "doubleConfirm": true,
+         "doubleConfirmText": "您尚未完成估價，確定要結束（Y/N）?",
+        },
+    ],
+    "fields": [
+        {"name": "address", "showName": "地址", "type": "string", "require": 1, "multivalue": false, 
+         "defaultQuestion": "請問您的房屋地址是那裡? (目前僅提供台北市估價)",
+         "doubleConfirm": true,
+         "doubleConfirmText": "請確認地址是否為${address}",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.AddressRule",
+             "administrativeArea": { "require": true, "targetDialog": "AdministrativeAreaDisambiguation" },
+             "locality": { "require": true, "targetDialog": "LocalityDisambiguation" },
+             "sublocality": { "require": false },
+             "streetAndNumber": { "require": true, "targetDialog": "StreetAndNumberDisambiguation" },
+            },
+         ]
+        },
+        {"name": "houseType", "showName": "類型", "type": "string", "require": 1, "multivalue": false, 
+         "defaultQuestion": "請問房屋的類型是? 1.公寓(5樓含以下無電梯); 2.住宅大樓(11層含以上有電梯); 3.套房(1房1廳1衛); 4.華廈(10層含以下有電梯); 5.以上皆非; 請輸入數字1到5進行選擇：",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(?<houseType>公寓|住宅大樓|套房|華廈|透天|店面|頂樓加蓋|農舍|農地|墓園|地下室|違章|不是很清楚|不太知道|不太清楚|不知道|全部不是|都不是|不清楚|以上皆非).*?"],
+             "rewrite": "${houseType}",
+             "rewriteMapping": {"公寓": "公寓(5樓含以下無電梯)", "住宅大樓": "住宅大樓(11層含以上有電梯)", "套房": "套房(1房1廳1衛)", "華廈": "華廈(10層含以下有電梯)", 
+             					"透天": "透天厝", "店面": "店面", "頂樓加蓋": "頂樓加蓋", "地下室": "地下室", "違章": "違章建築", 
+             					"農舍": "農舍", "農地": "農地", "墓園": "墓園",
+             					"不是很清楚": "以上皆非", "不太清楚": "以上皆非", "不太知道": "以上皆非", "不清楚": "以上皆非", "不知道": "以上皆非", "全部不是": "以上皆非", "都不是": "以上皆非", "以上皆非": "以上皆非"},
+             "testCases": [
+                { "input": "是公寓", "assertEquals": "公寓(5樓含以下無電梯)" },
+                { "input": "是一間套房", "assertEquals": "套房(1房1廳1衛)" },
+             ]
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.OptionsRule",
+             "options": ["1", "公寓(5樓含以下無電梯)", "2", "住宅大樓(11層含以上有電梯)", "3", "套房(1房1廳1衛)", "4", "華廈(10層含以下有電梯)", "5", "以上皆非"],
+             "testCases": [
+                { "input": "1", "assertEquals": "公寓(5樓含以下無電梯)" },
+                { "input": "3", "assertEquals": "套房(1房1廳1衛)" },
+             ]
+            }
+         ],
+         "validators": [
+         	{"expr": "currentField.currentValue !~ ['透天厝', '農舍', '農地', '墓園', '店面', '違章', '頂樓加蓋']", "errorText": "目前公司不承作此類型物件"},
+         	{"expr": "currentField.currentValue !~ ['以上皆非']", "errorText": "需要請您直接來電由客服人員進行協助"},
+         ]
+        },
+        {"name": "floor", "showName": "樓層", "type": "integer", "require": 1, "multivalue": false, 
+         "defaultQuestion": "請問您所在的樓層? (ex. 10樓)",
+         "doubleConfirm": true,
+         "doubleConfirmText": "請確認您房屋所在樓層為${floor}樓?",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(地下|B)(?<floor>(\\d+\\.)?\\d+)(樓|層|F)?.*?"],
+             "rewrite": "B${floor}",
+             "testCases": [
+                { "input": "我買在地下3樓", "assertEquals": "B3" },
+                { "input": "B1樓", "assertEquals": "B1" },
+             ]
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(?<floor>(\\d+\\.)?\\d+)(樓|層|F)?.*?"],
+             "rewrite": "${floor}",
+             "testCases": [
+                { "input": "我買在18樓", "assertEquals": "18" },
+                { "input": "18樓", "assertEquals": "18" },
+                { "input": "18", "assertEquals": "18" },
+             ]
+            }
+         ],
+         "validators": [
+         	{"expr": "currentField.currentValue !~ '\\d+\\.\\d+'", "errorText": "樓層需為整數，請重新輸入"},
+         	{"expr": "new('java.lang.Double', currentField.currentValue.replace('B', '-')) > 0", "errorText": "目前公司不承作地下室物件的放款"},
+         ]
+        },
+        {"name": "age", "showName": "屋齡", "type": "integer", "require": 1, "multivalue": false, 
+         "defaultQuestion": "您清楚您買的房屋屋齡或是知道哪一年蓋好的嗎？ (ex. 十年前 / 民國83年)",
+         "doubleConfirm": true,
+         "doubleConfirmText": "請確認屋齡是否為${age}年?",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.HouseAgeRule",
+             "testCases": [
+                { "input": "10個月前", "assertEquals": "0" },
+                { "input": "18個月", "assertEquals": "1" },
+                { "input": "大概是民國85年蓋好的", "assertEquals": "20" },
+                { "input": "差不多15年前", "assertEquals": "15" },
+                { "input": "1980年", "assertEquals": "36" },
+                { "input": "1980年5月", "assertEquals": "36" },
+                { "input": "民國103年", "assertEquals": "2" },
+                { "input": "今年蓋好的", "assertEquals": "0" },
+                { "input": "是去年蓋好的", "assertEquals": "1" },
+             ]
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(?<unknown>不是很清楚|不太知道|不太清楚|不知道|全部不是|都不是|不知|不清楚).*?"],
+             "rewrite": "不清楚",
+            },
+         ],
+         "validators": [
+         	{"expr": "currentField.currentValue !~ '不清楚'", "errorText": "若不清楚屋齡，請來電由客服人員為您協助"},
+         	{"expr": "currentField.currentValue !~ '\\d+\\.\\d+' and currentField.currentValue > 0d", "errorText": "屋齡需為整數，且不可為零或者負數，麻煩您重新輸入。"}
+         ]
+        },
+        {"name": "square", "showName": "坪數", "type": "double", "require": 1, "multivalue": false, 
+         "defaultQuestion": "請問房屋的權狀坪數是多少坪呢? (ex. 18.7坪)",
+         "doubleConfirm": false,
+         "doubleConfirmText": "請確認您房屋權狀坪數為${square}坪?",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(?<square>[+-]?\\d+(\\.\\d+)?)(多?坪)?.*?"],
+             "rewrite": "${square}",
+             "testCases": [
+                { "input": "差不多40坪", "assertEquals": "40" },
+                { "input": "18.7", "assertEquals": "18.7" },
+                { "input": "18坪", "assertEquals": "18" },
+             ]
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(?<unknown>不是很清楚|不太知道|不太清楚|不知道|全部不是|都不是|不知|不清楚).*?"],
+             "rewrite": "不清楚",
+            },
+         ],
+         "validators": [
+         	{"expr": "currentField.currentValue !~ '不清楚'", "errorText": "若不清楚坪數，請來電由客服人員為您協助"},
+         	{"expr": "currentField.currentValue > 0d", "errorText": "坪數不可為零或者負數，請重新輸入。"}
+         ]
+        },
+    ],
+  },
+  {
+    "name": "YearDisambiguation",
+    "description": "確認年份",
+    "class": "com.intumit.solr.robot.qadialog.FillFormQADialog",
+    "normalTrigger": [],
+    "enterTrigger": [
+        {"type": "reqAttr",
+         "contents": [
+            "DLGSPCODE0001", "YearDisambiguation",
+          ],
+        },
+    ],
+    "quitTrigger": [
+        {"type": "status",
+         "contents": ["FINISHED"],
+         "showCurrentStatus": true,
+         "doubleConfirm": false,
+        },
+    ],
+    "fields": [
+        {"name": "age", "showName": "屋齡", "type": "string", "require": 1, "multivalue": false, 
+         "defaultQuestion": "請問您輸入的是? 1.民國{{CtxAttr:YearDisambiguation:bundle}}年; 2.屋齡{{CtxAttr:YearDisambiguation:bundle}}年;",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.PipeRule",
+             rules: [
+                {
+                "class": "com.intumit.solr.robot.qadialog.OptionsRule",
+                "options": ["1", "民國{{CtxAttr:YearDisambiguation:bundle}}年", "2", "屋齡{{CtxAttr:YearDisambiguation:bundle}}年"],
+                },
+                { "class": "com.intumit.solr.robot.qadialog.HouseAgeRule" },
+             ]
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.PipeRule",
+             rules: [
+                {
+                 "class": "com.intumit.solr.robot.qadialog.RegexRule",
+                 "match": [".*?(?<type>民國|屋齡).*?"],
+                 "rewrite": "${type}{{CtxAttr:YearDisambiguation:bundle}}",
+                },
+                { "class": "com.intumit.solr.robot.qadialog.HouseAgeRule" },
+             ]
+            },
+         ]
+        },
+    ],
+  },
+  {
+    "name": "AdministrativeAreaDisambiguation",
+    "description": "確認縣市",
+    "class": "com.intumit.solr.robot.qadialog.FillFormQADialog",
+    "normalTrigger": [],
+    "enterTrigger": [
+        {"type": "reqAttr",
+         "contents": [
+            "DLGSPCODE0001", "AdministrativeAreaDisambiguation",
+          ],
+        },
+    ],
+    "quitTrigger": [
+        {"type": "status",
+         "contents": ["FINISHED"],
+         "showCurrentStatus": true,
+         "doubleConfirm": false,
+        },
+    ],
+    "fields": [
+        {"name": "address", "showName": "地址", "type": "string", "require": 1, "multivalue": false, 
+         "defaultQuestion": "請問是哪個縣市的{{CtxAttr:AdministrativeAreaDisambiguation:bundle}}？",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(?<zipcode>(^\\d{5}|^\\d{3})?)(?<city>\\D+[縣市])(?<district>.{2,4}(市區|鎮區|鎮市|[鄉鎮市區]))(?<street>.*([路街道]))(?<others>.+)?"],
+             "rewrite": "${zipcode}${city}${district}${street}${others}",
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(?<city>\\D+[縣市])(?<district>.{2,4}(市區|鎮區|鎮市|[鄉鎮市區]))"],
+             "rewrite": "${city}${district}{{CtxAttr:AdministrativeAreaDisambiguation:bundle}}",
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+         	 "match": [".*?(?<city>.*[市縣])"],
+             "rewrite": "${city}{{CtxAttr:AdministrativeAreaDisambiguation:bundle}}",
+            },
+         ]
+        },
+    ],
+  },
+  {
+    "name": "LocalityDisambiguation",
+    "description": "確認區域",
+    "class": "com.intumit.solr.robot.qadialog.FillFormQADialog",
+    "normalTrigger": [],
+    "enterTrigger": [
+        {"type": "reqAttr",
+         "contents": [
+            "DLGSPCODE0001", "LocalityDisambiguation",
+          ],
+        },
+    ],
+    "quitTrigger": [
+        {"type": "status",
+         "contents": ["FINISHED"],
+         "showCurrentStatus": true,
+         "doubleConfirm": false,
+        },
+    ],
+    "fields": [
+        {"name": "address", "showName": "地址", "type": "string", "require": 1, "multivalue": false, 
+         "defaultQuestion": "請問是{{CtxAttr:LocalityDisambiguation:bundle}}的什麼區域？(ex. 大安區、中正區)",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(?<zipcode>(^\\d{5}|^\\d{3})?)(?<city>\\D+[縣市])(?<district>.{2,4}(市區|鎮區|鎮市|[鄉鎮市區]))(?<street>.*([路街道]))(?<others>.+)?"],
+             "rewrite": "${zipcode}${city}${district}${street}${others}",
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+         	 "match": [".*?(?<locality>.*[區鄉鎮市])"],
+             "rewrite": "{{CtxAttr:AdministrativeAreaDisambiguation:bundle}}${locality}",
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+         	 "match": ["(?<locality>北投|士林|大同|中山|松山|內湖|萬華|中正|大安|信義|南港|文山)"],
+             "rewrite": "{{CtxAttr:AdministrativeAreaDisambiguation:bundle}}${locality}區",
+            },
+         ]
+        },
+    ],
+  },
+  {
+    "name": "StreetAndNumberDisambiguation",
+    "description": "確認地址",
+    "class": "com.intumit.solr.robot.qadialog.FillFormQADialog",
+    "normalTrigger": [],
+    "enterTrigger": [
+        {"type": "reqAttr",
+         "contents": [
+            "DLGSPCODE0001", "StreetAndNumberDisambiguation",
+          ],
+        },
+    ],
+    "quitTrigger": [
+        {"type": "status",
+         "contents": ["FINISHED"],
+         "showCurrentStatus": true,
+         "doubleConfirm": false,
+        },
+    ],
+    "fields": [
+        {"name": "address", "showName": "地址", "type": "string", "require": 1, "multivalue": false, 
+         "defaultQuestion": "請問是{{CtxAttr:StreetAndNumberDisambiguation:bundle}}的哪裡呢？（需要完整的地址及門牌號碼）",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+         	 "match": [".*?(?<street>.*([路街道]))(?<others>.+)?"],
+             "rewrite": "{{CtxAttr:AddressDisambiguation:bundle}}${street}${others}",
+            },
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+         	 "match": [".*?(?<number>.*([號号]))(?<others>.+)?"],
+             "rewrite": "{{CtxAttr:AddressDisambiguation:bundle}}${number}${others}",
+            },
+         ]
+        },
+    ],
+  },
+  {
+    "name": "AccountVerification",
+    "description": "核身",
+    "class": "com.intumit.solr.robot.qadialog.FillFormQADialog",
+    "noMatchScript": "return '請輸入身份證字號才能進一步查詢相關資料'",
+    "enterTrigger": [
+        {"type": "reqAttr",
+         "contents": [
+            "DLGSPCODE0001", "AccountVerification",
+          ],
+        },
+    ],
+    "quitTrigger": [
+        {"type": "status",
+         "contents": ["FINISHED"],
+         "showCurrentStatus": true,
+         "doubleConfirm": false,
+        },
+        {"type": "sentence",
+         "contents": ["放棄", "結束", "離開", "跳開", "停止", "不方便", "不要", "忘記"],
+         "showCurrentStatus": false,
+         "doubleConfirm": false,
+         "doubleConfirmText": "好的，確定結束（Y/N）?",
+        },
+    ],
+    "normalTrigger": [
+        {"type": "expression",
+         "endpoint": ["beforeRuleProcess"], 
+         "contents": ["ctx.requestAttribute.reconstructedQuestion!=null"],
+         "showCurrentStatus": false,
+         "doubleConfirm": false,
+         "action": {
+            "type": "runScript",
+            "scriptText": "
+               def upperQs = [];
+               ctx.currentQuestion = ctx.currentQuestion.toUpperCase();
+	           ctx.reqAttr.reconstructedQuestion.each { q -> 
+	           		upperQs += q.toUpperCase();
+	           }
+	           
+	           ctx.reqAttr.reconstructedQuestion = upperQs;
+	           return null;
+            ",
+         }
+        },
+    ],
+    "fields": [
+        {"name": "id", "showName": "會員帳號", "type": "stringMask", "hidden": true, "require": 1, "multivalue": false, "noContext": true,
+         "defaultQuestion": "如需瞭解保單明確繳費資訊，需要跟您作一下身份核對，請問您在國泰人壽的網站會員帳號是？",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(?<id>[a-zA-Z][0-9a-zA-Z]{5,}).*?"],
+             "rewrite": "${id}",
+            },
+         ],
+         "validators": [
+         	{"expr": "currentField.currentValue =~ '[A-Z][0-9]{8}[A-Z]'", "errorText": "您輸入的會員帳號不正確，請提供您完整的帳號（英文字母須大寫）"},
+         ]
+        },
+        {"name": "pwd", "showName": "會員密碼", "type": "password", "hidden": true, "require": 1, "multivalue": false, "noContext": true,
+         "defaultQuestion": "請問您您的會員密碼是？",
+         "rules": [
+            {
+             "class": "com.intumit.solr.robot.qadialog.RegexRule",
+             "match": [".*?(?<pwd>[0-9a-zA-Z]{4,}).*?"],
+             "rewrite": "${pwd}",
+            },
+         ],
+        },
+    ],
+  }
+]
+}

@@ -1,0 +1,13 @@
+[
+{"id":1, "pk_s":1, "cat_s":"brand", "Name_t":"Apple"}, 
+{"id":2, "pk_s":2, "cat_s":"brand", "Name_t":"Samsung"}, 
+{"id":3, "pk_s":3, "cat_s":"brand", "Name_t":"HTC"},
+{"id":4, "pk_s":1, "cat_s":"product", "Name_t":"iPhone", "brand_pk_s":1, "type_pk_s":1}, 
+{"id":5, "pk_s":2, "cat_s":"product", "Name_t":"iPad", "brand_pk_s":1, "type_pk_s":2}, 
+{"id":6, "pk_s":3, "cat_s":"product", "Name_t":"Galaxy S3", "brand_pk_s":2, "type_pk_s":1}, 
+{"id":7, "pk_s":4, "cat_s":"product", "Name_t":"Galaxy Note", "brand_pk_s":2, "type_pk_s":1}, 
+{"id":8, "pk_s":5, "cat_s":"product", "Name_t":"Galaxy Pad", "brand_pk_s":2, "type_pk_s":2}, 
+{"id":9, "pk_s":6, "cat_s":"product", "Name_t":"One X", "brand_pk_s":3, "type_pk_s":1},
+{"id":10, "pk_s":1,"cat_s":"spec", "Name_t":"Phone"},
+{"id":11, "pk_s":2,"cat_s":"spec", "Name_t":"Tablet"}
+]

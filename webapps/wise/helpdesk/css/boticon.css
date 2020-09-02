@@ -1,0 +1,197 @@
+@charset "UTF-8";
+.chatbot-area .chat-main {
+  /* アイコンの設定　基本的にblankアイコンになる */
+  /* すべての検索結果を見るリンク */ }
+  .chatbot-area .chat-main a {
+    display: inline-block;
+    padding-left: 20px;
+    min-height: 16px;
+    position: relative;
+    color: #2451c6;
+    cursor: pointer; }
+/*     .chatbot-area .chat-main a:before { */
+/*       display: block; */
+/*       width: 15px; */
+/*       height: 15px; */
+/*       content: ""; */
+/*       border-radius: 10em; */
+/*       background: #ff8225 url(/contents/common-chatbot-ots/img/icons-blank.png) 4px 4px no-repeat; */
+/*       position: absolute; */
+/*       top: 3px; */
+/*       left: 0; */
+/*       box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.26); } */
+  .chatbot-area .chat-main .osk-show-dl {
+    text-align: right;
+    font-size: 16px; }
+
+/* 回答側アバター */
+.chatbot-area .wc-message-from-bot .osk-icon {
+  display: block;
+  margin-top: -10px;
+  width: 70px;
+  height: 70px;
+  float: left;
+  background: url(/contents/common-chatbot-ots/img/avatar-calm-sprite.png) 0 0 no-repeat;
+  -webkit-animation: avatar-calm-move 1s steps(15) forwards;
+  animation: avatar-calm-move 1s steps(15) forwards; }
+
+.chatbot-area .wc-message-from-bot .osk-icon.emo-bouncy {
+  background: url(/contents/common-chatbot-ots/img/avatar-bouncy-sprite.png) 0 0 no-repeat;
+  -webkit-animation: avatar-bouncy-move 0.7s steps(16) forwards;
+  animation: avatar-bouncy-move 0.7s steps(16) forwards; }
+
+.chatbot-area .wc-message-from-bot .osk-icon.emo-sensitive {
+  background: url(/contents/common-chatbot-ots/img/avatar-sensitive-sprite.png) 0 0 no-repeat;
+  -webkit-animation: avatar-sensitive-move 2s steps(17) forwards;
+  animation: avatar-sensitive-move 2s steps(17) forwards; }
+
+.chatbot-area .waiting .osk-icon {
+  background: url(/contents/common-chatbot-ots/img/avatar-loading-sprite.png) 0 0 no-repeat;
+  -webkit-animation: avatar-loading-move 1.5s steps(24) forwards infinite;
+  animation: avatar-loading-move 1.5s steps(24) forwards infinite; }
+
+@-webkit-keyframes avatar-calm-move {
+  0% {
+    background-position: 0 0; }
+  100% {
+    background-position: 0 -1050px; } }
+
+@keyframes avatar-calm-move {
+  0% {
+    background-position: 0 0; }
+  100% {
+    background-position: 0 -1050px; } }
+
+@-webkit-keyframes avatar-bouncy-move {
+  0% {
+    background-position: 0 0; }
+  100% {
+    background-position: 0 -1120px; } }
+
+@keyframes avatar-bouncy-move {
+  0% {
+    background-position: 0 0; }
+  100% {
+    background-position: 0 -1120px; } }
+
+@-webkit-keyframes avatar-sensitive-move {
+  0% {
+    background-position: 0 0; }
+  100% {
+    background-position: 0 -1190px; } }
+
+@keyframes avatar-sensitive-move {
+  0% {
+    background-position: 0 0; }
+  100% {
+    background-position: 0 -1190px; } }
+
+@-webkit-keyframes avatar-loading-move {
+  0% {
+    background-position: 0 0; }
+  100% {
+    background-position: 0 -1680px; } }
+
+@keyframes avatar-loading-move {
+  0% {
+    background-position: 0 0; }
+  100% {
+    background-position: 0 -1680px; } }
+
+/* **********************************************************************************
+
+	スマートフォン対応 チャットボット
+
+********************************************************************************** */
+@media screen and (max-device-width: 599px) and (orientation: portrait), screen and (max-device-width: 736px) and (orientation: landscape) {
+  /* アイコンの設定　基本的にblankアイコンになる */
+  .chatbot-area .chat-main a {
+    display: inline-block;
+    padding-left: 20px;
+    position: relative; }
+/*     .chatbot-area .chat-main a:before { */
+/*       display: block; */
+/*       width: 15px; */
+/*       height: 15px; */
+/*       content: ""; */
+/*       border-radius: 10em; */
+/*       position: absolute; */
+/*       top: 2px; */
+/*       left: 0; */
+/*       box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.26); } */
+    .chatbot-area .chat-main a:after {
+      display: block;
+      width: 10px;
+      height: 8px;
+      content: "";
+      background: url(/contents/common-chatbot-ots/img/icons-blank.png) 0 0 no-repeat;
+      background-size: 7px auto;
+      position: absolute;
+      top: 6px;
+      left: 4px; }
+  /* 回答側アバター */
+  .chatbot-area .wc-message-from-bot .osk-icon {
+    display: block;
+    margin-top: 0;
+    width: 30px;
+    height: 30px;
+    float: left;
+    background: url(/contents/common-chatbot-ots/img/avatar-calm-sprite.png) 0 0 no-repeat;
+    background-size: 30px auto;
+    -webkit-animation: avatar-calm-move 1s steps(15) forwards;
+    animation: avatar-calm-move 1s steps(15) forwards; }
+  .chatbot-area .wc-message-from-bot .osk-icon.emo-bouncy {
+    background: url(/contents/common-chatbot-ots/img/avatar-bouncy-sprite.png) 0 0 no-repeat;
+    background-size: 30px auto;
+    -webkit-animation: avatar-bouncy-move 0.7s steps(16) forwards;
+    animation: avatar-bouncy-move 0.7s steps(16) forwards; }
+  .chatbot-area .wc-message-from-bot .osk-icon.emo-sensitive {
+    background: url(/contents/common-chatbot-ots/img/avatar-sensitive-sprite.png) 0 0 no-repeat;
+    background-size: 30px auto;
+    -webkit-animation: avatar-sensitive-move 2s steps(17) forwards;
+    animation: avatar-sensitive-move 2s steps(17) forwards; }
+  .chatbot-area .waiting .osk-icon {
+    background: url(/contents/common-chatbot-ots/img/avatar-loading-sprite.png) 0 0 no-repeat;
+    background-size: 30px auto;
+    -webkit-animation: avatar-loading-move 1.5s steps(24) forwards infinite;
+    animation: avatar-loading-move 1.5s steps(24) forwards infinite; }
+  @-webkit-keyframes avatar-calm-move {
+    0% {
+      background-position: 0 0; }
+    100% {
+      background-position: 0 -450px; } }
+  @keyframes avatar-calm-move {
+    0% {
+      background-position: 0 0; }
+    100% {
+      background-position: 0 -450px; } }
+  @-webkit-keyframes avatar-bouncy-move {
+    0% {
+      background-position: 0 0; }
+    100% {
+      background-position: 0 -480px; } }
+  @keyframes avatar-bouncy-move {
+    0% {
+      background-position: 0 0; }
+    100% {
+      background-position: 0 -480px; } }
+  @-webkit-keyframes avatar-sensitive-move {
+    0% {
+      background-position: 0 0; }
+    100% {
+      background-position: 0 -510px; } }
+  @keyframes avatar-sensitive-move {
+    0% {
+      background-position: 0 0; }
+    100% {
+      background-position: 0 -510px; } }
+  @-webkit-keyframes avatar-loading-move {
+    0% {
+      background-position: 0 0; }
+    100% {
+      background-position: 0 -720px; } }
+  @keyframes avatar-loading-move {
+    0% {
+      background-position: 0 0; }
+    100% {
+      background-position: 0 -720px; } } }

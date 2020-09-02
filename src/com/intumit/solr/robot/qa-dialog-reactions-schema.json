@@ -1,0 +1,95 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "array",
+  "format": "tabs",
+  "options": {
+	"disable_array_delete_last_row": true
+  },
+  "name": "qa-actions",
+  "title": "反應動作設置區",
+  "description": "這裡的反應動作可以有多個，將會依序執行，因此順序是有差別的。另外特定類型的反應動作將會使後面的反應動作不被執行，例如轉到別的節點。注意，全域型節點的觸發時機跟反應動作的反應時機一般來說應該要一致，否則反應動作將無法觸發。",
+  "items": {
+    "type": "object",
+    "options": {
+    		"disable_edit_json": true,
+    		"disable_properties": true,
+    		"disable_array_delete_last_row": true
+    },
+    "headerTemplate": "{{ i1 }} - {{ self.label }}",
+    "properties": {
+      "label": { "title": "名稱 (建議不超過 10 個字)", "type": "string" },
+      "when": {
+      	  "title": "反應時機",
+		  "type": "enum",
+		  "enumSource": [{
+		      "source": [
+		        { "value": "JUST_ACTIVATED", "title": "剛進入節點" },
+		        { "value": "WAIT_INPUT", "title": "等待使用者輸入" },
+		        { "value": "GOT_INPUT", "title": "接收到使用者輸入" },
+		        { "value": "LEAVING_NODE", "title": "準備離開節點" },
+		        { "value": "DEACTIVE", "title": "節點進入休眠" }
+		      ],
+		      "title": "{{item.title}}",
+		      "value": "{{item.value}}"
+		  }]
+		},
+      "type": {
+      	  "title": "反應類型",
+		  "type": "enum",
+		  "enumSource": [{
+		      "source": [
+		        { "value": "set_answer", "title": "覆蓋答案" },
+		        { "value": "append_answer", "title": "附加回覆" },
+		        { "value": "set_menu", "title": "設定選單" },
+		        { "value": "append_menu", "title": "附加選項" },
+		        { "value": "add_line_template_message", "title": "附加LINE圖文" },
+		        { "value": "redirect_to_question", "title": "轉送到別題" },
+		        { "value": "redirect_to_node", "title": "轉送到別個節點" },
+		        { "value": "redirect_to_last_node", "title": "轉送回上個節點（從那裡來，就回那裡去）" },
+		        { "value": "set_dialog_variable", "title": "設定情境變數（情境結束就忘記）" },
+		        { "value": "set_context_variable", "title": "設定長期變數（直到使用者離開）" },
+		        { "value": "set_context_variable_custom_qa", "title":"設定長期變數(搜尋特殊問答)"},
+		        { "value": "set_request_variable", "title": "設定一次性變數" },
+		        { "value": "unset_dialog_variable", "title": "清空情境變數" },
+		        { "value": "unset_context_variable", "title": "清空長期變數" },
+		        { "value": "unset_request_variable", "title": "清空一次性變數" },
+		        { "value": "exit_dialog", "title": "結束情境" },
+		        { "value": "check_context_append", "title": "根據長期變數附加回覆"},
+		        { "value": "groovy_script", "title": "執行 Script"},
+		        { "value": "set_context_variable_get_date", "title": "設定長期變數(取得日期)"},
+		        { "value": "set_response_variable", "title": "設定反應變數"},
+		        { "value": "add_tag_to_user", "title": "貼使用者標籤"}
+		      ],
+		      "title": "{{item.title}}",
+		      "value": "{{item.value}}"
+		  }]
+		},
+      "contents": {
+          "type": "array",
+          "title": "參數陣列",
+          "format": "tabs",
+	      "options": {
+	    		"disable_array_delete_last_row": true
+  	      },
+          "description": "依據不同的反應條件類型，這裡會需要不同的值，請參閱說明文件 <span class='glyphicon glyphicon-exclamation-sign helpIcon'></span>",
+          "items": {
+              "type": "string",
+              "format": "textarea",
+              "title": "參數",
+              "description": "參數值"
+          }
+		},
+      "enable": {
+      	  "title": "是否啟用",
+		  "type": "boolean",
+		  "format": "checkbox"
+		},
+	  "detail": {
+	  	  "title": "備註區（勿填參數）",
+	  	  "description": "<div class='alert alert-danger'>這裡僅是放備註，不是填參數的地方</div>",
+	  	  "type": "string",
+	  	  "format": "textarea"
+		}
+    }
+  }
+}

@@ -1,0 +1,45 @@
+<dataConfig>
+<!-- 
+MySQL 範例
+<dataSource name="db" driver="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/yourdbname" user="root" password="root"/> 
+-->
+<!-- 
+SQL Server 範例
+ -->
+<dataSource name="db" driver="com.inet.tds.TdsDriver" url="jdbc:inetdae7:localhost:1433?database=yourdbname" user="root" password="root"/>
+<!-- 
+Oracle 範例
+ <dataSource name="db" driver="com.inet.ora.OraDriver" url="jdbc:inetora:localhost:1521:ORCL" user="root" password="root"/>
+ -->
+    <dataSource name="binFS" type="BinFileDataSource" />
+    <document name="products">
+        <entity name="product" transformer="com.intumit.solr.TrimTransformer" 
+        		dataSource="db"
+        		query="SELECT 
+        			MyPrimaryKey as id,
+        			Name,
+        			Desc,
+        			PublishDate,
+        			AttachmentFullPath 
+        			FROM YOURDATABASE" 
+        		batchSize="10000">
+        	<field column="id" name="id" />
+        	<field column="Name" name="Name_t" />
+        	<field column="Desc" name="Description_mt" />
+        	<field column="PublishDate" name="Date_dt" />
+        	
+        	<!-- 如果要將欄位內容當做檔案路徑，並去抓取解析檔案內容當中的文字（例如 PDF, Office 檔案），
+        		 則需包含下面這個區段，若不需要請關閉，否則解析檔案耗時，效能較低 
+        		 下方 url="${product.AttachmentFullPath}" 當中的 AttachmentFullPath 是上方 SQL 查出來的欄位，
+        		 若欄位名稱不同需要調整成相同
+        	     -->
+        	<!-- 
+        	<entity name="x" dataSource="binFS" processor="TikaEntityProcessor" url="${product.AttachmentFullPath}">
+            	<field column="text"				name="Description_mt"/>
+		    	<field column="Author"	meta="true"	name="Author_s"/>
+		    	<field column="title"	meta="true"	name="Name_t"/>
+            </entity>
+        	-->
+        </entity>
+    </document>
+</dataConfig>

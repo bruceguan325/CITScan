@@ -1,0 +1,136 @@
+body {
+	font-family: Trebuchet MS, Tahoma, Arial, sans-serif;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+  line-height: 1.5;
+}
+
+body.panel {
+  margin-top: 3em;
+}
+
+code, tt, pre {
+  font-family: "Lucida Sans Unicode",monospace !important;
+}
+
+h1, h2 {
+  margin: 0;
+  padding: 0;
+  margin-top: 0.5em;
+  font-weight: normal;
+  text-shadow: 1px 1px 8px black;
+}
+
+h1 {
+  font-size: 20px;
+}
+h2 {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+h2 + p {
+  margin-top: 0;
+}
+
+li {
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  margin: 0;
+  padding-left: 1.5em;
+}
+
+small {
+  font-size: 100%;
+}
+
+em.brand {
+  font-style: normal;
+  font-weight: bold;
+  font-family: Tahoma, Arial, sans-serif;
+}
+
+a.download {
+	padding-left: 18px;
+	background-image: url(./icon-download.png);
+	background-position: 0 center;
+	background-repeat: no-repeat;
+}
+
+/** Customizations for the dark theme */
+body.dark {
+  background-color: #1d1c1b;
+  color: #ddd;
+}
+
+body.dark h1,
+body.dark h2 {
+  color: white;
+}
+
+body.dark a {
+  color: #8fb5c9;
+}
+
+.folded > legend,
+.unfolded > legend,
+.folded > h1,
+.unfolded > h1 {
+  display: inline-block;
+  *display: block;
+  *float: left;
+  *clear: both;
+  padding-right: 20px;
+  cursor: pointer;
+}
+.folded > * {
+  display: none;
+}
+.folded > legend + *,
+.unfolded > legend + *,
+.folded > h1 + *,
+.unfolded > h1 + * {
+  *clear: both;
+}
+
+body.dark .unfolded > legend,
+body.dark .unfolded > h1 {
+  background: url(./arrow-dark-down.png) no-repeat right center;
+}
+body.dark .folded > legend,
+body.dark .folded > h1 {
+  background: url(./arrow-dark-right.png) no-repeat right center;
+  margin-bottom: 0 !important;
+}
+
+body.dark tt {
+  background-color: #4a4846;
+  padding: 0 2px;
+  color: #fff;
+}
+
+body.dark a > tt {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+body.dark tt > a {
+  color: #a9d5ed;
+  text-decoration: none;
+}
+body.dark tt > a:hover {
+  text-decoration: underline;
+}
+
+
+body.dark em.brand  {
+  color: white;
+}
+body.dark small  {
+  color: #aaa;
+}

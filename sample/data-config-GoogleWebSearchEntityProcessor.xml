@@ -1,0 +1,28 @@
+<dataConfig>
+<!-- <dataSource driver="net.sourceforge.jtds.jdbc.Driver" url="jdbc:jtds:sqlserver://localhost/wise_book" user="root" password="root"/> -->
+<!-- 
+<dataSource driver="com.inet.tds.TdsDriver" url="jdbc:inetdae7:192.168.10.15:1433?database=wise_book" user="root" password="root"/>
+ -->
+<!-- 
+ <dataSource driver="com.inet.ora.OraDriver" url="jdbc:inetora:localhost:1521:ORCL" user="root" password="root"/>
+ -->
+ <dataSource type="FileDataSource" />
+ 
+    <document name="products">
+        <entity name="product" transformer="com.intumit.solr.TrimTransformer,com.intumit.solr.TimestampTransformer,com.intumit.solr.WikiKeywordTransformer" 
+        		processor="com.intumit.solr.dataimport.GoogleWebSearchEntityProcessor" 
+        		site="www.intumit.com" 
+        		contentExtractor="http://219.84.175.196:7036/cgi-bin/doExtract.pl" 
+        		limit="500" 
+        		pk="id"
+        		batchSize="10000">
+        	<field column="id" name="id" />
+        	<field column="TITLE" name="Name_t" />
+        	<field column="HTMLContent" name="HTMLContent_t" trim="true" />    
+        	<field column="EXTRACTED" name="Description_t" trim="true" />        	
+        	<field column="UnixTime" name="UnixTime_ig" />        	        	
+        	<field column="Date_dt" name="Date_dt" sourceColName="UnixTime" timestamp="true" format="millisecond" />
+        	<field column="KEYWORD" name="KEYWORD_ms" trim="true" wiki="true" sourceColName="EXTRACTED" />      
+        </entity>
+    </document>
+</dataConfig>

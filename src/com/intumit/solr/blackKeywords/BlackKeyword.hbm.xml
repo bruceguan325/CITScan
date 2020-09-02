@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping
+ PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.intumit.solr.blackKeywords.BlackKeyword" table="BlackKeyword">
+
+        <id name="id" unsaved-value="0">
+			<generator class="native">
+				<param name="sequence">BlackKeyword_seq</param>
+			</generator>
+		</id>
+
+        <property name="keyword"/>
+        <property name="saveTime"/>
+
+    </class>
+
+</hibernate-mapping>

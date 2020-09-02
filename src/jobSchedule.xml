@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quartz>
+<!--	<job>-->
+<!--		<job-detail>-->
+<!--			<name>Import</name>-->
+<!--			<group>IndexSchedule</group>-->
+<!--			<description>Import</description>-->
+<!--			<job-class>com.intumit.quartz.DataImportSchedule</job-class>-->
+<!--			<job-data-map allows-transient-data="true">-->
+<!--				<entry>-->
+<!--					<key>name</key>-->
+<!--					<value>Import</value>-->
+<!--				</entry>-->
+<!--				<entry>-->
+<!--					<key>core</key>-->
+<!--					<value>0</value>-->
+<!--				</entry>-->
+<!--				<entry>-->
+<!--					<key>type</key>-->
+<!--					 delta-import or full-import-->
+<!--					<value>delta-import</value>-->
+<!--				</entry>-->
+<!--				<entry>-->
+<!--					<key>commit</key>-->
+<!--					<value>false</value>-->
+<!--				</entry>-->
+<!--				<entry>-->
+<!--					<key>optimize</key>-->
+<!--					<value>false</value>-->
+<!--				</entry>-->
+<!--				<entry>-->
+<!--					<key>clean</key>-->
+<!--					<value>false</value>-->
+<!--				</entry>-->
+<!--				<entry>-->
+<!--					<key>fullImport</key>-->
+<!--					<value>http://localhost:8080/wise/wiseadm/core0/dataimport?command=full-import&amp;commit=false&amp;optimize=false&amp;clean=false</value>-->
+<!--				</entry>-->
+<!--				<entry>-->
+<!--					<key>deltaImport</key>-->
+<!--					<value>http://localhost:8080/wise/wiseadm/core0/dataimport?command=delta-import&amp;commit=false&amp;optimize=false&amp;clean=false</value>-->
+<!--				</entry>-->
+<!--				<entry>-->
+<!--					<key>commit</key>-->
+<!--					<value>http://localhost:8080/wise/wiseadm/core0/update?stream.body=%3Ccommit%2F%3E</value>-->
+<!--				</entry>-->
+<!--				<entry>-->
+<!--					<key>sms</key>-->
+<!--					<value>http://localhost:8080/wise/wiseadm/sms?command=commit&amp;coreName=core0</value>-->
+<!--				</entry>-->
+<!--				<entry>-->
+<!--					<key>account</key>-->
+<!--					<value>xxx</value>-->
+<!--				</entry>-->
+<!--				<entry>-->
+<!--					<key>password</key>-->
+<!--					<value>xxx</value>-->
+<!--				</entry>-->
+<!--				<entry>-->
+<!--					<key>commitInterval</key>-->
+<!--					<value>600</value>-->
+<!--				</entry>-->
+<!--			</job-data-map>-->
+<!--		</job-detail>-->
+<!--		<trigger>-->
+<!--			<cron>-->
+<!--				<name>Import</name>-->
+<!--				<group>IndexSchedule</group>-->
+<!--				<job-name>Import</job-name>-->
+<!--				<job-group>IndexSchedule</job-group>-->
+<!--				<cron-expression>0 0 5 * * ?</cron-expression>-->
+<!--			</cron>-->
+<!--		</trigger>-->
+<!---->
+<!--	</job>-->
+	<!--
+	<job>
+		<job-detail>
+			<name>FullImport</name>
+			<group>DEFAULT</group>
+			<description>FullImport</description>
+			<job-class>com.intumit.quartz.DataImportSchedule</job-class>
+			<job-data-map allows-transient-data="true">
+				<entry>
+					<key>name</key>
+					<value>FullImport</value>
+				</entry>
+				<entry>
+					<key>url</key>
+					<value>http://127.0.0.1:8080/wise/core0/dataimport?command=full-import&amp;commit=false</value>
+				</entry>
+			</job-data-map>
+		</job-detail>
+		<trigger>
+			<cron>
+				<name>FullImport</name>
+				<group>DEFAULT</group>
+				<job-name>FullImport</job-name>
+				<job-group>DEFALUT</job-group>
+				<cron-expression>0 15 18 ? * WED</cron-expression>
+			</cron>
+		</trigger>
+	</job>
+    -->
+	</quartz>
+	<!--
+		"0 0 12 * * ?" Fire at 12pm (noon) every day
+		"0 15 10 ? * *" Fire at 10:15am every day
+		"0 15 10 * * ?" Fire at 10:15am every day
+		"0 15 10 * * ? *" Fire at 10:15am every day
+		"0 15 10 * * ? 2005" Fire at 10:15am every day during the year 2005
+		"0 * 14 * * ?" Fire every minute starting at 2pm and ending at 2:59pm, every day
+		"0 0/5 14 * * ?" Fire every 5 minutes starting at 2pm and ending at 2:55pm, every day
+		"0 0/5 14,18 * * ?" Fire every 5 minutes starting at 2pm and ending at 2:55pm, AND fire every 5 minutes starting at 6pm and ending at 6:55pm, every day
+		"0 0-5 14 * * ?" Fire every minute starting at 2pm and ending at 2:05pm, every day"0 10,44 14 ? 3 WED" Fire at 2:10pm and at 2:44pm every Wednesday in the month of March.
+		"0 15 10 ? * MON-FRI" Fire at 10:15am every Monday, Tuesday, Wednesday, Thursday and Friday
+		"0 15 10 15 * ?" Fire at 10:15am on the 15th day of every month
+		"0 15 10 L * ?" Fire at 10:15am on the last day of every month
+		"0 15 10 ? * 6L" Fire at 10:15am on the last Friday of every month
+		"0 15 10 ? * 6L" Fire at 10:15am on the last Friday of every month
+	    "0 15 10 ? * 6L 2002-2005" Fire at 10:15am on every last friday of every month during the years 2002, 2003, 2004 and 2005
+		"0 15 10 ? * 6#3" Fire at 10:15am on the third Friday of every month
+	-->

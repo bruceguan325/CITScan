@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping
+ PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+ "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="com.intumit.solr.searchKeywords.ClickLog" table="ClickLog">
+
+        <id name="id" unsaved-value="0">
+			<generator class="native">
+				<param name="sequence">ClickLog_seq</param>
+			</generator>
+		</id>
+
+        <property name="target"/>
+        <property name="func"/>
+        <property name="identity" column="_identity"/><!-- SQLServer 保留字 -->
+        <property name="logtime"/>
+        <property name="clickId"/>
+        <property name="clickTitle"/>
+    </class>
+
+</hibernate-mapping>

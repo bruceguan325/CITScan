@@ -1,0 +1,17 @@
+{
+ "type": "array",
+ "name": "messages",
+ "items": {
+    "type": "object",
+    "headerTemplate": "訊息{{ i1 }}",
+    "properties": {
+      "type": {
+        "type": "string", "propertyOrder": 10
+      },
+      "template": {
+        "$ref": "get-jsonschema-ajax.jsp?type=line-template"
+      }
+    },
+    "defaultProperties": ["type"]
+ }
+}

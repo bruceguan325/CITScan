@@ -1,0 +1,1295 @@
+@charset "UTF-8";
+/* **********************************************************************************
+
+	イニシャライズ
+
+********************************************************************************** */
+body {
+  margin: 0; }
+
+.chatbot-area div, .chatbot-area span, .chatbot-area h1, .chatbot-area h2, .chatbot-area h3, .chatbot-area h4, .chatbot-area h5, .chatbot-area h6, .chatbot-area p, .chatbot-area blockquote, .chatbot-area pre, .chatbot-area address, .chatbot-area cite, .chatbot-area code, .chatbot-area img, .chatbot-area q, .chatbot-area samp, .chatbot-area small, .chatbot-area sub, .chatbot-area sup, .chatbot-area dl, .chatbot-area dt, .chatbot-area dd, .chatbot-area ol, .chatbot-area ul, .chatbot-area li, .chatbot-area fieldset, .chatbot-area form, .chatbot-area label, .chatbot-area legend, .chatbot-area table, .chatbot-area caption, .chatbot-area tbody, .chatbot-area tfoot, .chatbot-area thead, .chatbot-area tr, .chatbot-area th, .chatbot-area td, .chatbot-area article, .chatbot-area aside, .chatbot-area canvas, .chatbot-area figcaption, .chatbot-area figure, .chatbot-area footer, .chatbot-area header, .chatbot-area nav, .chatbot-area section, .chatbot-area time, .chatbot-area audio, .chatbot-area video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  font-style: normal;
+  vertical-align: baseline;
+  background-color: transparent; }
+
+.chatbot-area blockquote, .chatbot-area q {
+  quotes: none; }
+
+.chatbot-area blockquote:before, .chatbot-area blockquote:after, .chatbot-area q:before, .chatbot-area q:after {
+  content: '';
+  content: none; }
+
+.chatbot-area a {
+  margin: 0;
+  padding: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent; }
+
+.chatbot-area table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+.chatbot-area input, .chatbot-area select {
+  vertical-align: top; }
+
+.chatbot-area article, .chatbot-area aside, .chatbot-area footer, .chatbot-area header, .chatbot-area main, .chatbot-area nav, .chatbot-area section {
+  display: block; }
+
+.chatbot-area {
+  font-family: Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Helvetica, sans-serif; }
+  .chatbot-area a:link {
+    color: #2451c6;
+    text-decoration: none; }
+  .chatbot-area a:active {
+    color: #2451c6;
+    text-decoration: underline; }
+  .chatbot-area a:visited {
+    color: #7c169e;
+    text-decoration: none; }
+  .chatbot-area a:hover {
+    color: #2451c6;
+    text-decoration: underline; }
+  .chatbot-area input {
+    font-family: Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Helvetica, sans-serif; }
+  .chatbot-area .clearfix {
+    min-height: 1px; }
+    .chatbot-area .clearfix:after {
+      content: "";
+      display: block;
+      clear: both;
+      height: 0;
+      visibility: hidden; }
+
+/* -------------------------------------------------------------------
+	初期化
+------------------------------------------------------------------- */
+.chatbot-area {
+  /* リンクアイコンを消去 */ }
+  .chatbot-area p {
+    margin: 1em 0 0;
+    font-size: 14px;
+    line-height: 1.7em; }
+  .chatbot-area ol, .chatbot-area ul {
+    margin: 1em 0 0 29px; }
+  .chatbot-area li {
+    margin: 0.4em 0 0;
+    font-size: 14px;
+    line-height: 1.7em; }
+  .chatbot-area li ul {
+    margin: 1em 0 0 14px; }
+  .chatbot-area dl {
+    margin: 1em 0 0; }
+  .chatbot-area dt {
+    font-size: 14px;
+    line-height: 1.7em; }
+  .chatbot-area dd {
+    font-size: 14px;
+    line-height: 1.7em; }
+  .chatbot-area table {
+    font-size: 14px;
+    line-height: 1.7em; }
+  .chatbot-area a img {
+    margin-left: -16px; }
+
+/* **********************************************************************************
+
+	PC対応 チャットボット
+
+********************************************************************************** */
+.wc-hidden {
+  visibility: hidden; }
+
+.wc-message-from {
+  clear: both; }
+
+/* browser scrollbar customization */
+.wc-app ::-webkit-scrollbar {
+  width: 8px; }
+
+.wc-app ::-webkit-scrollbar * {
+  background-color: transparent; }
+
+.wc-app ::-webkit-scrollbar-thumb {
+  background-color: #dbdee1; }
+
+.chatbot-area {
+  max-width: 960px;
+  min-width: 960px;
+  margin: 0 auto;
+  padding: 20px 0;
+  box-sizing: border-box;
+  -webkit-text-size-adjust: none; }
+
+.chatbot-area .chatbot-title {
+  margin: 0;
+  padding: 10px 0 8px;
+  font-size: 22px;
+  line-height: 1.2em;
+  font-weight: bold; }
+
+.chatbot-area .wc-message-pane {
+  border: 1px solid #ccc;
+  border-bottom: none;
+  box-sizing: border-box;
+  background-color: #fcfcfc;
+  position: relative; }
+
+.chatbot-area .wc-message-groups {
+  min-height: 270px;
+  overflow-y: scroll;
+  -webkit-transition: height 0.3s ease;
+  transition: height 0.3s ease; }
+
+/* シャドウ（疑似要素） */
+.chatbot-area .wc-message-groups:before {
+  display: block;
+  width: 100%;
+  height: 4px;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  opacity: 0.1;
+  background: -webkit-linear-gradient(top, #1f1c1c 0%, #e1e0e0 100%);
+  background: linear-gradient(to bottom, #1f1c1c 0%, #e1e0e0 100%); }
+
+.chatbot-area .wc-message-groups:after {
+  display: block;
+  width: 4px;
+  height: 100%;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  opacity: 0.1;
+  background: -webkit-linear-gradient(left, #1f1c1c 0%, #e1e0e0 100%);
+  background: linear-gradient(to right, #1f1c1c 0%, #e1e0e0 100%); }
+
+.chatbot-area .wc-message-group-content {
+  padding: 27px;
+  font-size: 16px;
+  line-height: 1.7em; }
+
+.chatbot-area .wc-app {
+  margin: -1px 0 0; }
+
+/* 質問入力エリア */
+.chatbot-area .wc-console {
+  position: relative;
+  z-index: 201;
+  box-sizing: border-box;
+  padding: 14px 98px;
+  border: 2px solid #ccc;
+  background: #e8e9ed;
+  text-align: center;
+  letter-spacing: 0; }
+
+/* ヘルプの表示 */
+.chatbot-area .wc-console .help-popup {
+  position: absolute;
+  bottom: 92px;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  width: 402px;
+  margin: 0 auto;
+  padding: 9px 10px 11px;
+  border: 1px solid #0069cc;
+  background: #e8f4ff;
+  font-size: 18px;
+  text-align: center;
+  -webkit-animation: help-popup 2s ease-out 0s infinite alternate;
+  animation: help-popup 2s ease-out 0s infinite alternate;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0); }
+
+.chatbot-area .wc-console .help-popup .note {
+  display: block;
+  font-size: 13px;
+  line-height: 1.2em; }
+
+.chatbot-area .wc-console .help-popup.hide {
+  display: none; }
+
+/* ヘルプの表示のアニメーション */
+@-webkit-keyframes help-popup {
+  0% {
+    bottom: 92px; }
+  60% {
+    bottom: 92px; }
+  80% {
+    bottom: 100px; }
+  100% {
+    bottom: 92px; } }
+
+@keyframes help-popup {
+  0% {
+    bottom: 92px; }
+  60% {
+    bottom: 92px; }
+  80% {
+    bottom: 100px; }
+  100% {
+    bottom: 92px; } }
+
+/* ヘルプの吹き出し部分 */
+.chatbot-area .wc-console .help-popup:before {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -12px;
+  z-index: 1;
+  width: 0;
+  margin: 0 auto;
+  content: "";
+  border: 13px solid transparent;
+  border-top-color: #e8f4ff;
+  border-bottom-width: 0; }
+
+.chatbot-area .wc-console .help-popup:after {
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -13px;
+  width: 0;
+  margin: 0 auto;
+  content: "";
+  border: 13px solid transparent;
+  border-top-color: #0069cc;
+  border-bottom-width: 0; }
+
+/* 入力箇所 */
+.chatbot-area .wc-console .auto-suggest {
+  position: relative;
+  display: inline-block;
+  width: -webkit-calc(100% - 143px);
+  width: calc(100% - 143px);
+  letter-spacing: 0; }
+
+.chatbot-area .wc-console .auto-suggest .input-field {
+  margin: 0; }
+
+.chatbot-area .wc-console .auto-suggest input {
+  width: 100%;
+  height: 43px;
+  box-sizing: border-box;
+  padding: 8px 16px 6px;
+  border-radius: 10px 0 0 10px;
+  border: 1px solid #cfcfcf;
+  font-size: 16px;
+  line-height: 1.5em;
+  box-shadow: inset 3px 3px 3px rgba(0, 0, 0, 0.15);
+  background-color: #fff;
+  vertical-align: middle;
+  -webkit-appearance: none;
+  -moz-appearance: none; }
+
+.chatbot-area .wc-console .help-popup.show + .auto-suggest input {
+  border-color: #0069cc; }
+
+.chatbot-area .wc-console .auto-suggest input::-ms-clear {
+  display: none; }
+
+.chatbot-area .wc-console .help-popup.show + .auto-suggest input:focus,
+.chatbot-area .wc-console .auto-suggest input:focus {
+  outline: 0;
+  border-color: #ff9e20;
+  border-right-width: 1px;
+  padding-right: 16px;
+  box-shadow: inset 3px 3px 3px rgba(0, 0, 0, 0.15); }
+
+/* 質問するボタン */
+.chatbot-area .wc-console .btn-question {
+  display: inline-block;
+  margin: 0; }
+
+.chatbot-area .wc-console .btn-question a {
+  display: inline-block;
+  width: 143px;
+  height: 43px;
+  overflow: hidden;
+  box-sizing: border-box;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+  background: #ec7500;
+  background: -webkit-linear-gradient(top, #ec7500 0%, #e16900 100%);
+  background: linear-gradient(to bottom, #ec7500 0%, #e16900 100%);
+  border-radius: 0 10px 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+  line-height: 44px;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+  text-shadow: 0 0 2px #ba5c00, 0 0 2px #ba5c00, 0 0 2px #ba5c00, 0 0 2px #ba5c00, 0 0 2px #ba5c00, 0 0 2px #ba5c00, 0 0 2px #ba5c00, 0 0 2px #ba5c00, 0 0 2px #ba5c00, 0 0 2px #ba5c00, 0 0 2px #ba5c00, 0 0 2px #ba5c00, 0 0 2px #ba5c00; }
+
+.chatbot-area .wc-console .btn-question a:hover {
+  background: #f68d26;
+  background: -webkit-linear-gradient(top, #f68d26 0%, #f08726 100%);
+  background: linear-gradient(to bottom, #f68d26 0%, #f08726 100%);
+  text-decoration: none; }
+
+/* サジェスト */
+.chatbot-area .wc-console .auto-suggest .datalist {
+  position: absolute;
+  left: 0;
+  top: auto;
+  bottom: calc(100% + 3px);
+  margin: 0;
+  padding: 0;
+  width: 617px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #ccc;
+  z-index: 100; }
+
+.chatbot-area .wc-console .auto-suggest .datalist.hide {
+  display: none; }
+
+.chatbot-area .wc-console .auto-suggest .datalist ul {
+  margin: 0; }
+
+.chatbot-area .wc-console .auto-suggest .datalist li {
+  display: block;
+  margin: 0;
+  padding: 6px 14px 4px;
+  color: #333;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1.5em;
+  text-align: left; }
+
+.chatbot-area .wc-console .auto-suggest .datalist li a:hover {
+  text-decoration: none; }
+
+.chatbot-area .wc-console .auto-suggest .datalist li.select,
+.chatbot-area .wc-console .auto-suggest .datalist li:hover {
+  background: #f0f0f0; }
+
+.chatbot-area .wc-console .auto-suggest .datalist li b.highlight {
+  color: #ba5c00; }
+
+/* チャットリスト */
+.chatbot-area #chat-wrapper ul.chat-list {
+  margin: 0;
+  padding: 27px; }
+
+.chatbot-area #chat-wrapper ul.chat-list li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 16px;
+  word-break: break-all; }
+
+.chatbot-area #chat-wrapper ul.chat-list li.chat-elem:first-child {
+  margin-top: 0; }
+
+.wc-message-wrapper.hide {
+  display: none; }
+
+/* 回答側吹き出しエリア */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-statement {
+  padding-left: 13px;
+  float: left;
+  width: 670px;
+  overflow: hidden;
+  -webkit-animation: statement-answer 0.7s ease-out 0s 1 alternate;
+  animation: statement-answer 0.7s ease-out 0s 1 alternate; }
+
+/* 回答側 吹き出し表示のアニメーション */
+@-webkit-keyframes statement-answer {
+  0% {
+    width: 0; }
+  100% {
+    width: 670px; } }
+
+@keyframes statement-answer {
+  0% {
+    width: 0; }
+  100% {
+    width: 670px; } }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-statement-inner {
+  width: 670px; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-statement img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: top; }
+
+/* 回答吹き出し */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main {
+  display: inline-block;
+  margin: 5px 10px 10px 0;
+  padding: 12px 17px 13px;
+  box-sizing: border-box;
+  vertical-align: top;
+  background: #fff;
+  border: 2px solid #ffd297;
+  border-radius: 16px;
+  position: relative;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+  max-width: 660px;
+  word-break: break-all; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main p {
+  font-size: 16px; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main:before {
+  display: block;
+  content: "";
+  background: url(/wise/helpdesk/images/speech-balloon-answer.svg) 0 0 no-repeat;
+  width: 17px;
+  height: 15px;
+  position: absolute;
+  top: 14px;
+  left: -16px; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-statement.one-line-only .chat-main::before {
+  background-image: url(/wise/helpdesk/images/speech-balloon-answer-one-line-only.svg);
+  top: 40%; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-statement.one-line-only .chat-main {
+  border-radius: 1.7em; }
+
+/* ローディング */
+.chatbot-area .waiting .wc-message-from-bot .wc-message-content .chat-statement .chat-main {
+  width: 73px;
+  height: 54px; }
+  .chatbot-area .waiting .wc-message-from-bot .wc-message-content .chat-statement .chat-main::after {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 35px;
+    height: 17px;
+    margin: auto;
+    background: url(/wise/helpdesk/images/loading-circle.gif) 0 0 no-repeat;
+    background-size: 35px auto;
+    content: ""; }
+
+/* 該当がない場合の選択肢 */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main button {
+  display: inline-block;
+  width: auto;
+  margin: 7px 0 0;
+  padding: 8px 15px 7px;
+  border: none;
+  cursor: pointer;
+  color: #2451c6;
+  text-decoration: none;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  border-radius: 2em;
+  font-size: 16px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+  font-family: Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Helvetica, sans-serif;
+  text-align: left; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main button:hover {
+  background: #f0f0f0;
+  box-shadow: 0 0 0 2px #fff inset, 0 1px 0 rgba(0, 0, 0, 0.05);
+  color: #2451c6;
+  text-decoration: underline; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .wc-list .wc-card .wc-card-buttons {
+  list-style: none;
+  margin: 0; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .wc-list .wc-card .wc-card-buttons li {
+  margin: 0; }
+
+/* 質問に近いページ　リンクリスト */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main dl {
+  margin: 0;
+  padding: 0; }
+
+/* リンクタイトル */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main dl dt {
+  margin: 1em 0 0;
+  padding: 0;
+  font-size: 16px; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main dl dt a {
+  margin-bottom: 0; }
+
+/* リンクサマリー */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main dl dd {
+  margin-top: 0.2em; }
+
+/* 質問側吹き出し */
+.chatbot-area .wc-message-from-me {
+  text-align: right;
+  margin-right: 17px; }
+
+.chatbot-area .wc-message-from-me .chat-statement {
+  margin-left: auto;
+  padding-right: 13px;
+  width: 670px;
+  overflow: hidden;
+  -webkit-animation: statement-question 0.7s ease-out 0s 1 alternate;
+  animation: statement-question 0.7s ease-out 0s 1 alternate; }
+
+@-webkit-keyframes statement-question {
+  0% {
+    width: 0; }
+  100% {
+    width: 670px; } }
+
+@keyframes statement-question {
+  0% {
+    width: 0; }
+  100% {
+    width: 670px; } }
+
+.chatbot-area .wc-message-from-me .chat-statement .chat-statement-inner {
+  width: 660px;
+  float: right; }
+
+.chatbot-area .wc-message-from-me .chat-statement .chat-statement-inner .chat-main {
+  display: inline-block;
+  max-width: 660px;
+  margin: 5px 0 10px 10px;
+  padding: 12px 14px 10px;
+  box-sizing: border-box;
+  vertical-align: top;
+  text-align: left;
+  background: #fff3be;
+  border-radius: 1.3em;
+  position: relative;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.05);
+  word-break: break-all; }
+
+.chatbot-area .wc-message-from-me .chat-statement .chat-statement-inner .chat-main:before {
+  display: block;
+  content: "";
+  background: url(/wise/helpdesk/images/speech-balloon-question.svg) 0 0 no-repeat;
+  width: 17px;
+  height: 15px;
+  position: absolute;
+  top: 14px;
+  right: -14px; }
+
+/* 吹き出しの下の文言消す */
+.chatbot-area .wc-message-from > span {
+  display: none; }
+
+/* フィードバック */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback {
+  margin: 14px -14px -10px;
+  padding: 11px 13px 10px;
+  background: #f9f9f9;
+  border-radius: 0 0 12px 12px; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback p,
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback p {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: 0;
+  font-size: 14px; }
+
+/* 確信度 */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .confidence {
+  display: inline-block;
+  margin-top: 10px;
+  padding-top: 15px;
+  color: #999;
+  font-size: 13px; }
+
+/* ボタン */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .buttons {
+  display: inline-block; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback button {
+  display: inline-block;
+  vertical-align: middle;
+  min-width: 88px;
+  margin: 0 0 0 12px;
+  padding: 5px 10px 4px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  box-sizing: border-box;
+  text-align: center;
+  background: #fcfcfc;
+  background: -webkit-linear-gradient(top, #fdfdfd 0%, #f5f5f5 100%);
+  background: linear-gradient(to bottom, #fdfdfd 0%, #f5f5f5 100%);
+  border: 1px solid #ccc;
+  border-radius: 10em;
+  font-size: 12px;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.75);
+  line-height: 1.3em;
+  font-family: Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Helvetica, sans-serif;
+  color: #000; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback button:hover {
+  background: #f0f0f0;
+  text-decoration: none; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback button + button {
+  margin-left: 5px; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback button.disabled {
+  cursor: default;
+  color: #ccc !important; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table {
+  text-align: left;
+  margin: 0 -15px -15px;
+  border-collapse: separate;
+  border-spacing: 15px; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table th {
+  width: 200px;
+  padding-top: 2px;
+  vertical-align: top;
+  text-align: right;
+  font-size: 16px; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td {
+  width: 409px;
+  vertical-align: top; }
+
+/* ラジオボタン */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td ul {
+  margin: 0 !important;
+  padding-top: 2px !important; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td ul li {
+  display: inline-block;
+  margin: 0 !important;
+  padding: 0 !important; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td ul li + li {
+  margin-top: 0.3em; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td ul li input {
+  margin-right: 8px; }
+
+/* セレクトボックス */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table tr td select {
+  margin: 0;
+  margin-bottom: calc(0);
+  box-sizing: border-box;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.17);
+  overflow: hidden;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #faf6f5;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAABkCAIAAACHE87nAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2RpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDoyNDMwMDFDMjQ3NzFFNTExQkNGQkI5MTk1OTQzMEIzMCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoyRTk3OTRDMzcxNDgxMUU1OEZERjhGMUIzNThBM0E0NyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoyRTk3OTRDMjcxNDgxMUU1OEZERjhGMUIzNThBM0E0NyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IFdpbmRvd3MiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGQjYxQTEyMjQ4NzFFNTExOTZDQzhFNEQ5MjIzRTI1MyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyNDMwMDFDMjQ3NzFFNTExQkNGQkI5MTk1OTQzMEIzMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpS+uyQAAADRSURBVHja7NhbDoIwFEVRQpwqo2IQnUgn0RAIXwzh6kETo2ixEmuw7vPRNCVk5aYPHtU0Td77Y87UVf5gYGBgYGBgYGBgYGDMOVx7+hjB2JGRj7mrowjDzKhjR+vKzvl940tzvlJH0zSxS23bpj4/VITF45x7er/G7VXqRR2xjOP4yGhE4x8zlGEYbhn1NWIJqRdzvp6+7y+MWvUT//W9vXa7rhOgduPaTdwfIQT2YBHnVSlneylzXsr7Fe+i/2Lw7YyBgYGBgYGBgYGBMeckwACJ00Pd0A8LtAAAAABJRU5ErkJggg==) no-repeat right center, #faf6f5;
+  position: relative;
+  z-index: 3; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td select {
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  width: 409px;
+  width: calc(100%);
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding: 4px 5px;
+  padding: 4px calc(34px) 4px 5px;
+  background: transparent;
+  border: none;
+  border-radius: 4px 3px 3px 4px;
+  font-size: 16px;
+  line-height: 1.5em;
+  color: #333;
+  font-family: Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Helvetica, sans-serif;
+  white-space: normal;
+  position: relative;
+  background-color: #fff;
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAABkCAIAAACHE87nAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2RpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDoyNDMwMDFDMjQ3NzFFNTExQkNGQkI5MTk1OTQzMEIzMCIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoyRTk3OTRDMzcxNDgxMUU1OEZERjhGMUIzNThBM0E0NyIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoyRTk3OTRDMjcxNDgxMUU1OEZERjhGMUIzNThBM0E0NyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M2IFdpbmRvd3MiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpGQjYxQTEyMjQ4NzFFNTExOTZDQzhFNEQ5MjIzRTI1MyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoyNDMwMDFDMjQ3NzFFNTExQkNGQkI5MTk1OTQzMEIzMCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PpS+uyQAAADRSURBVHja7NhbDoIwFEVRQpwqo2IQnUgn0RAIXwzh6kETo2ixEmuw7vPRNCVk5aYPHtU0Td77Y87UVf5gYGBgYGBgYGBgYGDMOVx7+hjB2JGRj7mrowjDzKhjR+vKzvl940tzvlJH0zSxS23bpj4/VITF45x7er/G7VXqRR2xjOP4yGhE4x8zlGEYbhn1NWIJqRdzvp6+7y+MWvUT//W9vXa7rhOgduPaTdwfIQT2YBHnVSlneylzXsr7Fe+i/2Lw7YyBgYGBgYGBgYGBMeckwACJ00Pd0A8LtAAAAABJRU5ErkJggg==) no-repeat right center; }
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td select::-ms-expand {
+    display: none; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td select.invalid {
+  background-color: #ffe8ce;
+  position: relative; }
+
+/* IE9には未対応プロパティrotate3dで10以降は、afterをhidden領域まで飛ばす（矢印分上書き） */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td select::after {
+  display: block;
+  width: 19px;
+  height: 100%;
+  position: absolute;
+  right: 34px;
+  top: 0;
+  z-index: 50;
+  background: #faf6f5;
+  content: "";
+  -webkit-transform: rotate3d(1, 1, 0, 180deg);
+  transform: rotate3d(1, 1, 0, 180deg);
+  -webkit-transform-origin: 0 150px;
+  transform-origin: 0 150px; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td select.invalid::after {
+  display: block;
+  width: 19px;
+  height: 100%;
+  content: "";
+  position: absolute;
+  right: 34px;
+  top: 0;
+  z-index: 50;
+  background: #ffeedb;
+  -webkit-transform: rotate3d(1, 1, 0, 180deg);
+  transform: rotate3d(1, 1, 0, 180deg);
+  -webkit-transform-origin: 0 150px;
+  transform-origin: 0 150px; }
+
+/* テキストエリア */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td textarea {
+  width: 409px;
+  min-height: 100px;
+  margin-top: 0;
+  padding: 3px 5px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1) inset;
+  font-size: 14px;
+  line-height: 1.5em;
+  font-family: Meiryo, "メイリオ", "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro W3", Helvetica, sans-serif;
+  resize: vertical; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td textarea.invalid {
+  background-color: #ffe8ce; }
+
+/* 送信ボタン */
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment > .osk-row {
+  text-align: center; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment > .osk-row button {
+  margin: 15px 0 10px;
+  padding: 10px 10px 9px;
+  font-size: 16px;
+  min-width: 130px; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment > .osk-row button:disabled {
+  cursor: default;
+  color: #ccc !important; }
+
+.chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment > .osk-row button:disabled:hover {
+  background: #fcfcfc;
+  background: -webkit-linear-gradient(top, #fdfdfd 0%, #f5f5f5 100%);
+  background: linear-gradient(to bottom, #fdfdfd 0%, #f5f5f5 100%); }
+
+/* **********************************************************************************
+
+	タブレット対応 チャットボット
+
+********************************************************************************** */
+@media only screen and (max-device-width: 959px) and (min-device-width: 600px) and (orientation: portrait), only screen and (max-device-width: 959px) and (min-device-width: 600px) and (min-device-height: 600px) and (min-resolution: 144dpi) {
+  .chatbot-area {
+    max-width: 959px;
+    min-width: 600px; }
+  /* 回答側吹き出しエリア */
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-statement {
+    display: block;
+    position: relative;
+    float: right;
+    width: calc(100% - 70px - 13px);
+    overflow: visible;
+    padding: 0;
+    letter-spacing: 0;
+    -webkit-animation: none;
+    animation: none; }
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-statement:after {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: -5px;
+    width: 0;
+    height: 100%;
+    background: #fcfcfc;
+    content: "";
+    -webkit-animation: statement-answer 0.7s ease-out 0s 1 alternate;
+    animation: statement-answer 0.7s ease-out 0s 1 alternate; }
+  /* 回答側 吹き出し表示のアニメーション */
+  @-webkit-keyframes statement-answer {
+    0% {
+      width: -webkit-calc(100% + 5px); }
+    100% {
+      width: 0; } }
+  @keyframes statement-answer {
+    0% {
+      width: calc(100% + 5px); }
+    100% {
+      width: 0; } }
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-statement .chat-statement-inner {
+    width: 100%; }
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-statement .chat-main {
+    max-width: 100%; }
+  /* 質問側 */
+  .chatbot-area .wc-message-from-me .wc-message-content {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end; }
+  .chatbot-area .wc-message-from-me .chat-statement {
+    margin-left: auto;
+    padding-right: 0;
+    width: auto;
+    overflow: visible;
+    -webkit-animation: none;
+    animation: none;
+    position: relative; }
+  .chatbot-area .wc-message-from-me .chat-statement:after {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: calc(100% + 5px);
+    background: #fcfcfc;
+    content: "";
+    -webkit-animation: statement-question 0.7s ease-out 0s 1 alternate;
+    animation: statement-question 0.7s ease-out 0s 1 alternate; }
+  @-webkit-keyframes statement-question {
+    0% {
+      width: 100%; }
+    100% {
+      width: 0; } }
+  @keyframes statement-question {
+    0% {
+      width: 100%; }
+    100% {
+      width: 0; } }
+  .chatbot-area .wc-message-from-me .chat-statement .chat-statement-inner {
+    width: 100%; }
+  .chatbot-area .wc-message-from-me .chat-statement .chat-statement-inner .chat-main {
+    max-width: 100%; }
+  /* 質問入力エリア */
+  .chatbot-area .wc-console {
+    padding: 14px; }
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td {
+    width: 279px;
+    /* ラジオボタン */
+    /* テキストエリア */ }
+    .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td ul li {
+      display: block; }
+    .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td ul li + li {
+      margin-top: 0.4em !important; }
+    .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table td textarea {
+      width: 100%; } }
+
+/* **********************************************************************************
+
+	スマートフォン対応 チャットボット
+
+********************************************************************************** */
+@media screen and (max-device-width: 599px) and (orientation: portrait), screen and (max-device-width: 736px) and (orientation: landscape), screen and (device-width: 854px) and (device-height: 534px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2.25) {
+  /* browser scrollbar customization */
+  .wc-app ::-webkit-scrollbar {
+    display: none; }
+  .wc-app ::-webkit-scrollbar * {
+    display: none; }
+  .wc-app ::-webkit-scrollbar-thumb {
+    display: none; }
+  #wrap {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    height: 100%;
+    background-color: #fcfcfc; }
+  #main-container {
+    -webkit-flex-grow: 1;
+    flex: 1;
+    position: relative; }
+    #main-container::before {
+      display: block;
+      background: transparent linear-gradient(to bottom, #1f1c1c 0%, #e1e0e0 100%) repeat scroll 0 0;
+      content: "";
+      height: 6px;
+      left: 0;
+      opacity: 0.1;
+      position: absolute;
+      top: 0;
+      width: 100%;
+      z-index: 200; }
+  #main {
+    height: 100%; }
+  .chatbot-area {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    max-width: 100%;
+    height: 100%;
+    min-width: 1px; }
+    .chatbot-area .chatbot-title {
+      display: none; }
+    .chatbot-area #BotChatElement {
+      -webkit-flex: 1;
+      flex: 1; }
+      .chatbot-area #BotChatElement .wc-app {
+        height: 100%; }
+        .chatbot-area #BotChatElement .wc-app .wc-chatview-panel {
+          height: 100%; }
+          .chatbot-area #BotChatElement .wc-app .wc-chatview-panel .wc-message-pane {
+            min-height: 60%;
+            border: none; }
+            .chatbot-area #BotChatElement .wc-app .wc-chatview-panel .wc-message-pane .wc-message-groups {
+              min-height: 1px;
+              overflow-x: hidden;
+              overflow-y: auto;
+              border: none; }
+  .chatbot-area .wc-message-groups {
+    height: auto;
+    padding: 0 7px;
+    padding: 0 calc(constant(safe-area-inset-right) + 7px) 0 calc(constant(safe-area-inset-left) + 7px);
+    padding: 0 calc(env(safe-area-inset-right) + 7px) 0 calc(env(safe-area-inset-left) + 7px); }
+  /* シャドウ（疑似要素） */
+  .chatbot-area .wc-message-groups:after {
+    display: none; }
+  .chatbot-area .wc-message-group-content {
+    padding: 17px 0 20px; }
+  .chatbot-area .wc-app {
+    margin: 0; }
+  /* 質問入力エリア */
+  .chatbot-area .wc-console {
+    padding: 8px 10px;
+    padding: 8px calc(constant(safe-area-inset-right) + 10px) 8px calc(constant(safe-area-inset-left) + 10px);
+    border-width: 1px 0 0; }
+  /* ヘルプの表示 */
+  .chatbot-area .wc-console .help-popup {
+    width: calc(100% - 64px);
+    width: calc(100% - 64px - constant(safe-area-inset-right) - constant(safe-area-inset-left));
+    width: calc(100% - 64px - env(safe-area-inset-right) - env(safe-area-inset-left));
+    padding: 7px 8px 9px;
+    bottom: 74px;
+    font-size: 13px;
+    line-height: 1.5em; }
+  .chatbot-area .wc-console .help-popup .note {
+    margin: 0.2em 0 0;
+    font-size: 10px; }
+  /* ヘルプの表示のアニメーション */
+  @-webkit-keyframes help-popup {
+    0% {
+      bottom: 74px; }
+    60% {
+      bottom: 74px; }
+    80% {
+      bottom: 82px; }
+    100% {
+      bottom: 74px; } }
+  @keyframes help-popup {
+    0% {
+      bottom: 74px; }
+    60% {
+      bottom: 74px; }
+    80% {
+      bottom: 82px; }
+    100% {
+      bottom: 74px; } }
+  /* ヘルプの吹き出し部分 */
+  .chatbot-area .wc-console .help-popup:before {
+    bottom: -9px;
+    border: 10px solid transparent;
+    border-top-color: #e8f4ff;
+    border-bottom-width: 0; }
+  .chatbot-area .wc-console .help-popup:after {
+    bottom: -10px;
+    border: 10px solid transparent;
+    border-top-color: #0069cc;
+    border-bottom-width: 0; }
+  /* 入力箇所 */
+  .chatbot-area .wc-console .auto-suggest {
+    width: calc(100% - 60px); }
+  .chatbot-area .wc-console .auto-suggest input {
+    height: 40px;
+    padding: 7px 10px; }
+  .chatbot-area .wc-console .help-popup.show + .auto-suggest input:focus,
+  .chatbot-area .wc-console .auto-suggest input:focus {
+    outline: 0;
+    border-color: #ff9e20;
+    border-right-width: 1px;
+    padding-right: 16px;
+    box-shadow: inset 3px 3px 3px rgba(0, 0, 0, 0.15); }
+  .chatbot-area .wc-console .auto-suggest input::-webkit-input-placeholder {
+    font-size: 14px; }
+  .chatbot-area .wc-console .auto-suggest input::placeholder {
+    font-size: 14px; }
+  /* 質問するボタン */
+  .chatbot-area .wc-console .btn-question a {
+    width: 60px;
+    height: 40px;
+    font-size: 11px;
+    line-height: 40px; }
+  /* サジェスト */
+  .chatbot-area .wc-console .auto-suggest .datalist {
+    width: calc(100% + 60px); }
+  .chatbot-area .wc-console .auto-suggest .datalist li {
+    position: relative;
+    padding: 4px 30px 4px 14px;
+    border-top: 1px solid #eaeaea;
+    font-size: 12px; }
+  .chatbot-area .wc-console .auto-suggest .datalist li:first-child {
+    border-top: none; }
+  .chatbot-area .wc-console .auto-suggest .datalist li::after {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    content: "";
+    width: 26px;
+    height: 100%;
+    margin: auto 0;
+    background: #f6f6f6 url(/wise/helpdesk/images/sp-icon-suggest-menu.png) right center/auto 26px no-repeat; }
+  /* チャットリスト */
+  .chatbot-area .wc-message-group-content .wc-message-wrapper {
+    margin-top: 1em; }
+  .chatbot-area .wc-message-group-content .wc-message-wrapper:first-child {
+    margin-top: 0; }
+  /* 回答側吹き出しエリア */
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-statement {
+    display: inline-block;
+    position: relative;
+    float: right;
+    width: 253px;
+    width: -webkit-calc(100% - 22px - 30px);
+    width: calc(100% - 22px - 32px);
+    overflow: visible;
+    margin: 0 20px 0 2px;
+    padding: 0;
+    letter-spacing: 0;
+    -webkit-animation: none;
+    animation: none; }
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-statement:after {
+    display: block;
+    position: absolute;
+    top: 0;
+    right: -5px;
+    width: 0;
+    height: 100%;
+    background: #fcfcfc;
+    content: "";
+    -webkit-animation: statement-answer 0.7s ease-out 0s 1 alternate;
+    animation: statement-answer 0.7s ease-out 0s 1 alternate; }
+  /* 回答側 吹き出し表示のアニメーション */
+  @-webkit-keyframes statement-answer {
+    0% {
+      width: -webkit-calc(100% + 5px); }
+    100% {
+      width: 0; } }
+  @keyframes statement-answer {
+    0% {
+      width: calc(100% + 5px); }
+    100% {
+      width: 0; } }
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-statement-inner {
+    width: 100%; }
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-statement img {
+    max-width: 100%;
+    height: auto;
+    vertical-align: top; }
+  /* 回答吹き出し */
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-main {
+    margin: 0;
+    padding: 10px 12px;
+    border-width: 1px;
+    max-width: 100%;
+    font-size: 13px;
+    line-height: 1.5em; }
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-main p {
+    font-size: 16px; }
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-main:before {
+    display: block;
+    content: "";
+    background: url(/wise/helpdesk/images/sp-speech-balloon-answer.svg) 0 0 no-repeat;
+    background-size: 9px auto;
+    width: 9px;
+    height: 9px;
+    position: absolute;
+    top: 13px;
+    left: -8.5px; }
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-statement.one-line-only .chat-main:before {
+    background-image: url(/wise/helpdesk/images/sp-speech-balloon-answer-one-line-only.svg);
+    background-size: 9px auto;
+    top: 10px; }
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-statement.one-line-only .chat-main {
+    border-radius: 1.6em;
+    line-height: 1.5em; }
+  /* ローディング */
+  .chatbot-area .waiting .wc-message-from-bot .wc-message-content .chat-statement .chat-main {
+    width: 61px;
+    height: 33px; }
+    .chatbot-area .waiting .wc-message-from-bot .wc-message-content .chat-statement .chat-main::after {
+      display: block;
+      position: absolute;
+      top: -6px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 35px;
+      height: 17px;
+      margin: auto;
+      background: url(/wise/helpdesk/images/loading-circle.gif) 0 0 no-repeat;
+      background-size: 35px auto;
+      content: ""; }
+  /* 該当がない場合の選択肢 */
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-main button {
+    margin: 0.42em 0 0;
+    padding: 5px 12px;
+    font-size: 13px;
+    line-height: 1.3em; }
+  /* リンクサマリー */
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-main dl dd {
+    margin-top: 0.2em;
+    font-size: 13px; }
+  /* 質問側 */
+  .chatbot-area .wc-message-from-me {
+    text-align: left;
+    margin-right: 0; }
+  .chatbot-area .wc-message-from-me .wc-message-content {
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end; }
+  .chatbot-area .wc-message-from-me .chat-statement {
+    margin-left: auto;
+    padding-right: 0;
+    width: auto;
+    overflow: visible;
+    -webkit-animation: none;
+    animation: none;
+    position: relative; }
+  .chatbot-area .wc-message-from-me .chat-statement:after {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: calc(100% + 5px);
+    background: #fcfcfc;
+    content: "";
+    -webkit-animation: statement-question 0.7s ease-out 0s 1 alternate;
+    animation: statement-question 0.7s ease-out 0s 1 alternate; }
+  @-webkit-keyframes statement-question {
+    0% {
+      width: 100%; }
+    100% {
+      width: 0; } }
+  @keyframes statement-question {
+    0% {
+      width: 100%; }
+    100% {
+      width: 0; } }
+  .chatbot-area .wc-message-from-me .chat-statement .chat-statement-inner {
+    width: 100%;
+    float: right; }
+  .chatbot-area .wc-message-from-me .chat-statement .chat-statement-inner .chat-main {
+    max-width: 100%;
+    margin: 0 8px 0 49px;
+    padding: 10px 12px;
+    border-radius: 16px;
+    font-size: 13px;
+    line-height: 1.5em; }
+  .chatbot-area .wc-message-from-me .chat-statement .chat-statement-inner .chat-main:before {
+    top: 11px;
+    right: -6px;
+    width: 8px;
+    height: 8px;
+    background: url(/wise/helpdesk/images/sp-speech-balloon-question.svg) left center/8px auto no-repeat; }
+  /* フィードバック */
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback {
+    margin: 10px -11px -9px;
+    padding: 9px 12px 10px;
+    border-radius: 0 0 16px 16px; }
+    .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback p {
+      font-size: 13px; }
+    .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback button {
+      display: block;
+      margin: 0.5em 0 0;
+      color: #000; }
+    .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .buttons {
+      display: block;
+      text-align: center; }
+      .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .buttons button {
+        display: inline;
+        margin: 0.5em 0.5em 0 0; }
+      .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .buttons button + button {
+        display: inline;
+        margin: 0.5em 0.5em 0 0; }
+    .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment {
+      margin-top: 1em; }
+      .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment textarea {
+        width: 90%; }
+      .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table {
+        display: block;
+        margin: 0;
+        border-spacing: 0; }
+        .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table tbody {
+          display: block; }
+          .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table tbody tr {
+            display: block; }
+            .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table tbody tr:nth-child(n+2) {
+              margin: 1em 0 0; }
+            .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table tbody tr th, .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table tbody tr td {
+              display: block;
+              width: 100%;
+              padding: 0; }
+            .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table tbody tr th {
+              text-align: center; }
+            .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table tbody tr td {
+              margin-top: 0.5em; }
+              .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table tbody tr td ul {
+                padding-top: 0 !important; }
+                .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table tbody tr td ul li {
+                  padding-left: 26px !important;
+                  text-indent: -26px;
+                  line-height: 1.4em; }
+              .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment table tbody tr td textarea {
+                width: 100%; }
+      .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .osk-feedback .osk-feedback-comment > .osk-row button {
+        margin-left: auto;
+        margin-right: auto; }
+  /* 確信度 */
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-main .confidence {
+    font-size: 12px; } }
+
+/* **********************************************************************************
+
+	スマートフォン横画面対応 チャットボット
+
+********************************************************************************** */
+@media screen and (max-device-width: 736px) and (orientation: landscape), screen and (device-width: 854px) and (device-height: 534px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2.25) {
+  html {
+    overflow-x: hidden; }
+  #wrap {
+    display: block;
+    overflow: visible; }
+  .chatbot-area {
+    display: block; }
+    .chatbot-area #BotChatElement .wc-app .wc-chatview-panel .wc-message-pane {
+      min-height: 1px; }
+      .chatbot-area #BotChatElement .wc-app .wc-chatview-panel .wc-message-pane .wc-message-groups {
+        min-height: 234px; } }
+
+@media screen and (device-width: 854px) and (device-height: 534px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2.25) {
+  .chatbot-area .wc-message-from-bot .wc-message-content .chat-statement {
+    width: 200px; } }

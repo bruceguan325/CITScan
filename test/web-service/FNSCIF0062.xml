@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="BIG5"?>
+<CUBXML xmlns="http://www.cathaybk.com.tw/webservice/FNSCIF0062/">
+  <MWHEADER>
+  </MWHEADER>
+  <TRANRS>
+    <Records>
+      <Record>
+        <TWDBalance>1234</TWDBalance>
+        <AvailableBalance>5678</AvailableBalance>
+      </Record>
+    </Records>
+  </TRANRS>
+</CUBXML>

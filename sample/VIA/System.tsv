@@ -1,0 +1,34 @@
+﻿	ID	ProductSeries	ModelName	CPU	Chipset	CPUType	CoreNumber	CPUManufacture
+1	341	Network Appliance Platform	NFR7500 (1U) (EOL)	C7®	CN896	X86	單核心	VIA
+2	1251	Fanless AMOS Series	AMOS-5210 (Kiosk)	Nano® E	VX800	X86	單核心	VIA
+3	990	Fanless AMOS Series	AMOS-5000 (EITX-3000)	Nano® E	VX800	X86	單核心	VIA
+4	1252	Fanless AMOS Series	"AMOS-5110 (POI, Digital Signage) (EOL)"	Nano® E	VX800	X86	單核心	VIA
+5	870	Fanless AMOS Series	AMOS-3000 (Pico-ITX) (EOL)	C7® / Eden® ULV	VX700	X86	單核心	VIA
+6	1490	Fanless AMOS Series	AMOS-5001 (EITX-3001)	Nano® E	VX855	X86	單核心	VIA
+7	1350	Box Computers	"M'SERV S2100 (2-Bay, Nano-ITX) (EOL)"	Nano®	VX800	X86	單核心	VIA
+8	1250	Fanless AMOS Series	AMOS-5430 (Fleet Management) (EOL)	Nano® E	VX800	X86	單核心	VIA
+9	1690	Fanless AMOS Series	AMOS-5002 (EITX-3002)	Nano® X2 E / Eden® X2	VX900H	X86	雙核心	VIA
+10	1351	Box Computers	ARTiGO A1100 (Pico-ITX) (EOL)	Nano®	VX855	X86	單核心	VIA
+11	1650	Box Computers	ARTiGO A1150 (Pico-ITX)	Eden® X2	VX900H	X86	雙核心	VIA
+12	1051	Fanless AMOS Series	AMOS-3001 (Pico-ITX)	Nano® ULV / Eden® ULV	VX855	X86	單核心	VIA
+13	1850	Box Computers	ARTiGO A1200	Eden® X2	VX900	X86	雙核心	VIA
+14	101	Networked Storage Servers	"NSD7800 (8-Bay, Desktop) (EOL)"	C7®-D	CN700	X86	單核心	VIA
+15	1870	Fanless AMOS Series	AMOS-3002 (Pico-ITX)	Eden® X2	VX900H	X86	雙核心	VIA
+16	1170	Fanless VIPRO Panel PCs	VIPRO VP7806 (EOL)	Nano®	VX800	X86	單核心	VIA
+17	1110	Fanless ART Series	ART-3000 (Automation)	Nano® E	VX800	X86	單核心	VIA
+18	930	Chassis	AMOS-1000 (Mini-ITX) (EOL)	N/A	N/A	X86	0	N/A
+19	1990	Box Computers	ARTiGO A1250 (Pico-ITX)	QuadCore E	VX11H	X86	雙核心	VIA
+20	890	Fanless VIPRO Panel PCs	VIPRO VP7710	C7® / Eden® ULV	CX700M	X86	單核心	VIA
+21	471	Networked Storage Servers	"NSR7800 (8-Bay, 2U) (EOL)"	C7®	CN700	X86	單核心	VIA
+22	1352	Box Computers	ARTiGO A1000 (Pico-ITX) (EOL)	C7®	VX700	X86	單核心	VIA
+23	2030	Fanless AMOS Series	"AMOS-800 (Pico-ITX, ARM based)"	Cortex-A8	-	ARM	單核心	Freescale
+24	2050	Box Computers	"ARTiGO A800 (Pico-ITX, ARM based)"	Cortex-A8	-	ARM	單核心	Freescale
+25	1430	Fanless ART Series	ART-5450 (Fleet Management)	Nano® E	VX800	X86	單核心	VIA
+26	22	Networked Storage Servers	NSD7200 (2-Bay) (EOL)	C7®-D	VX800	X86	單核心	VIA
+27	2110	Fanless VIPRO Panel PCs	VIPRO VP7910	Eden® X2	VX11H	X86	雙核心	VIA
+28	931	Chassis	AMOS-2000 (Nano-ITX) (EOL)	N/A	N/A	X86	0	N/A
+29	1171	Fanless VIPRO Panel PCs	VIPRO VP7815 (EOL)	Nano®	VX800	X86	單核心	VIA
+30	891	Digital Signage Systems	vmpc vm7700 (EOL)	C7® / Eden®	CX700M	X86	單核心	VIA
+31	1470	Box Computers	"ARTiGO A2000 (2-Bay, Nano-ITX) (EOL)"	C7®	VX800	X86	單核心	VIA
+32	2170	Fanless AMOS Series	"AMOS-820 (Pico-ITX, ARM based)"	Cortex-A9	N/A	ARM	雙核心	Freescale
+33	1910	Digital Signage System	ALTA DS System	Cortex-A8	N/A	ARM	單核心	Freescale

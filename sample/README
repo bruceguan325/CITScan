@@ -1,0 +1,2 @@
+# Import JSON
+curl http://127.0.0.1:8080/wise/wiseadm/core0/update/json -H 'Content-type:application/json' --data-binary @JSON_FILE_NAME

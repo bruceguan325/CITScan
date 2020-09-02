@@ -1,0 +1,136 @@
+<script id="searchBoxTemplate" type="text/html">
+	<div class="well form-search input-append">
+        <input id="searchText" type="text" class="inputSearch form-control input-md search typeahead" name="q" value="{{q}}" autocomplete="off" size="60" placeholder="請輸入查詢關鍵字">
+		<input type="hidden" name="ro" value="true">
+		{{#d}}
+		<input type="hidden" name="d" value="{{d}}">
+		{{/d}}
+        <a class="btn btn-primary" href="#" id="searchBtn">Search</a>
+		<input type="hidden" name="qt" value="browse">
+		
+		<h6>熱門：
+		{{#hotKeywords}}
+			<a class='custom-anchor hot-keywords' data-query='{{keyword}}'>{{keyword}}</a>&nbsp;
+		{{/hotKeywords}}
+		</h6>
+	</div>
+</script>
+
+<script id="queryHistoriesTemplate" type="text/html">
+	<a href="#" class="btn btn-sm btn-default">Home</a>
+	{{#histories}}
+	<a href="#" data-query="{{{link}}}" class="btn btn-sm btn-default">{{name}} <span class='glyphicon glyphicon-remove'></span></a>
+	{{/histories}}
+</script>
+
+<script id="paginationTemplate" type="text/html">
+	<ul class="pagination" >
+		{{#firstPage}}
+		<li><a class='page-btn' data-page='1' data-rows='{{rows}}'><i class='glyphicon glyphicon-step-backward'></i>&nbsp;</a></li>
+		{{/firstPage}}
+		{{#pages}}
+		<li class='{{#active}}active{{/active}}'><a class='page-btn' data-page='{{pageNo}}' data-rows='{{rows}}'>{{pageNo}}</a></li>
+		{{/pages}}
+		{{#lastPage}}
+		<li><a class='page-btn' data-page='{{lastPage}}' data-rows='{{rows}}'><i class='glyphicon glyphicon-step-forward'></i>&nbsp;</a></li>
+		{{/lastPage}}
+	</ul>
+</script>
+
+<script id="tabsTemplate" type="text/html">
+	<ul class="nav nav-tabs">
+	{{#tabs}}
+	{{#selected}}
+	<li class="active"><a><h4>{{name}} ({{numFound}})</h4></a></li>
+	{{/selected}}
+	{{^selected}}
+	<li class="custom-anchor"><a data-query="{{link}}"><h4>{{name}} ({{numFound}})</h4></a></li>
+	{{/selected}}
+	{{/tabs}}
+	</ul>
+</script>
+
+<script id="infoTemplate" type="text/html">
+	<div>
+	搜尋費時 <span>{{info.qTime}}</span> 秒
+ 	依照 
+ 	<div class="btn-group">
+	  {{#sortables}}
+		{{#order}}
+	  <a class="btn btn-default btn-mini dropdown-toggle" data-toggle="dropdown" href="#" id="currentSort">
+	  </a>
+		{{/order}}
+	  {{/sortables}}
+	  <ul class="dropdown-menu" id="sortables">
+		  {{#sortables}}
+		  <li><a data-query="{{descLink}}" href="#">
+		    {{name}} <i class="glyphicon glyphicon-sort-by-attributes-alt"></i> 降冪
+		  </a></li>
+		  <li><a data-query="{{ascLink}}" href="#">
+		    {{name}} <i class="glyphicon glyphicon-sort-by-attributes"></i> 升冪
+		  </a></li>
+		  {{/sortables}}
+	  </ul>
+	</div> 
+	排序 <br>
+ 	共查詢到 <span>{{info.numFound}}</span> 筆 / 目前顯示第 <span>{{info.startPlusOne}}</span> - <span>{{info.startPlusRows}}</span> 筆
+	</div>
+</script>
+
+<script id="docTemplate" type="text/html">
+	{{#docs}}
+	<li style="display:none">
+    <table class="table table-striped">
+    	<tr valign="top">
+        	<td width=75%>
+				<H3><a onmousedown="return clk(this.href, this.title)" target="_new" HREF="{{Link_s}}" title="{{Name_t}}">
+				{{{Name_t}}}
+				</a>
+				</H3>
+			</td>
+			<td width=10%>
+			 	<font color=BROWN>
+			 	{{Date_dt}}
+			 	</font>
+			</td>
+			<td width=10%>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3">
+			<p>
+			{{#Description_mt}}
+			{{.}}<br>
+			{{/Description_mt}}
+			</p>
+			</td>
+		</tr>                                                
+		</table>
+	</li>
+	{{/docs}}
+	{{^docs}}
+	<div id="noresult">
+		<div class="alert alert-error">
+		很抱歉，我們無法找到符合條件的查詢結果。<br>
+		建議您：<br>
+		1.	請縮短查詢字組來擴大您的搜尋範圍。<br>
+		2.	請檢查查詢字有無錯別字。<br>
+		3.	請以新的關鍵字或相似詞重新查詢。<br>
+		</div>
+	</div>
+	{{/docs}}
+</script>
+
+<script id="facetTemplate" type="text/html">
+	{{#facets}}
+	<li>
+	<H3>{{name}}</H3>
+		{{#data}}
+		    <span class="facet">
+		        <a href="#" data-query="{{link}}">{{name}}
+		    	<span class="badge">{{count}}</span></a>
+		    </span><BR>
+		{{/data}}
+	</li>
+	{{/facets}}
+</script>

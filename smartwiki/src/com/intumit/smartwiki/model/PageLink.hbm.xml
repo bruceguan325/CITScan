@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+<hibernate-mapping>
+	<class name="com.intumit.smartwiki.model.PageLink" table="pagelinks">
+		<composite-id>
+			<key-property name="pageLinkFrom" column="pl_from" type="integer" />
+			<key-property name="pageLinkNamespace" column="pl_namespace" type="integer" />
+			<key-property name="pageLinkTitle" column="pl_title" type="string" />
+			<key-property name="pageLinkTo" column="pl_to" type="integer" />
+		</composite-id>
+	</class>
+</hibernate-mapping>

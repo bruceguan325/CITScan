@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LdapConfigs>
+	<global>
+		<serverAddr>127.0.0.1</serverAddr>
+		<serverPort>389</serverPort>
+		<loginBaseDn>DC=intumit,DC=com</loginBaseDn>
+		<apUserDn>CN=Administrator,OU=AdminGroup,DC=intumit,DC=com</apUserDn>
+		<apPassword>U-Must-Put-Your-Ldap-Pwd-Here</apPassword>
+		<userFilter>(objectClass=organizationalPerson)</userFilter>
+		<userNameField>name</userNameField>
+		<userAccountField>sAMAccountName</userAccountField>
+		<groupNameField>name</groupNameField>
+		<groupDescriptionField>description</groupDescriptionField>
+		<emailField>userPrincipalName</emailField>
+		<groupFilter sync="true">(objectClass=organizationalUnit)
+		</groupFilter>
+	</global>
+</LdapConfigs>

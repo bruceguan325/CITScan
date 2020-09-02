@@ -1,0 +1,23 @@
+<table id="spec-table" class="table table-striped table-bordered">
+	<tr>
+	#foreach( $fn in $fields )
+		#if( $colMapper.getMappingName($fn) )
+			<th>$colMapper.getMappingName($fn)</th>
+		#else
+			<th>$fn</th>
+		#end
+	#end
+	</tr>
+	#foreach( $doc in $docs )
+		<tr>
+		#foreach( $fn in $fields )
+			#if ( $fn.indexOf("_ADDR_") != -1 )
+			<th><a target="_new" href="http://maps.google.com/?q=$doc.getFieldValue($fn)">$doc.getFieldValue($fn) <i class="icon-map-marker"></i></a></th>
+			#else
+			<th>$!display.list($doc.getFieldValue($fn), "、")</th>
+			#end
+		#end
+		</tr>
+	#end
+</table>
+進一步查詢更多ATM資訊，請至 <a href="https://www.cathaybk.com.tw/cathaybk/about_query02.asp" target="_new">這裡<i class="icon-external-link"></i></a> 進行查詢

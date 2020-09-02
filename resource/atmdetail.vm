@@ -1,0 +1,3 @@
+#foreach( $fn in $fields ) #if( $colMapper.getMappingName($fn) ) $colMapper.getMappingName($fn)： #if ( $fn.indexOf("_ADDR_") != -1 ) $firstDoc.getFirstValue($fn) #else $firstDoc.getFirstValue($fn) #end
+<BR> #end
+進一步查詢更多ATM資訊，請至 https://www.cathaybk.com.tw/cathaybk/about_query02.asp 進行查詢

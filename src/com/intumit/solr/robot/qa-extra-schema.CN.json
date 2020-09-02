@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "name": "extra-parameters",
+  "title": "附加参数",
+  "properties": {
+    "intent": {
+      "type": "string"
+    },
+    "entity": {
+      "type": "string"
+    }
+  }
+}

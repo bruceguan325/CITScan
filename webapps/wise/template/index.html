@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+<!-- 下面路徑連結按照實際狀況修正 -->
+<base href="/wise/">
+<title>WiSe - 智慧型搜尋引擎</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="styles/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<link href="styles/bootstrap-responsive.min.css" type="text/css" rel="stylesheet"/>
+<script src="script/jquery-1.7.2.min.js" type="text/javascript"></script>
+<script src="script/bootstrap.min.js" type="text/javascript"></script>
+<script src="script/search.js" type="text/javascript"></script>
+<script src="script/require.js" type="text/javascript"></script>
+<style id="templateStyles">
+</style>
+</head>
+<body>
+
+<div style="clear: both;width: 110;padding: 0">&nbsp;</div>
+<div id="templateLoader"></div>
+<script>
+// 下面路徑按照實際狀況修正
+var options = {baseUrl: 'http://127.0.0.1:8080/wise'};
+require.config({baseUrl: "template/google"});
+requirejs(['index']);
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://www.cathaybk.com.tw/rate/" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://www.cathaybk.com.tw/rate/" xmlns:intf="http://www.cathaybk.com.tw/rate/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://www.cathaybk.com.tw/rate/" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="XServiceMethod">
+    <complexType>
+     <sequence>
+      <element name="XServiceMethodDeparture" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="XServiceMethodResponse">
+    <complexType>
+     <sequence>
+      <element name="XServiceMethodReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="XServiceMethodRequest">
+
+      <wsdl:part element="impl:XServiceMethod" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="XServiceMethodResponse">
+
+      <wsdl:part element="impl:XServiceMethodResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="RateService">
+
+      <wsdl:operation name="XServiceMethod">
+
+         <wsdl:input message="impl:XServiceMethodRequest" name="XServiceMethodRequest"/>
+
+         <wsdl:output message="impl:XServiceMethodResponse" name="XServiceMethodResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="RateServiceSoapBinding" type="impl:RateService">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="XServiceMethod">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="XServiceMethodRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="XServiceMethodResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="RateServiceService">
+
+      <wsdl:port binding="impl:RateServiceSoapBinding" name="RateService">
+
+         <wsdlsoap:address location="http://localhost:38080/WEBS/services/RateService"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

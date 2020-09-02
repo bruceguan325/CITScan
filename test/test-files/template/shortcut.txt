@@ -1,0 +1,3 @@
+網銀所有功能連結：
+存款帳戶查詢 {{SHORTCUT:AccInq/B0101_DepInq }} 其他 {{OTHER:aaa/bbb}} 掛失服務 {{SHORTCUT: CardLoss/B0701_CardLossApply}}
+以上

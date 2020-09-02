@@ -1,0 +1,105 @@
+.line-message-row {
+    position: relative;
+    margin-bottom: 30px;
+    overflow: hidden;
+    clear: both;
+}
+
+.line-message-row a {
+    color: #2296F3;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+.line-message-row a:hover {
+    color: #71B1F7;
+    text-decoration: none;
+}
+
+.line-message-row.by-robot {
+    min-height: 72px;
+}
+
+.line-message-row.by-robot .msg {
+    margin-right: 80px;
+}
+
+.line-message-row.by-robot.swiper {
+    margin-right: -316px;
+}
+
+.swiper .line-buttons-message-container {
+    /* padding-right: 84px; */
+    padding-right: 316px;
+}
+
+.line-buttons-message-container {
+    margin-left: 0px;
+    float: left;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: visible;
+}
+
+.line-buttons-message-block {
+    width: 232px;
+    min-width: 232px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    background-color: #F0F0F0;
+    color: #4C4C4C;
+    font-size: 16px;
+    display: inline-block;
+    margin-right: 14px;
+}
+
+.line-buttons-message-block:last-of-type {
+    margin-right: 0;
+}
+
+.line-buttons-message-block .img-wrapper {
+    margin: -10px -20px;
+    margin-bottom: 0;
+    height: 128px;
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+}
+
+.line-buttons-message-block .img-wrapper img {
+    width: 100%;
+}
+
+.line-buttons-message-block .description {
+    background-color: white;
+    color: #7F7F7F;
+    font-size: 14px;
+    margin: 0 -20px;
+    padding: 10px 20px;
+    border: 1px solid #CCCCCC;
+    border-bottom: transparent;
+    white-space: normal;
+}
+
+.line-buttons-message-block .description h4 {
+    color: #4C4C4C;
+    font-size: 16px;
+    line-height: 22px;
+    margin: 0;
+}
+
+.line-buttons-message-block ul {
+    list-style: none;
+    padding: 0;
+    background-color: white;
+    margin: 0 -20px -10px -20px;
+    border: 1px solid #CCCCCC;
+    border-top: transparent;
+    border-radius: 0 0 12px 12px;
+}
+
+.line-buttons-message-block ul li {
+    border-top: 1px solid #CCCCCC;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+}
