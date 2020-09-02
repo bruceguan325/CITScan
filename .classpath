@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test/src"/>
+	<classpathentry kind="src" path="smartwiki/src"/>
+	<classpathentry kind="src" path="zql"/>
+	<classpathentry kind="src" path="resource"/>
+	<classpathentry kind="src" path="microsoft"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="lib/randomizedtesting-runner-2.0.13.jar"/>
+	<classpathentry kind="lib" path="webapps/wise/WEB-INF/lib/solr-analysis-extras-4.10.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="webapps/wise/WEB-INF/lib/solr-cell-4.10.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="webapps/wise/WEB-INF/lib/solr-clustering-4.10.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="webapps/wise/WEB-INF/lib/solr-core-4.10.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="webapps/wise/WEB-INF/lib/solr-dataimporthandler-4.10.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="webapps/wise/WEB-INF/lib/solr-dataimporthandler-extras-4.10.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="webapps/wise/WEB-INF/lib/solr-solrj-4.10.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="webapps/wise/WEB-INF/lib/solr-test-framework-4.10.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="webapps/wise/WEB-INF/lib/solr-uima-4.10.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="webapps/wise/WEB-INF/lib/solr-velocity-4.10.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="webapps/wise/WEB-INF/lib/lucene-codecs-4.10.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="webapps/wise/WEB-INF/lib/lucene-core-4.10.5-SNAPSHOT.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api.jar" sourcepath="lib/javax.servlet-api-3.1.0-sources.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="webapps/wise/WEB-INF/classes"/>
+</classpath>
